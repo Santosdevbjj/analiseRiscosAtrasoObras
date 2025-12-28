@@ -3,12 +3,18 @@
 Transformando dados operacionais em previsões acionáveis para reduzir multas e aumentar satisfação do cliente
 
 
----
+----
 
 ### 🧪 Teste o Modelo ao Vivo
 
 
-(https://huggingface.co/spaces/Sergiobjj2079/Streamlit/resolve/main/index.html)
+https://huggingface.co/spaces/Sergiobjj2079/atraso-obras
+
+
+
+
+
+
 
 
 ---
