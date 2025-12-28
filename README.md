@@ -226,7 +226,7 @@ Estrutura de Problema / Insight / Resultado — modelo Meigarom – Imersão CDS
 
 ---
 
-🧲 Call to Action (Opcional para o GitHub)
+🧲 **Call to Action**
 
 Se quiser visualizar um protótipo executável, comente na issue:
 👉 "Quero demo Streamlit" — e eu disponibilizo uma versão interativa.
@@ -234,15 +234,28 @@ Se quiser visualizar um protótipo executável, comente na issue:
 
 ---
 
-📬 Contato
 
-Se quiser conversar sobre Data Science aplicado a operações:
 
-👤 Sérgio Santos
-💼 LinkedIn: https://linkedin.com/in/(seu-perfil)
-📧 Email: (opcional)
+**Autor:**
+Sergio Santos 
+
+---
+
+
+## 📩 Contato
+
+
+
+[![Portfólio Sérgio Santos](https://img.shields.io/badge/Portfólio-Sérgio_Santos-111827?style=for-the-badge&logo=githubpages&logoColor=00eaff)](https://santosdevbjj.github.io/portfolio/)
+[![LinkedIn Sérgio Santos](https://img.shields.io/badge/LinkedIn-Sérgio_Santos-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/santossergioluiz) 
+
 
 
 ---
+
+
+
+
+
 
 
