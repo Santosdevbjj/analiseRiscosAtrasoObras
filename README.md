@@ -80,39 +80,44 @@ O objetivo é explicação + previsibilidade, não causalidade
 
 ---
 
-🧠 5. Decisões Técnicas — Como e por quê foi construído
+🧠 **5. Decisões Técnicas — Como e por quê foi construído**
 
-Esta seção revela o pensamento crítico, ponto mais valorizado para recrutadores (Luiz Café 💡).
+## Esta seção revela o pensamento crítico, ponto mais valorizado para recrutadores
 
-Componente	Escolha	Motivação
+• Componente	Escolha	Motivação
 
-Linguagem	Python 3.12	Ecossistema rico para Data Science
-Frameworks	Pandas, NumPy, Scikit-Learn	Manipulação e modelagem
-Modelo	RandomForestRegressor	Captura relações não-lineares e heterogeneidade entre obras
-Alternativas avaliadas	Regressão Linear, XGBoost	Linear não performou bem — Ruído no comportamento do atraso
-Visualização	Matplotlib e Seaborn	Clareza para explicar insights para áreas de negócio
-Deploy futuro	Streamlit (opcional)	Possibilidade de demo executável para diretoria
+• Linguagem	Python 3.12	Ecossistema rico para Data Science
+
+• Frameworks	Pandas, NumPy, Scikit-Learn	Manipulação e modelagem
+
+• Modelo	RandomForestRegressor	Captura relações não-lineares e heterogeneidade entre obras
+
+• Alternativas avaliadas	Regressão Linear, XGBoost	Linear não performou bem — Ruído no comportamento do atraso
+
+• Visualização	Matplotlib e Seaborn	Clareza para explicar insights para áreas de negócio
+
+• Deploy futuro	Streamlit (opcional)	Possibilidade de demo executável para diretoria
 
 
-> 🧠 Nota técnica: O modelo foi treinado com dados normalizados e codificados (One-Hot Encoding). Para usar .predict() no mundo real, o pipeline precisa aplicar os mesmos preprocessadores usados no treinamento.
+> 🧠 **Nota técnica:** O modelo foi treinado com dados normalizados e codificados (One-Hot Encoding). Para usar .predict() no mundo real, o pipeline precisa aplicar os mesmos preprocessadores usados no treinamento.
 
 
 
 
 ---
 
-🔧 6. Como Executar o Projeto
+🔧 **6. Como Executar o Projeto**
 
-Pré-requisitos:
+**• Pré-requisitos:**
 
-python 3.12
+• python 3.12
 pip install -r requirements.txt
 
-Rodar o notebook:
+• **Rodar o notebook:**
 
-jupyter notebook notebooks/analise_atrasos.ipynb
+• jupyter notebook notebooks/analise_atrasos.ipynb
 
-Rodar inferência com modelo salvo:
+• Rodar inferência com modelo salvo:
 
 import joblib
 import pandas as pd
@@ -128,44 +133,50 @@ print(previsoes)
 
 ---
 
-📊 7. Estratégia da Solução (Etapas — Meigarom Style)
+📊 **7. Estratégia da Solução**
 
 1️⃣ Entendimento do problema de negócio
+
 2️⃣ Exploração dos dados (tipos, nulos, distribuições)
+
 3️⃣ Análise descritiva (estatísticas, % atraso, padrões)
+
 4️⃣ Segmentação (chuva, fornecedor, porte, região)
+
 5️⃣ Treinamento do Random Forest
+
 6️⃣ Avaliação de erro e explicabilidade
+
 7️⃣ Geração de visualizações para o negócio
 
 
----
-
-🔍 8. Insights Encontrados
-
-> 🎯 Insights entregam valor — é aqui que o projeto vira portfólio.
-
-
-
-Obras com fornecedores de rating baixo concentram maior atraso
-
-Dias com chuva elevaram o atraso médio em +38%
-
-Empreendimentos grandes têm +62% probabilidade de atraso
-
-Obras com logística acima de 25 km apresentam risco crítico
-
-Fornecedores atrasados em projetos anteriores continuam atrasando (padrão recorrente)
-
-
 
 ---
 
-📊 9. Feature Importance — O que mais impacta o atraso?
+🔍 **8. Insights Encontrados**
+
+> ## 🎯 Insights entregam valor — é aqui que o projeto vira portfólio.
+
+
+• Obras com fornecedores de rating baixo concentram maior atraso
+
+• Dias com chuva elevaram o atraso médio em +38%
+
+• Empreendimentos grandes têm +62% probabilidade de atraso
+
+•™Obras com logística acima de 25 km apresentam risco crítico
+
+• Fornecedores atrasados em projetos anteriores continuam atrasando (padrão recorrente)
 
 
 
- Interpretação: atraso não é aleatório — ele é explicado por logística, fornecedor e clima.
+---
+
+📊 **9. Feature Importance — O que mais impacta o atraso?**
+
+
+
+ **• Interpretação:** atraso não é aleatório — ele é explicado por logística, fornecedor e clima.
  
 ![Importância das Features](reports/figures/feature_importance.png)
 
@@ -174,56 +185,55 @@ Fornecedores atrasados em projetos anteriores continuam atrasando (padrão recor
 
 ---
 
-🧮 10. Resultados (Métricas do Modelo)
+🧮 **10. Resultados (Métricas do Modelo)**
 
-Métrica	Valor	Interpretação para o negócio
+• Métrica	Valor	Interpretação para o negócio
 
-MAE (Erro Médio)	4,97 dias	O modelo erra em média < 5 dias
-R² Score	0,41	Explicamos 41% dos fatores de atraso
-Economia Estimada	R$ 248.400,00 / ano	Multas evitadas ao agir nos empreendimentos de maior risco
+• MAE (Erro Médio)	4,97 dias	O modelo erra em média < 5 dias
 
+• R² Score	0,41	Explicamos 41% dos fatores de atraso
 
+• Economia Estimada	R$ 248.400,00 / ano	Multas evitadas ao agir nos empreendimentos de maior risco
 
----
-
-🚀 11. Objetivos Futuros — Próximos Passos
-
-Criar um dashboard automático para monitorar risco → Power BI + Streamlit
-
-Adicionar variáveis externas (chuva real via API)
-
-Expandir o dataset com número de equipes e rotatividade
-
-Migrar modelo para RandomForest + SHAP Explainability
-
-Implementar acionadores automáticos para obra crítica ✉
 
 
 
 ---
 
-📚 12. Aprendizados Individuais (Minha Reflexão Técnica)
+🚀 **11. Objetivos Futuros — Próximos Passos**
+
+• Criar um dashboard automático para monitorar risco → Power BI + Streamlit
 
 
-O que mais aprendi neste projeto:
+• Adicionar variáveis externas (chuva real via API)
 
-Entender o negócio antes de abrir o Jupyter
 
-Nem sempre o modelo mais complexo é o melhor → clareza vence
+• Expandir o dataset com número de equipes e rotatividade
 
-Explicar bem vale tanto quanto programar bem
 
-Pipeline de preprocessamento é parte do modelo, não acessório
+• Migrar modelo para RandomForest + SHAP Explainabilit
+
+
+• Implementar acionadores automáticos para obra crítica ✉
 
 
 
 ---
 
-🤝 13. Créditos e Inspiração
+📚 **12. Aprendizados Individuais (Minha Reflexão Técnica)*
 
-Artigo — Como escrever um README que torna seu Portfólio Legível para Recrutadores — por Luiz Café
 
-Estrutura de Problema / Insight / Resultado — modelo Meigarom – Imersão CDS
+**• O que mais aprendi neste projeto:**
+
+• Entender o negócio antes de abrir o Jupyter
+
+• Nem sempre o modelo mais complexo é o melhor → clareza vence
+
+• Explicar bem vale tanto quanto programar bem
+
+• Pipeline de preprocessamento é parte do modelo, não acessório
+
+
 
 
 
