@@ -13,7 +13,7 @@ st.set_page_config(page_title="MRV - Predictive Risk", layout="wide")
 @st.cache_resource
 def load_model():
     # Certifique-se de que o caminho está correto conforme sua estrutura
-    return joblib.load("../models/modelo_random_forest.pkl")
+    return joblib.load("models/modelo_random_forest.pkl")
 
 model = load_model()
 
