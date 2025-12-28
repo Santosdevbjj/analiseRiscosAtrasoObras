@@ -113,11 +113,18 @@ Chuvas	paralisação de obra
 **• Pré-requisitos:**
 
 • python 3.12
+
+**instalar dependências**
 pip install -r requirements.txt
 
 • **Rodar o notebook:**
 
-• jupyter notebook notebooks/analise_atrasos.ipynb
+ **Abrir notebook e explorar analise**
+• jupyter notebook Notebooks/analise_atrasos.ipynb
+
+ **Rodar simulador**
+python scripts/simulador_de_risco.py
+
 
 • Rodar inferência com modelo salvo:
 
@@ -164,7 +171,7 @@ print(previsoes)
 
 • Empreendimentos grandes têm +62% probabilidade de atraso
 
-•™Obras com logística acima de 25 km apresentam risco crítico
+• Obras com logística acima de 25 km apresentam risco crítico
 
 • Fornecedores atrasados em projetos anteriores continuam atrasando (padrão recorrente)
 
@@ -211,7 +218,7 @@ print(previsoes)
 • Expandir o dataset com número de equipes e rotatividade
 
 
-• Migrar modelo para RandomForest + SHAP Explainabilit
+• Migrar modelo para RandomForest + SHAP Explainability
 
 
 • Implementar acionadores automáticos para obra crítica ✉
