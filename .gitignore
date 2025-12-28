@@ -1,0 +1,24 @@
+# Ambientes Virtuais (Obrigatório)
+venv/
+.venv/
+env/
+bin/
+lib/
+share/
+
+# Jupyter Notebook (Ficheiros temporários e checkpoints)
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+__pycache__/
+*.py[cod]
+
+# Dados (Opcional - se os ficheiros forem muito grandes)
+# data/raw/*.csv 
+
+# Sistema e IDEs
+.DS_Store
+.vscode/
+.idea/
+
+# Ficheiros de Log
+*.log
