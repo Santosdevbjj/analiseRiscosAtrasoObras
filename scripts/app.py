@@ -4,7 +4,7 @@ import joblib
 import plotly.express as px
 import numpy as np
 
-# Configuração da Página
+# 1. Configuração da Página (Deve ser a primeira linha de Streamlit)
 st.set_page_config(page_title="MRV - Predictive Risk", layout="wide")
 
 # =====================
@@ -12,7 +12,7 @@ st.set_page_config(page_title="MRV - Predictive Risk", layout="wide")
 # =====================
 @st.cache_resource
 def load_model():
-    # Caminho ajustado para o Streamlit Cloud (lê da raiz)
+    # Caminho raiz para o Streamlit Cloud encontrar o arquivo .pkl
     return joblib.load("models/modelo_random_forest.pkl")
 
 model = load_model()
@@ -30,7 +30,7 @@ with st.sidebar:
     atraso_mat = st.slider("% Atraso na Entrega de Materiais", 0, 100, 10)
 
 # Criar DataFrame para o modelo
-# IMPORTANTE: A ordem abaixo deve ser EXATAMENTE a mesma do X_train no notebook
+# Nota: A ordem deve ser a mesma do treino: Chuva, Fornecedor, Mão de Obra, Material
 input_df = pd.DataFrame({
     'chuva_dias': [chuva],
     'fornecedor_score': [fornecedor],
@@ -49,8 +49,10 @@ col1, col2 = st.columns([1, 2])
 with col1:
     st.subheader("Previsão Atual")
     if st.button("🚀 Calcular Risco"):
-        # USAMOS .values para evitar o erro de nomes de colunas (Feature Names)
-        predicao = model.predict(input_df.values)[0]
+        # USAMOS .values para que o modelo receba apenas os números e ignore nomes de colunas
+        dados_modelo = input_df.values
+        predicao = model.predict(dados_modelo)[0]
+        
         st.metric(label="Atraso Estimado", value=f"{predicao:.1f} Dias")
         
         if predicao > 10:
@@ -61,27 +63,26 @@ with col1:
             st.success("Operação dentro da normalidade")
 
 with col2:
-    st.subheader("📈 Análise de Sensibilidade (O que aconteceria se...?)")
+    st.subheader("📈 Análise de Sensibilidade")
     
-    # Gerar cenário hipotético
+    # Criar variação de cenários (0 a 30 dias de chuva)
     cenarios = pd.DataFrame({
         'chuva_dias': list(range(0, 31)),
-        'fornecedor_score': fornecedor,
-        'mão_obra_qtd': equipe,
-        'material_atraso': atraso_mat
+        'fornecedor_score': [fornecedor] * 31,
+        'mão_obra_qtd': [equipe] * 31,
+        'material_atraso': [atraso_mat] * 31
     })
     
-    # Reordenar colunas e usar .values para garantir compatibilidade
-    cenarios_input = cenarios[['chuva_dias', 'fornecedor_score', 'mão_obra_qtd', 'material_atraso']]
-    cenarios['Atraso Previsto (Dias)'] = model.predict(cenarios_input.values)
+    # Usar .values para prever todos os cenários de uma vez
+    cenarios['Atraso Previsto (Dias)'] = model.predict(cenarios.values)
     
     fig = px.line(cenarios, x='chuva_dias', y='Atraso Previsto (Dias)',
                   title="Impacto do Clima no Cronograma",
-                  labels={'chuva_dias': 'Dias de Chuva no Mês'})
+                  labels={'chuva_dias': 'Previsão de Dias de Chuva', 'Atraso Previsto (Dias)': 'Dias de Atraso'})
     
-    # Destacar o ponto atual
-    atual_pred = model.predict(input_df.values)[0]
-    fig.add_scatter(x=[chuva], y=[atual_pred], 
+    # Adicionar o ponto atual no gráfico
+    pred_atual = model.predict(input_df.values)[0]
+    fig.add_scatter(x=[chuva], y=[pred_atual], 
                     name="Cenário Atual", marker=dict(size=15, color='red'))
     
     st.plotly_chart(fig, use_container_width=True)
