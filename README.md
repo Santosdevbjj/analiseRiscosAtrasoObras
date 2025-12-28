@@ -5,9 +5,6 @@ Prever qual obra tem maior chance de estourar o cronograma..
 ---
 
 
-
-Entendido, Sérgio. Vamos integrar esses resultados reais e as métricas exatas que o seu código gerou dentro da narrativa profissional. Este README agora reflete não apenas a teoria, mas a execução real do seu projeto, exatamente como um recrutador técnico (Luiz Café) e um cientista de dados (Meigarom) esperam ver.
-Aqui está o conteúdo completo para o seu README.md:
 🏗️ Previsão de Riscos e Atrasos em Obras – MRV Engenharia
 📖 1. Visão Geral e Problema de Negócio
 A MRV enfrenta o desafio de gerenciar atrasos que impactam o fluxo de caixa e a satisfação do cliente. O atraso em uma única etapa (como fundação) gera custos em cascata.
