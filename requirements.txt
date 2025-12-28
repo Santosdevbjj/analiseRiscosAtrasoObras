@@ -1,3 +1,6 @@
+# Adicione estes se houver erros de leitura de CSVs complexos:
+pyarrow
+scipy
 streamlit
 plotly
 
