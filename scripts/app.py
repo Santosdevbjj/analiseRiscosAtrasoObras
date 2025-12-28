@@ -2,63 +2,83 @@ import streamlit as st
 import pandas as pd
 import joblib
 import plotly.express as px
+import numpy as np
 
-# ======================
-# Carregar modelo
-# ======================
+# Configuração da Página
+st.set_page_config(page_title="MRV - Predictive Risk", layout="wide")
+
+# =====================
+# 1. Carregamento do Modelo
+# =====================
 @st.cache_resource
 def load_model():
-    return joblib.load("models/modelo_random_forest.pkl")
+    # Certifique-se de que o caminho está correto conforme sua estrutura
+    return joblib.load("../models/modelo_random_forest.pkl")
 
 model = load_model()
 
-# ======================
-# Layout
-# ======================
-st.set_page_config(page_title="Previsão de Atraso de Obras — MRV", layout="wide")
-st.title("🏗️ Previsão de Atraso de Obras — Demo Streamlit")
-st.markdown("Esse app usa Machine Learning (Random Forest) para prever atraso de obras da MRV Engenharia.")
+# =====================
+# 2. Interface Lateral (Inputs)
+# =====================
+st.sidebar.header("🏗️ Parâmetros da Obra")
 
-# ======================
-# Sidebar — Entrada de Dados
-# ======================
-st.sidebar.header("Parâmetros da Obra")
+with st.sidebar:
+    obra = st.text_input("Nome do Empreendimento", "Residencial MRV Prime")
+    chuva = st.slider("Dias de Chuva (Previsão)", 0, 30, 5)
+    fornecedor = st.slider("Rating do Fornecedor (0-10)", 0, 10, 7)
+    equipe = st.slider("Mão de Obra (Nº de Funcionários)", 5, 150, 50)
+    atraso_mat = st.slider("% Atraso na Entrega de Materiais", 0, 100, 10)
 
-obra = st.sidebar.text_input("Nome da Obra:", "Residencial Parque Bela Vista")
-chuva_dias = st.sidebar.slider("Dias de Chuva no Mês", 0, 30, 12)
-fornecedor_score = st.sidebar.slider("Qualidade do Fornecedor (0-10)", 0, 10, 6)
-mão_obra_qtd = st.sidebar.slider("Número de Funcionários", 2, 200, 45)
-material_atraso = st.sidebar.slider("% de atraso no material", 0, 100, 15)
-
-# Criar DataFrame com os inputs
-data = pd.DataFrame(
-    {
-        "chuva_dias": [chuva_dias],
-        "fornecedor_score": [fornecedor_score],
-        "mão_obra_qtd": [mão_obra_qtd],
-        "material_atraso": [material_atraso],
-    }
-)
-
-# ======================
-# Previsão
-# ======================
-if st.button("⚡ Prever Risco de Atraso"):
-    dias = model.predict(data)[0]
-    st.metric(label="⏳ Dias de Atraso Previstos", value=f"{dias:.2f} dias")
-    st.success("Recomendação: ajuste fornecedores e cronograma preventivamente 🚧")
-
-# ======================
-# Gráfico Exemplo
-# ======================
-st.subheader("📊 Exemplo — Ranking de Risco por Obra Integrado ao Modelo")
-
-df_demo = pd.DataFrame({
-    "obra": ["A", "B", "C", "D"],
-    "atraso_previsto_dias": [8.5, 2.1, 12.0, 4.4]
+# Criar DataFrame para o modelo
+input_df = pd.DataFrame({
+    'chuva_dias': [chuva],
+    'fornecedor_score': [fornecedor],
+    'mão_obra_qtd': [equipe],
+    'material_atraso': [atraso_mat]
 })
 
-fig = px.bar(df_demo, x="obra", y="atraso_previsto_dias", title="Previsão de atraso (dias)")
-st.plotly_chart(fig, use_container_width=True)
+# =====================
+# 3. Painel Principal
+# =====================
+st.title("🛡️ Sistema de Antecipação de Riscos - MRV")
+st.markdown(f"Análise preditiva para a obra: **{obra}**")
 
-st.caption("Modelo: RandomForestRegressor — métricas: MAE 4.97 dias | R² 0.41")
+col1, col2 = st.columns([1, 2])
+
+with col1:
+    st.subheader("Previsão Atual")
+    if st.button("🚀 Calcular Risco"):
+        predicao = model.predict(input_df)[0]
+        st.metric(label="Atraso Estimado", value=f"{predicao:.1f} Dias")
+        
+        if predicao > 10:
+            st.error("Risco Crítico Detectado!")
+        elif predicao > 5:
+            st.warning("Atenção: Risco Moderado")
+        else:
+            st.success("Operação dentro da normalidade")
+
+with col2:
+    st.subheader("📈 Análise de Sensibilidade (O que aconteceria se...?)")
+    # Gerar cenário hipotético: Variando dias de chuva de 0 a 30
+    cenarios = pd.DataFrame({
+        'chuva_dias': list(range(0, 31)),
+        'fornecedor_score': fornecedor,
+        'mão_obra_qtd': equipe,
+        'material_atraso': atraso_mat
+    })
+    
+    cenarios['Atraso Previsto (Dias)'] = model.predict(cenarios)
+    
+    fig = px.line(cenarios, x='chuva_dias', y='Atraso Previsto (Dias)',
+                  title="Impacto do Clima no Cronograma",
+                  labels={'chuva_dias': 'Dias de Chuva no Mês'})
+    
+    # Destacar o ponto atual selecionado no slider
+    fig.add_scatter(x=[chuva], y=[model.predict(input_df)[0]], 
+                    name="Cenário Atual", marker=dict(size=15, color='red'))
+    
+    st.plotly_chart(fig, use_container_width=True)
+
+st.markdown("---")
+st.caption("Desenvolvido por Sérgio Santos | Ciência de Dados Aplicada")
