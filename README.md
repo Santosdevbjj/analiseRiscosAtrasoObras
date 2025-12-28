@@ -12,15 +12,15 @@ Transformando dados operacionais em previsões acionáveis para reduzir multas e
 
 Este é um projeto de Machine Learning aplicado ao setor de construção civil, cujo objetivo é prever quantos dias uma obra tem risco de atrasar, permitindo que equipes tomem ações corretivas antes do problema acontecer.
 
-Ele faz parte do meu portfólio técnico para processos seletivos em Data Science, demonstrando:
+• Ele faz parte do meu portfólio técnico para processos seletivos em Data Science, demonstrando:
 
-Capacidade de entender um problema de negócio
+• Capacidade de entender um problema de negócio
 
-Transformar dados brutos em insights
+• Transformar dados brutos em insights
 
-Construir e explicar decisões técnicas
+• Construir e explicar decisões técnicas
 
-Desenvolver um modelo de previsão aplicável na prática
+• Desenvolver um modelo de previsão aplicável na prática
 
 
 
