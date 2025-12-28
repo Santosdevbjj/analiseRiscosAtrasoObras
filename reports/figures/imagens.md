@@ -1,0 +1,2 @@
+imagens geradas
+
