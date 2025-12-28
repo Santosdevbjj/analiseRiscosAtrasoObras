@@ -162,7 +162,9 @@ Fornecedores atrasados em projetos anteriores continuam atrasando (padrão recor
 
 
 
-> Interpretação: atraso não é aleatório — ele é explicado por logística, fornecedor e clima.
+ Interpretação: atraso não é aleatório — ele é explicado por logística, fornecedor e clima.
+ 
+![Importância das Features](reports/figures/feature_importance.png)
 
 
 
