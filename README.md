@@ -128,6 +128,7 @@ Chuvas	paralisação de obra
 • python 3.12
 
 **instalar dependências**
+
 pip install -r requirements.txt
 
 • **Rodar o notebook:**
