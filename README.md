@@ -10,9 +10,7 @@ Transformando dados operacionais em previsões acionáveis para reduzir multas e
 
 🌍 **1. Visão Geral — O que é este projeto?**
 
-Este é um projeto de Machine Learning aplicado ao setor de construção civil, cujo objetivo é prever quantos dias uma obra tem risco de atrasar, permitindo que equipes tomem ações corretivas antes do problema acontecer.
-
-• Ele faz parte do meu portfólio técnico para processos seletivos em Data Science, demonstrando:
+Este é um projeto de Machine Learning aplicado ao setor de construção civil, cujo objetivo é prever quantos dias uma obra tem risco de atrasar,permitindo atuação antecipada da diretoria, engenharia e suprimentos.
 
 • Capacidade de entender um problema de negócio
 
@@ -32,7 +30,7 @@ O projeto foi criado para atender a uma necessidade real de negócio:
 
 👉 Atrasos na entrega de imóveis geram multas contratuais, perda de confiança e impacto na reputação da construtora.
 
-**Com este projeto, busco demonstrar minha capacidade de:**
+**Com este projeto, busco**
 
 • Analisar dados com visão operacional
 
@@ -40,6 +38,18 @@ O projeto foi criado para atender a uma necessidade real de negócio:
 
 • Comunicar resultados de forma clara para diretoria, engenharia, obras e suprimentos
 
+
+**Atrasos na entrega de imóveis geram:**
+
+• Multas contratuais
+
+• Insatisfação dos clientes
+
+• Danos reputacionais
+
+• Perda de receita recorrente
+
+👉 Este projeto busca antecipar o risco antes do atraso ocorrer, sugerindo ações preventivas.
 
 
 ---
@@ -59,10 +69,25 @@ Chuvas	paralisação de obra
 
 • Logística de materiais	distâncias e falhas na rota
 
-
 • Hoje, esses dados existem — mas não são usados para tomada de decisão predictiva.
 
 • Este projeto resolve exatamente essa lacuna.
+
+Resumindo:
+
+Variável
+Impacto
+Fornecedores
+Atraso na entrega de materiais
+Chuvas
+Paralisação do canteiro
+Equipe
+Baixa disponibilidade de mão de obra
+Tipo da obra
+Obras grandes possuem maior risco
+Logística
+Distâncias > 25 km elevam atrasos
+📌 Hoje esses dados existem — porém não são usados de forma preditiva.
 
 
 ---
