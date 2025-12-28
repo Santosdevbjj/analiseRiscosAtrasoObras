@@ -5,6 +5,16 @@ Transformando dados operacionais em previsões acionáveis para reduzir multas e
 
 ---
 
+### 🧪 Teste o Modelo ao Vivo
+[gggg](https://huggingface.co/spaces/Sergiobjj2079/Streamlit/tree/main)
+
+
+
+
+---
+
+
+
 🌍 1. Visão Geral — O que é este projeto?
 
 Este é um projeto de Machine Learning aplicado ao setor de construção civil, cujo objetivo é prever quantos dias uma obra tem risco de atrasar, permitindo que equipes tomem ações corretivas antes do problema acontecer.
