@@ -130,24 +130,24 @@ Chuvas	paralisação de obra
 [![Streamlit App](https://img.shields.io/badge/Executar_Simulador-Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](#)
 
 
-**Rodar o Simulador Interativo:**
+• **Rodar o Simulador Interativo:**
 
 streamlit run scripts/app.py
 
 
 
-**instalar dependências**
+• **instalar dependências**
 
 pip install -r requirements.txt
 
 • **Rodar o notebook:**
 
- **Abrir notebook e explorar analise**
+ • **Abrir notebook e explorar analise**
  
 • jupyter notebook
 Notebooks/analise_atrasos.ipynb
 
- **Rodar simulador**
+ • **Rodar simulador**
  
 python scripts/simulador_de_risco.py
 
