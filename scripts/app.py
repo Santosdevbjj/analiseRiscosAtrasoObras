@@ -49,8 +49,8 @@ col1, col2 = st.columns([1, 2])
 with col1:
     st.subheader("Previsão Atual")
     if st.button("🚀 Calcular Risco"):
-        # USAMOS .values para que o modelo receba apenas os números e ignore nomes de colunas
-        dados_modelo = input_df.values
+        # Usar apenas as colunas que o modelo conhece
+        dados_modelo = input_df[model.feature_names_in_]
         predicao = model.predict(dados_modelo)[0]
         
         st.metric(label="Atraso Estimado", value=f"{predicao:.1f} Dias")
@@ -73,15 +73,15 @@ with col2:
         'material_atraso': [atraso_mat] * 31
     })
     
-    # Usar .values para prever todos os cenários de uma vez
-    cenarios['Atraso Previsto (Dias)'] = model.predict(cenarios.values)
+    # Usar apenas as colunas que o modelo conhece
+    cenarios['Atraso Previsto (Dias)'] = model.predict(cenarios[model.feature_names_in_])
     
     fig = px.line(cenarios, x='chuva_dias', y='Atraso Previsto (Dias)',
                   title="Impacto do Clima no Cronograma",
                   labels={'chuva_dias': 'Previsão de Dias de Chuva', 'Atraso Previsto (Dias)': 'Dias de Atraso'})
     
     # Adicionar o ponto atual no gráfico
-    pred_atual = model.predict(input_df.values)[0]
+    pred_atual = model.predict(input_df[model.feature_names_in_])[0]
     fig.add_scatter(x=[chuva], y=[pred_atual], 
                     name="Cenário Atual", marker=dict(size=15, color='red'))
     
