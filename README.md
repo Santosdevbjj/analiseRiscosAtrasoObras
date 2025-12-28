@@ -201,9 +201,6 @@ Implementar acionadores automáticos para obra crítica ✉
 
 📚 12. Aprendizados Individuais (Minha Reflexão Técnica)
 
-> Se o README não mostra sua jornada, você vira só mais um candidato. — Luiz Café
-
-
 
 O que mais aprendi neste projeto:
 
