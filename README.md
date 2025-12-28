@@ -120,9 +120,12 @@ pip install -r requirements.txt
 • **Rodar o notebook:**
 
  **Abrir notebook e explorar analise**
-• jupyter notebook Notebooks/analise_atrasos.ipynb
+ 
+• jupyter notebook
+Notebooks/analise_atrasos.ipynb
 
  **Rodar simulador**
+ 
 python scripts/simulador_de_risco.py
 
 
@@ -131,7 +134,8 @@ python scripts/simulador_de_risco.py
 import joblib
 import pandas as pd
 
-model = joblib.load("models/modelo_random_forest.pkl")
+model =
+joblib.load("models/modelo_random_forest.pkl")
 
 # ⚠ dados precisam estar transformados conforme pipeline original!
 X = preprocessador.transform(df_novos_dados)
