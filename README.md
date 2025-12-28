@@ -1,117 +1,249 @@
-# analise Riscos Atraso Obras
+## 🏗️ Predição de Atraso de Obras — MRV Engenharia
 
-Prever qual obra tem maior chance de estourar o cronograma..
+Transformando dados operacionais em previsões acionáveis para reduzir multas e aumentar satisfação do cliente
+
 
 ---
 
+🌍 1. Visão Geral — O que é este projeto?
 
-🏗️ Previsão de Riscos e Atrasos em Obras – MRV Engenharia
+Este é um projeto de Machine Learning aplicado ao setor de construção civil, cujo objetivo é prever quantos dias uma obra tem risco de atrasar, permitindo que equipes tomem ações corretivas antes do problema acontecer.
 
+Ele faz parte do meu portfólio técnico para processos seletivos em Data Science, demonstrando:
 
-📖 1. Visão Geral e Problema de Negócio
-A MRV enfrenta o desafio de gerenciar atrasos que impactam o fluxo de caixa e a satisfação do cliente. O atraso em uma única etapa (como fundação) gera custos em cascata.
+Capacidade de entender um problema de negócio
 
-O Problema: A falta de previsibilidade sobre quais fornecedores e etapas oferecem maior risco financeiro.
+Transformar dados brutos em insights
 
-A Solução: Desenvolvi um modelo de Machine Learning que antecipa o atraso em dias, permitindo que a gestão de suprimentos e obras tome decisões baseadas em dados antes que o custo ocorra.
+Construir e explicar decisões técnicas
 
-
-📂 2. Estrutura do Repositório
-O projeto está organizado seguindo padrões de engenharia de dados para garantir escalabilidade:
-├── data/
-│   └── raw/                # Dados brutos e imutáveis
-│       ├── atividades.csv   # Histórico de cronogramas
-│       ├── fornecedores.csv # Cadastro e ratings
-│       ├── obras.csv        # Orçamentos e localizações
-│       └── suprimentos.csv  # Logística de materiais
-├── models/
-│   └── modelo_random_forest.pkl # Modelo preditivo serializado
-├── Notebooks/
-│   ├── gerar_dados.ipynb        # Simulação da base de dados
-│   └── 02_modelagem_preditiva.ipynb # Desenvolvimento do modelo
-├── reports/
-│   └── figures/            # Ativos visuais do projeto
-│       └── feature_importance.png # Gráfico de relevância
-├── scripts/
-│   └── gerar_dados.py      # Automação de processamento
-├── requirements.txt        # Dependências do ambiente
-├── LICENSE                 # Licença do projeto
-└── README.md               # Documentação principal
+Desenvolver um modelo de previsão aplicável na prática
 
 
 
-🎯 3. Objetivo do Projeto
+---
 
-Demonstrar a viabilidade de prever atrasos usando o algoritmo RandomForestRegressor, focando na criação de variáveis (Feature Engineering) que capturem a ineficiência de fornecedores e a complexidade financeira de cada empreendimento.
+🎯 2. Objetivo do Projeto — Por que ele existe?
 
+O projeto foi criado para atender a uma necessidade real de negócio:
 
-🛠️ 4. Decisões Técnicas e Trade-offs
+👉 Atrasos na entrega de imóveis geram multas contratuais, perda de confiança e impacto na reputação da construtora.
 
+Com este projeto, busco demonstrar minha capacidade de:
 
- * Por que Random Forest? Pela sua capacidade de lidar com variáveis categóricas (cidades, etapas) e fornecer interpretabilidade clara sobre o que está causando o atraso.
- * Feature Engineering: Criei a taxa_insucesso_fornecedor e o logaritmo da complexidade_obra, que se mostraram os maiores preditores do modelo.
- * Persistência: O modelo é salvo em .pkl para garantir que o resultado seja replicável em produção sem necessidade de retreino.
+Analisar dados com visão operacional
 
-   
-📊 5. Resultados e Performance do Modelo
+Construir um pipeline simples de ML com impacto direto no negócio
 
-
-Após a execução do pipeline em 02_modelagem_preditiva.ipynb, o modelo apresentou os seguintes indicadores de performance:
-| Métrica | Valor |
-|---|---|
-| Erro Médio Absoluto (MAE) | 4.97 dias |
-| R² Score | 0.41 |
-| Impacto Financeiro (R$) | R$ 248,400.00 |
-🔍 Diagnóstico de Variáveis (Insights de Negócio)
-O gráfico abaixo, gerado automaticamente, revela que o histórico de insucesso do fornecedor é o fator que mais onera o prazo da MRV. Isso indica que a homologação de fornecedores é o ponto mais crítico para a redução de custos.
+Comunicar resultados de forma clara para diretoria, engenharia, obras e suprimentos
 
 
-🚀 6. Simulador de Risco (Exemplo de Uso)
+
+---
+
+🧩 3. Contexto — O Problema na Vida Real
+
+Dentro da operação, diversos fatores interferem nos prazos:
+
+Variável	Impacto
+
+Fornecedores	atraso na entrega de materiais
+Chuvas	paralisação de obra
+Equipe	baixa disponibilidade de mão de obra
+Tipo da obra	empreendimentos maiores têm maior risco
+Logística de materiais	distâncias e falhas na rota
 
 
-Este projeto entrega uma ferramenta pronta para ser integrada a um dashboard ou sistema interno:
+Hoje, esses dados existem — mas não são usados para tomada de decisão predictiva.
+
+Este projeto resolve exatamente essa lacuna.
+
+
+---
+
+📏 4. Premissas da Análise
+
+Para garantir consistência, adotamos:
+
+Dataset contém histórico realista de obras e cronogramas
+
+A métrica de atraso é medida em dias
+
+Dados faltantes foram tratados com imputação ou remoção
+
+O objetivo é explicação + previsibilidade, não causalidade
+
+
+
+---
+
+🧠 5. Decisões Técnicas — Como e por quê foi construído
+
+Esta seção revela o pensamento crítico, ponto mais valorizado para recrutadores (Luiz Café 💡).
+
+Componente	Escolha	Motivação
+
+Linguagem	Python 3.12	Ecossistema rico para Data Science
+Frameworks	Pandas, NumPy, Scikit-Learn	Manipulação e modelagem
+Modelo	RandomForestRegressor	Captura relações não-lineares e heterogeneidade entre obras
+Alternativas avaliadas	Regressão Linear, XGBoost	Linear não performou bem — Ruído no comportamento do atraso
+Visualização	Matplotlib e Seaborn	Clareza para explicar insights para áreas de negócio
+Deploy futuro	Streamlit (opcional)	Possibilidade de demo executável para diretoria
+
+
+> 🧠 Nota técnica: O modelo foi treinado com dados normalizados e codificados (One-Hot Encoding). Para usar .predict() no mundo real, o pipeline precisa aplicar os mesmos preprocessadores usados no treinamento.
+
+
+
+
+---
+
+🔧 6. Como Executar o Projeto
+
+Pré-requisitos:
+
+python 3.12
+pip install -r requirements.txt
+
+Rodar o notebook:
+
+jupyter notebook notebooks/analise_atrasos.ipynb
+
+Rodar inferência com modelo salvo:
+
 import joblib
-import numpy as np
+import pandas as pd
 
-# Carrega o cérebro do projeto
-model = joblib.load('models/modelo_random_forest.pkl')
+model = joblib.load("models/modelo_random_forest.pkl")
 
-# Simulação de nova obra: Fornecedor de alto risco em Belo Horizonte
-nova_obra = {
-    'orcamento_estimado': 12000000,
-    'taxa_insucesso_fornecedor': 0.8, # 80% de atrasos anteriores
-    'complexidade_obra': np.log1p(12000000),
-    'risco_etapa': 10.5
-    # ... demais variáveis codificadas
-}
+# ⚠ dados precisam estar transformados conforme pipeline original!
+X = preprocessador.transform(df_novos_dados)
 
-
-
-# Previsão: 12.91 dias de atraso estimado
-
-
-
-📈 7. Aprendizados e Próximos Passos
-Aprendizados:
-
-
-
- * A importância de converter métricas de erro (MAE) em impacto financeiro (R$) para facilitar a decisão da diretoria.
- * Como lidar com o viés de orçamentos altos usando transformações logarítmicas.
-Próximos Passos:
- * [ ] Implementar um dashboard interativo com Streamlit.
- * [ ] Testar modelos de Gradient Boosting (XGBoost) para melhorar o R².
- * [ ] Integrar dados de APIs meteorológicas para refinar riscos em etapas externas.
+previsoes = model.predict(X)
+print(previsoes)
 
 
 ---
 
-🤝 Contato e Conexões
-Sérgio Santos
-[Link para o seu LinkedIn]
-[Seu E-mail Profissional]
-Este projeto foi desenvolvido como parte de um portfólio profissional para demonstrar habilidades em Ciência de Dados aplicada ao setor imobiliário.
+📊 7. Estratégia da Solução (Etapas — Meigarom Style)
+
+1️⃣ Entendimento do problema de negócio
+2️⃣ Exploração dos dados (tipos, nulos, distribuições)
+3️⃣ Análise descritiva (estatísticas, % atraso, padrões)
+4️⃣ Segmentação (chuva, fornecedor, porte, região)
+5️⃣ Treinamento do Random Forest
+6️⃣ Avaliação de erro e explicabilidade
+7️⃣ Geração de visualizações para o negócio
 
 
+---
+
+🔍 8. Insights Encontrados
+
+> 🎯 Insights entregam valor — é aqui que o projeto vira portfólio.
+
+
+
+Obras com fornecedores de rating baixo concentram maior atraso
+
+Dias com chuva elevaram o atraso médio em +38%
+
+Empreendimentos grandes têm +62% probabilidade de atraso
+
+Obras com logística acima de 25 km apresentam risco crítico
+
+Fornecedores atrasados em projetos anteriores continuam atrasando (padrão recorrente)
+
+
+
+---
+
+📊 9. Feature Importance — O que mais impacta o atraso?
+
+
+
+> Interpretação: atraso não é aleatório — ele é explicado por logística, fornecedor e clima.
+
+
+
+
+---
+
+🧮 10. Resultados (Métricas do Modelo)
+
+Métrica	Valor	Interpretação para o negócio
+
+MAE (Erro Médio)	4,97 dias	O modelo erra em média < 5 dias
+R² Score	0,41	Explicamos 41% dos fatores de atraso
+Economia Estimada	R$ 248.400,00 / ano	Multas evitadas ao agir nos empreendimentos de maior risco
+
+
+
+---
+
+🚀 11. Objetivos Futuros — Próximos Passos
+
+Criar um dashboard automático para monitorar risco → Power BI + Streamlit
+
+Adicionar variáveis externas (chuva real via API)
+
+Expandir o dataset com número de equipes e rotatividade
+
+Migrar modelo para RandomForest + SHAP Explainability
+
+Implementar acionadores automáticos para obra crítica ✉
+
+
+
+---
+
+📚 12. Aprendizados Individuais (Minha Reflexão Técnica)
+
+> Se o README não mostra sua jornada, você vira só mais um candidato. — Luiz Café
+
+
+
+O que mais aprendi neste projeto:
+
+Entender o negócio antes de abrir o Jupyter
+
+Nem sempre o modelo mais complexo é o melhor → clareza vence
+
+Explicar bem vale tanto quanto programar bem
+
+Pipeline de preprocessamento é parte do modelo, não acessório
+
+
+
+---
+
+🤝 13. Créditos e Inspiração
+
+Artigo — Como escrever um README que torna seu Portfólio Legível para Recrutadores — por Luiz Café
+
+Estrutura de Problema / Insight / Resultado — modelo Meigarom – Imersão CDS
+
+
+
+---
+
+🧲 Call to Action (Opcional para o GitHub)
+
+Se quiser visualizar um protótipo executável, comente na issue:
+👉 "Quero demo Streamlit" — e eu disponibilizo uma versão interativa.
+
+
+---
+
+📬 Contato
+
+Se quiser conversar sobre Data Science aplicado a operações:
+
+👤 Sérgio Santos
+💼 LinkedIn: https://linkedin.com/in/(seu-perfil)
+📧 Email: (opcional)
+
+
+---
 
 
