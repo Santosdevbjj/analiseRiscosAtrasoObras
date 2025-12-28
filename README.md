@@ -6,7 +6,8 @@ Transformando dados operacionais em previsões acionáveis para reduzir multas e
 ---
 
 ### 🧪 Teste o Modelo ao Vivo
-[gggg](https://huggingface.co/spaces/Sergiobjj2079/Streamlit/tree/main)
+
+(https://huggingface.co/spaces/Sergiobjj2079/Streamlit/tree/main)
 
 
 
