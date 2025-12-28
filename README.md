@@ -8,7 +8,7 @@ Transformando dados operacionais em previsões acionáveis para reduzir multas e
 
 
 
-🌍 1. Visão Geral — O que é este projeto?
+🌍 **1. Visão Geral — O que é este projeto?**
 
 Este é um projeto de Machine Learning aplicado ao setor de construção civil, cujo objetivo é prever quantos dias uma obra tem risco de atrasar, permitindo que equipes tomem ações corretivas antes do problema acontecer.
 
@@ -26,55 +26,58 @@ Desenvolver um modelo de previsão aplicável na prática
 
 ---
 
-🎯 2. Objetivo do Projeto — Por que ele existe?
+🎯 **2. Objetivo do Projeto — Por que ele existe?**
 
 O projeto foi criado para atender a uma necessidade real de negócio:
 
 👉 Atrasos na entrega de imóveis geram multas contratuais, perda de confiança e impacto na reputação da construtora.
 
-Com este projeto, busco demonstrar minha capacidade de:
+**Com este projeto, busco demonstrar minha capacidade de:**
 
-Analisar dados com visão operacional
+• Analisar dados com visão operacional
 
-Construir um pipeline simples de ML com impacto direto no negócio
+• Construir um pipeline simples de ML com impacto direto no negócio
 
-Comunicar resultados de forma clara para diretoria, engenharia, obras e suprimentos
+• Comunicar resultados de forma clara para diretoria, engenharia, obras e suprimentos
 
 
 
 ---
 
-🧩 3. Contexto — O Problema na Vida Real
+🧩 **3. Contexto — O Problema na Vida Real**
 
 Dentro da operação, diversos fatores interferem nos prazos:
 
-Variável	Impacto
+• Variável	Impacto
 
-Fornecedores	atraso na entrega de materiais
+• Fornecedores	atraso na entrega de materiais
 Chuvas	paralisação de obra
-Equipe	baixa disponibilidade de mão de obra
-Tipo da obra	empreendimentos maiores têm maior risco
-Logística de materiais	distâncias e falhas na rota
+
+• Equipe	baixa disponibilidade de mão de obra
+
+• Tipo da obra	empreendimentos maiores têm maior risco
+
+• Logística de materiais	distâncias e falhas na rota
 
 
-Hoje, esses dados existem — mas não são usados para tomada de decisão predictiva.
+• Hoje, esses dados existem — mas não são usados para tomada de decisão predictiva.
 
-Este projeto resolve exatamente essa lacuna.
+• Este projeto resolve exatamente essa lacuna.
 
 
 ---
 
-📏 4. Premissas da Análise
+📏 **4. Premissas da Análise**
 
-Para garantir consistência, adotamos:
+• Para garantir consistência, adotamos:
 
-Dataset contém histórico realista de obras e cronogramas
+• Dataset contém histórico realista de obras e cronogramas
 
-A métrica de atraso é medida em dias
+• A métrica de atraso é medida em dias
 
-Dados faltantes foram tratados com imputação ou remoção
+• Dados faltantes foram tratados com imputação ou remoção
 
-O objetivo é explicação + previsibilidade, não causalidade
+• O objetivo é explicação + previsibilidade, não causalidade
 
 
 
@@ -82,7 +85,6 @@ O objetivo é explicação + previsibilidade, não causalidade
 
 🧠 **5. Decisões Técnicas — Como e por quê foi construído**
 
-## Esta seção revela o pensamento crítico, ponto mais valorizado para recrutadores
 
 • Componente	Escolha	Motivação
 
@@ -155,8 +157,6 @@ print(previsoes)
 
 🔍 **8. Insights Encontrados**
 
-> ## 🎯 Insights entregam valor — é aqui que o projeto vira portfólio.
-
 
 • Obras com fornecedores de rating baixo concentram maior atraso
 
@@ -220,7 +220,7 @@ print(previsoes)
 
 ---
 
-📚 **12. Aprendizados Individuais (Minha Reflexão Técnica)*
+📚 **12. Aprendizados Individuais (Minha Reflexão Técnica)**
 
 
 **• O que mais aprendi neste projeto:**
