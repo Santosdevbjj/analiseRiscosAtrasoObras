@@ -73,21 +73,6 @@ Chuvas	paralisação de obra
 
 • Este projeto resolve exatamente essa lacuna.
 
-Resumindo:
-
-Variável
-Impacto
-Fornecedores
-Atraso na entrega de materiais
-Chuvas
-Paralisação do canteiro
-Equipe
-Baixa disponibilidade de mão de obra
-Tipo da obra
-Obras grandes possuem maior risco
-Logística
-Distâncias > 25 km elevam atrasos
-📌 Hoje esses dados existem — porém não são usados de forma preditiva.
 
 
 ---
@@ -102,7 +87,10 @@ Distâncias > 25 km elevam atrasos
 
 • Dados faltantes foram tratados com imputação ou remoção
 
-• O objetivo é explicação + previsibilidade, não causalidade
+• O objetivo é explicação para negócio + previsibilidade
+
+• Não buscamos causalidade científica
+
 
 
 
@@ -111,7 +99,7 @@ Distâncias > 25 km elevam atrasos
 🧠 **5. Decisões Técnicas — Como e por quê foi construído**
 
 
-• Componente	Escolha	Motivação
+• **Componente,	Escolha,	Motivação:**
 
 • Linguagem	Python 3.12	Ecossistema rico para Data Science
 
