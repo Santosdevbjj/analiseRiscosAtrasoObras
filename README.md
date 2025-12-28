@@ -130,6 +130,12 @@ Chuvas	paralisação de obra
 [![Streamlit App](https://img.shields.io/badge/Executar_Simulador-Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](#)
 
 
+**Rodar o Simulador Interativo:**
+
+streamlit run scripts/app.py
+
+
+
 **instalar dependências**
 
 pip install -r requirements.txt
