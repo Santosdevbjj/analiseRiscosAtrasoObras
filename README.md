@@ -89,7 +89,7 @@ Chuvas	paralisação de obra
 
 • O objetivo é explicação para negócio + previsibilidade
 
-• Não buscamos causalidade científica
+• O foco é a utilidade preditiva e explicabilidade para o negócio.
 
 
 
@@ -115,6 +115,8 @@ Chuvas	paralisação de obra
 
 
 > 🧠 **Nota técnica:** O modelo foi treinado com dados normalizados e codificados (One-Hot Encoding). Para usar .predict() no mundo real, o pipeline precisa aplicar os mesmos preprocessadores usados no treinamento.
+
+> O modelo em produção foi otimizado para lidar com a dimensionalidade do treinamento via alinhamento de matrizes (padding), garantindo que a inferência no Streamlit seja rápida e estável."
 
 
 
