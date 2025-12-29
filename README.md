@@ -6,7 +6,6 @@
 
 ---
 
-![Atraso Estimado](reports/figures/Previsao_Atual.png)
 
 
 Transformando dados operacionais em previsões acionáveis para reduzir multas e aumentar satisfação do cliente
