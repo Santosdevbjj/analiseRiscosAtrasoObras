@@ -4,8 +4,6 @@
   <img src="reports/figures/Previsao_Atual.png" width="800" title="Interface do Simulador MRV">
 </p>
 
----
-
 
 
 Transformando dados operacionais em previsões acionáveis para reduzir multas e aumentar satisfação do cliente
@@ -107,8 +105,10 @@ Chuvas	paralisação de obra
 🧠 **5. Decisões Técnicas — Como e por quê foi construído**
 
 
+<p align="center">
+  <img src="reports/figures/Analise_Sensibilidade.png" width="800" title="Interface do Simulador MRV">
+</p>
 
-![O impacto no cronograma](reports/figures/Analise_Sensibilidade.png)
 
 
 • **Componente,	Escolha,	Motivação:**
