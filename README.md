@@ -127,7 +127,9 @@ Chuvas	paralisação de obra
 
 • python 3.12
 
-[![Streamlit App](https://img.shields.io/badge/Executar_Simulador-Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](#)
+
+[![Streamlit App](https://img.shields.io/badge/Executar_Simulador-Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://xsczxui9hscbsfpucq38yu.streamlit.app/)
+
 
 
 • **Rodar o Simulador Interativo:**
