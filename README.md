@@ -281,7 +281,8 @@ print(previsoes)
 🧲 **Call to Action**
 
 Se quiser visualizar um protótipo executável, comente na issue:
-👉 "Quero demo Streamlit" — e eu disponibilizo uma versão interativa.
+
+👉 O simulador já está disponível através da badge no início deste documento! Esta na seção 6.
 
 
 ---
