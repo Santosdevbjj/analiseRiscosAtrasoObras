@@ -1,5 +1,10 @@
 ## 🏗️ Simulador de Riscos Logísticos - MRV
  
+<p align="center">
+  <img src="reports/figures/Previsao_Atual.png" width="800" title="Interface do Simulador MRV">
+</p>
+
+---
 
 ![Atraso Estimado](reports/figures/Previsao_Atual.png)
 
