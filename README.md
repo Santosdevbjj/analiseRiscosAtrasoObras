@@ -173,8 +173,7 @@ python scripts/simulador_de_risco.py
 import joblib
 import pandas as pd
 
-model =
-joblib.load("models/modelo_random_forest.pkl")
+model=joblib.load("models/modelo_random_forest.pkl")
 
 # ⚠ dados precisam estar transformados conforme pipeline original!
 X = preprocessador.transform(df_novos_dados)
@@ -232,6 +231,7 @@ print(previsoes)
 
 
 
+• Utilizei Feature Importance para garantir que o engenheiro de campo entenda por que o modelo está alertando sobre o risco (ex: é por causa da distância logística ou do fornecedor?).
 
 ---
 
@@ -246,7 +246,7 @@ print(previsoes)
 • Economia Estimada	R$ 248.400,00 / ano	Multas evitadas ao agir nos empreendimentos de maior risco
 
 
-
+• **Nota:** O R² de 0,41 reflete a complexidade e volatilidade do setor, mas o MAE de <5 dias garante utilidade prática para o planejamento semanal."
 
 ---
 
