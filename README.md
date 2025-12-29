@@ -103,6 +103,10 @@ Chuvas	paralisação de obra
 🧠 **5. Decisões Técnicas — Como e por quê foi construído**
 
 
+
+![O impacto no cronograma](reports/figures/Analise_Sensibilidade.png)
+
+
 • **Componente,	Escolha,	Motivação:**
 
 • Linguagem	Python 3.12	Ecossistema rico para Data Science
