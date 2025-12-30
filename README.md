@@ -8,7 +8,7 @@ Transformando dados operacionais em previsões acionáveis para reduzir multas e
 
 ---
 
-**Atenção:** Barra de controles a esquerda 
+**Atenção:** Barra de controles a esquerda, na seção 6 ative o simulador 
 
 <p align="center">
   <img src="reports/figures/Slider_Controle01.png" width="800" title="Interface do Simulador MRV">
