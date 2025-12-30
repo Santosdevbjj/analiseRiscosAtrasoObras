@@ -248,6 +248,12 @@ print(previsoes)
 
 • **Nota:** O R² de 0,41 reflete a complexidade e volatilidade do setor, mas o MAE de <5 dias garante utilidade prática para o planejamento semanal."
 
+
+
+<p align="center">
+  <img src="reports/figures/Importancia_das_Features.png" width="800" title="Interface do Simulador MRV">
+</p>
+
 ---
 
 🚀 **11. Objetivos Futuros — Próximos Passos**
