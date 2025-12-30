@@ -231,7 +231,63 @@ print(previsoes)
 
 • Obras com logística acima de 25 km apresentam risco crítico
 
-• Fornecedores atrasados em projetos anteriores continuam atrasando (padrão recorrente)
+• Fornecedores atrasados em projetos anteriores continuam atrasando (padrão recorrente) 
+
+
+<p align="center">
+  <img src="reports/figures/Pior_Caso.png" width="800" title="Interface do Simulador MRV">
+</p> 
+
+**Pior Caso**
+
+
+
+<p align="center">
+  <img src="reports/figures/Caso_Otimizado.png" width="800" title="Interface do Simulador MRV">
+</p> 
+
+**Caso Otimizado**
+
+
+
+**1. Comparação Direta de Performance**
+   
+ • **Pior Caso - Fundação:** Apresenta um atraso de 10.1 dias. O sistema indica um grau de confiança "Média", pois nesta fase (fundações) as variáveis externas como geologia e clima são mais imprevisíveis.
+ 
+ • **Caso Otimizado - Acabamento:** O atraso cai para 7.2 dias. Curiosamente, o grau de confiança sobe para "Alta". Isto demonstra que o modelo tem maior certeza nas previsões de etapas internas, onde o impacto de surpresas geológicas é menor.
+   
+**2. Análise de Sensibilidade Climática (Gráfico de Linhas)**
+
+ 
+Ao comparar os dois gráficos de "Relação Clima-Cronograma":
+
+  • **No Pior Caso (Fundação):** A curva de atraso começa em patamares mais altos (perto de 10 dias) e mostra uma inclinação mais acentuada. Pequenas variações de chuva têm um efeito cascata no cronograma.
+   
+  • **No Caso Otimizado (Acabamento):** A curva é muito mais estável. Note que o atraso flutua minimamente entre 6.5 e 8 dias, independentemente da pluviosidade. Isto valida a tese de que a gestão de fornecedores e a logística são os fatores dominantes aqui, não o clima.
+
+  
+**3. Impacto Geológico (Gráfico de Barras)**
+ * Em ambos os relatórios, o Solo Arenoso aparece como o de maior risco relativo, mas a magnitude desse risco é drasticamente reduzida no Caso Otimizado.
+   
+   **Insight:** "A escolha da etapa e a eficiência do fornecedor conseguem 'amortecer' os riscos naturais do terreno."
+Sugestão de Estrutura para o seu Slide Executivo
+
+
+
+**Título: Inteligência de Dados na Mitigação de Atrasos**
+
+| Métrica | Cenário A (PDF 3) | Cenário B (PDF 4) | Impacto da Otimização |
+|---|---|---|---|
+| Etapa Crítica | Fundação | Acabamento | Transição de Fase |
+| Atraso Estimado | 10.1 Dias | 7.2 Dias | -2.9 Dias (Redução de 28%) |
+| Confiança da IA | Média | Alta | Maior Previsibilidade |
+| Status | Alerta Crítico | Alerta Gerenciável | Redução de Stress Operacional |
+Conclusão para a Diretoria:
+
+"Ao utilizarmos o MRV Risk Intelligence, identificamos que a fase de Acabamento, embora ainda em estado de alerta, oferece uma janela de 71% de confiança alta contra apenas uma confiança média na Fundação. 
+
+Isto permite-nos focar esforços de contingência (como tendas ou drenagem) onde a IA aponta maior vulnerabilidade (Fundação) e focar em eficiência logística onde o clima já não é o vilão (Acabamento)."
+
 
 
 
