@@ -1,15 +1,12 @@
 """
-scripts/telegram_bot.py — Bot de Inteligência Preditiva MRV
-Versão Final Consolidada: Data Science + Business Intelligence + Visualizações + PDF
+scripts/telegram_bot.py — Bot de Inteligência Preditiva MRV 2.0
+Versão Final Consolidada: IA + Clima + Geologia + PDF
 
 Recursos:
 - Token via variável de ambiente (TELEGRAM_TOKEN)
-- Pipeline completo (pré-processamento + modelo RandomForest)
-- Relatório consolidado por obra (risco médio previsto, pior etapa, fornecedor/material mais crítico)
-- Gráfico por etapas da obra (risco previsto médio)
-- Gráfico comparativo entre cidades (risco previsto médio)
-- Exportação de relatório + gráficos em PDF consolidado para análise offline
-- Logging e mensagens de erro amigáveis
+- Suporte a variáveis ambientais (Chuva e Solo)
+- Relatório detalhado com métricas de engenharia
+- Gráficos comparativos e exportação em PDF
 """
 
 import os
@@ -51,14 +48,15 @@ logger = logging.getLogger("telegram_bot_mrv")
 # -----------------------------
 try:
     pipeline = joblib.load(PIPELINE_PATH)
-    logger.info("✅ Pipeline RandomForest carregado.")
+    logger.info("✅ Pipeline RandomForest (Multivariado) carregado.")
 except Exception as e:
     logger.error(f"❌ Erro ao carregar pipeline: {e}")
     pipeline = None
 
 try:
+    # A base agora deve conter: nivel_chuva e tipo_solo
     df_base = pd.read_csv(DB_PATH)
-    logger.info("✅ Base detalhada carregada.")
+    logger.info("✅ Base detalhada com dados de Chuva/Solo carregada.")
 except Exception as e:
     logger.error(f"❌ Erro ao carregar base CSV: {e}")
     df_base = None
@@ -67,61 +65,60 @@ except Exception as e:
 # Utilitários
 # -----------------------------
 def emoji_risco(dias: float) -> str:
-    if dias > 15:
-        return "🔴"
-    if dias > 5:
-        return "🟡"
+    if dias > 15: return "🔴"
+    if dias > 7: return "🟡"
     return "🟢"
 
 def gerar_relatorio_inteligente(id_obra: str, df_obra: pd.DataFrame) -> str:
-    """Relatório preditivo consolidado por obra."""
-    predicoes = pipeline.predict(df_obra.drop(columns=["id_obra"], errors="ignore"))
-    df_obra = df_obra.copy()
-    df_obra["predicao_atraso"] = predicoes
+    """Relatório preditivo consolidado incluindo Clima e Solo."""
+    # Preparar dados para o pipeline (removendo id_obra se existir)
+    X = df_obra.drop(columns=["id_obra"], errors="ignore")
+    predicoes = pipeline.predict(X)
+    
+    df_res = df_obra.copy()
+    df_res["predicao_atraso"] = predicoes
 
-    risco_medio_previsto = float(df_obra["predicao_atraso"].mean())
-    pior_linha = df_obra.loc[df_obra["predicao_atraso"].idxmax()]
+    risco_medio = float(df_res["predicao_atraso"].mean())
+    pior_linha = df_res.loc[df_res["predicao_atraso"].idxmax()]
 
-    cidade = str(df_obra["cidade"].iloc[0])
-    orcamento = float(df_obra["orcamento_estimado"].iloc[0])
-    fornecedor_critico = str(df_obra.loc[df_obra["taxa_insucesso_fornecedor"].idxmax(), "material"])
-    taxa_critica = float(df_obra["taxa_insucesso_fornecedor"].max())
-
-    status_geral = emoji_risco(risco_medio_previsto)
+    # Dados contextuais (pegando da primeira linha da obra)
+    cidade = str(df_res["cidade"].iloc[0])
+    solo = str(df_res["tipo_solo"].iloc[0])
+    chuva = float(df_res["nivel_chuva"].iloc[0])
+    orcamento = float(df_res["orcamento_estimado"].iloc[0])
+    
+    status_geral = emoji_risco(risco_medio)
 
     relatorio = (
         f"{status_geral} *RELATÓRIO PREDITIVO MRV*\n"
         f"-------------------------------------------\n"
-        f"📍 *Obra:* {id_obra}\n"
-        f"🏢 *Cidade:* {cidade}\n"
+        f"📍 *Obra:* {id_obra} | 🏢 *{cidade}*\n"
+        f"⛰️ *Solo:* {solo} | 🌧️ *Chuva:* {chuva:.0f}mm\n"
         f"💰 *Orçamento:* R$ {orcamento:,.2f}\n"
         f"-------------------------------------------\n"
-        f"📊 *MÉTRICAS DE IA*\n"
-        f"• Risco Médio Estimado: `{risco_medio_previsto:.1f} dias`\n"
-        f"• Fornecedor mais crítico: {fornecedor_critico} (taxa insucesso {taxa_critica:.2%})\n\n"
-        f"⚠️ *PIOR CENÁRIO*\n"
+        f"📊 *ANÁLISE DE IA*\n"
+        f"• Risco Médio Estimado: `{risco_medio:.1f} dias`\n\n"
+        f"⚠️ *PONTO CRÍTICO IDENTIFICADO*\n"
         f"• Etapa: {pior_linha['etapa']}\n"
         f"• Material: {pior_linha['material']}\n"
-        f"• Atraso Previsto: `{pior_linha['predicao_atraso']:.1f} dias`\n"
-        f"• Taxa Fornecedor: {pior_linha['taxa_insucesso_fornecedor']:.2%}\n"
+        f"• Atraso nesta Etapa: `{pior_linha['predicao_atraso']:.1f} dias`\n"
         f"-------------------------------------------\n"
-        f"💡 *Sugestão:* Avalie redundância de fornecedores na etapa de {pior_linha['etapa']}."
+        f"💡 *Sugestão:* O solo {solo} com chuva de {chuva:.0f}mm exige atenção redobrada na drenagem da etapa de {pior_linha['etapa']}."
     )
     return relatorio
 
 def gerar_grafico_etapas(id_obra: str, df_obra: pd.DataFrame) -> BytesIO:
-    """Gráfico de risco previsto médio por etapa da obra."""
-    predicoes = pipeline.predict(df_obra.drop(columns=["id_obra"], errors="ignore"))
-    df_obra = df_obra.copy()
-    df_obra["predicao_atraso"] = predicoes
+    """Gráfico de barras do risco por etapa."""
+    X = df_obra.drop(columns=["id_obra"], errors="ignore")
+    df_res = df_obra.copy()
+    df_res["predicao_atraso"] = pipeline.predict(X)
 
-    etapas_prev = df_obra.groupby("etapa")["predicao_atraso"].mean().sort_values()
+    etapas_prev = df_res.groupby("etapa")["predicao_atraso"].mean().sort_values()
 
     plt.figure(figsize=(6.5, 4.5))
-    etapas_prev.plot(kind="bar", color="#5DADE2", edgecolor="black")
-    plt.title(f"Risco previsto médio por etapa — {id_obra}")
-    plt.ylabel("Dias de atraso (previsto)")
-    plt.xlabel("Etapa")
+    etapas_prev.plot(kind="bar", color="#2E86C1", edgecolor="black")
+    plt.title(f"Risco por Etapa — {id_obra}\n(Refletindo Solo e Chuva)")
+    plt.ylabel("Dias de Atraso Previstos")
     plt.tight_layout()
 
     buf = BytesIO()
@@ -130,57 +127,28 @@ def gerar_grafico_etapas(id_obra: str, df_obra: pd.DataFrame) -> BytesIO:
     plt.close()
     return buf
 
-def gerar_grafico_cidades(df_detalhada: pd.DataFrame) -> BytesIO:
-    """Gráfico comparativo de risco previsto médio por cidade."""
-    pred_all = pipeline.predict(df_detalhada.drop(columns=["id_obra"], errors="ignore"))
-    df_all = df_detalhada.copy()
-    df_all["predicao_atraso"] = pred_all
-
-    cidades_prev = df_all.groupby("cidade")["predicao_atraso"].mean().sort_values()
-
-    plt.figure(figsize=(7.5, 5))
-    cidades_prev.plot(kind="bar", color="#F5B041", edgecolor="black")
-    plt.title("Comparativo — Risco previsto médio por cidade")
-    plt.ylabel("Dias de atraso (previsto)")
-    plt.xlabel("Cidade")
-    plt.tight_layout()
-
-    buf = BytesIO()
-    plt.savefig(buf, format="png")
-    buf.seek(0)
-    plt.close()
-    return buf
-
-def gerar_pdf_relatorio(id_obra: str, df_obra: pd.DataFrame, df_detalhada: pd.DataFrame) -> str:
-    """Gera PDF consolidado com relatório e gráficos."""
+def gerar_pdf_relatorio(id_obra: str, df_obra: pd.DataFrame, df_base_completa: pd.DataFrame) -> str:
+    """PDF consolidado para análise offline."""
     pdf_path = os.path.join(REPORTS_PATH, f"relatorio_{id_obra}.pdf")
-    relatorio_texto = gerar_relatorio_inteligente(id_obra, df_obra).replace("*", "").replace("`", "")
+    # Limpa markdown para o PDF
+    texto = gerar_relatorio_inteligente(id_obra, df_obra).replace("*", "").replace("`", "")
 
     with PdfPages(pdf_path) as pdf:
-        # Página 1 — texto
+        # Pág 1: Relatório
         fig, ax = plt.subplots(figsize=(8.5, 11))
         ax.axis("off")
-        ax.text(0.06, 0.95, relatorio_texto, va="top", fontsize=12, wrap=True)
+        ax.text(0.06, 0.95, texto, va="top", fontsize=11, family='sans-serif', wrap=True)
         pdf.savefig(fig)
         plt.close(fig)
 
-        # Página 2 — gráfico por etapas
-        buf_etapas = gerar_grafico_etapas(id_obra, df_obra)
-        img = plt.imread(buf_etapas)
+        # Pág 2: Gráfico de Etapas
+        buf = gerar_grafico_etapas(id_obra, df_obra)
+        img = plt.imread(buf)
         fig2, ax2 = plt.subplots(figsize=(8.5, 6))
         ax2.imshow(img)
         ax2.axis("off")
         pdf.savefig(fig2)
         plt.close(fig2)
-
-        # Página 3 — gráfico comparativo cidades
-        buf_cidades = gerar_grafico_cidades(df_detalhada)
-        img2 = plt.imread(buf_cidades)
-        fig3, ax3 = plt.subplots(figsize=(8.5, 6))
-        ax3.imshow(img2)
-        ax3.axis("off")
-        pdf.savefig(fig3)
-        plt.close(fig3)
 
     return pdf_path
 
@@ -189,18 +157,59 @@ def gerar_pdf_relatorio(id_obra: str, df_obra: pd.DataFrame, df_detalhada: pd.Da
 # -----------------------------
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
-        "🏗️ *Sistema de Risco MRV Ativo*\n\n"
-        "Envie o ID da obra (ex: `MRV-100`) para receber:\n"
-        "• Relatório preditivo consolidado\n"
-        "• Gráfico por etapas\n"
-        "• Comparativo por cidades\n"
-        "• PDF consolidado para análise offline",
+        "🏗️ *MRV Risk Intelligence Bot 2.0*\n\n"
+        "Sistema atualizado com variáveis de **Chuva** e **Solo**.\n"
+        "Envie o ID da obra (ex: `MRV-100`) para uma análise preditiva completa.",
         parse_mode=ParseMode.MARKDOWN
     )
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     id_usuario = update.message.text.upper().strip()
-    logger.info(f"Consulta: {id_usuario}")
-
+    
     if df_base is None or pipeline is None:
-        await update.message.reply_text("❌ Sistema offline. Verifique os arquivos .pkl e .csv em data/raw.")
+        await update.message.reply_text("❌ Erro: Pipeline ou Base CSV não carregados.")
+        return
+
+    df_obra = df_base[df_base["id_obra"] == id_usuario]
+    if df_obra.empty:
+        await update.message.reply_text(f"❌ Obra `{id_usuario}` não encontrada.")
+        return
+
+    await update.message.reply_text(f"🔍 Analisando cronograma, solo e clima para {id_usuario}...")
+
+    try:
+        # 1. Relatório
+        relatorio = gerar_relatorio_inteligente(id_usuario, df_obra)
+        await update.message.reply_text(relatorio, parse_mode=ParseMode.MARKDOWN)
+
+        # 2. Gráfico
+        grafico = gerar_grafico_etapas(id_usuario, df_obra)
+        await update.message.reply_photo(photo=grafico, caption="📊 Análise de Risco por Etapa")
+
+        # 3. PDF
+        pdf_path = gerar_pdf_relatorio(id_usuario, df_obra, df_base)
+        with open(pdf_path, "rb") as f:
+            await update.message.reply_document(document=f, filename=os.path.basename(pdf_path))
+
+    except Exception as e:
+        logger.error(f"Erro: {e}")
+        await update.message.reply_text("⚠️ Erro ao processar os dados de IA.")
+
+# -----------------------------
+# Main
+# -----------------------------
+def main():
+    token = os.getenv("TELEGRAM_TOKEN")
+    if not token:
+        print("Defina TELEGRAM_TOKEN")
+        return
+
+    app = ApplicationBuilder().token(token).build()
+    app.add_handler(CommandHandler("start", start))
+    app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), handle_message))
+    
+    logger.info("🚀 Bot MRV 2.0 Online!")
+    app.run_polling()
+
+if __name__ == "__main__":
+    main()
