@@ -1,4 +1,4 @@
-id_obra,orcamento_estimado,rating_confiabilidade,taxa_insucesso_fornecedor,complexidade_obra,risco_etapa,nivel_chuva,tipo_solo,material,cidade,etapa
+ id_obra,orcamento_estimado,rating_confiabilidade,taxa_insucesso_fornecedor,complexidade_obra,risco_etapa,nivel_chuva,tipo_solo,material,cidade,etapa
 MRV-100,5375161.33,1.6,0.16666666666666666,15.497299332452194,10.08,152,Rochoso,Cimento,Belo Horizonte,Fundação
 MRV-100,5375161.33,1.6,0.16666666666666666,15.497299332452194,10.08,229,Rochoso,Brita,Belo Horizonte,Fundação
 MRV-100,5375161.33,2.4,0.6666666666666666,15.497299332452194,8.48,142,Argiloso,Aço,Belo Horizonte,Estrutura
