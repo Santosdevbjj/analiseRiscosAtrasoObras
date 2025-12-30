@@ -1,4 +1,4 @@
-id_obra,cidade,tipo_solo,nivel_chuva,risco_medio,pior_etapa,risco_pior,material_critico,taxa_insucesso
+ id_obra,cidade,tipo_solo,nivel_chuva,risco_medio,pior_etapa,risco_pior,material_critico,taxa_insucesso
 MRV-100,Belo Horizonte,Rochoso,152,8.39,Fundação,10.08,Aço,0.67
 MRV-101,Rio de Janeiro,Siltoso,70,8.39,Fundação,10.08,Aço,0.67
 MRV-102,São Paulo,Argiloso,137,8.39,Fundação,10.08,Aço,0.44
