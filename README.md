@@ -4,6 +4,11 @@
   <img src="reports/figures/Previsao_Real.png" width="800" title="Interface do Simulador MRV">
 </p> 
 
+<p align="center">
+  <img src="reports/figures/Analise_Residuos_Real_Preditivo.png" width="800" title="Interface do Simulador MRV">
+</p> 
+
+
 Transformando dados operacionais em previsões acionáveis para reduzir multas e aumentar satisfação do cliente
 
 ---
@@ -12,9 +17,6 @@ Transformando dados operacionais em previsões acionáveis para reduzir multas e
 
 
 
-<p align="center">
-  <img src="reports/figures/Slider_Controle02.png" width="800" title="Interface do Simulador MRV">
-</p> 
  
 
 <p align="center">
