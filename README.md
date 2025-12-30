@@ -289,6 +289,81 @@ Isto permite-nos focar esforços de contingência (como tendas ou drenagem) onde
 
 
 
+## Sumario:
+
+ • **Plano de Resposta ao Risco" identificado pela Inteligência Artificial** 
+
+<p align="center">
+  <img src="reports/figures/Caso_Otimizado.png" width="800" title="Interface do Simulador MRV">
+</p> 
+
+> **Caso Otimizado**
+
+
+ Com base na previsão de 7,2 dias de atraso para a etapa de Acabamento (conforme o relatório Caso Otimizado), o cenário é de Alerta Gerenciável. 
+ 
+ Diferente da fase de fundação, onde o risco é geológico e climático, no acabamento o foco deve ser logística interna, fluxo de materiais e gestão de mão de obra.
+ 
+Aqui está o sumário de ações preventivas para mitigar esse atraso e evitar que ele se aproxime dos 10 dias:
+
+📋 **Plano de Ação Preventiva: Cenário Acabamento**
+
+1. Gestão de Suprimentos e Logística (Foco em Materiais Críticos)
+   
+Como o atraso de 7.2 dias nesta fase geralmente está ligado à falta de insumos, a primeira ação é garantir o fluxo.
+
+ • **Ação:** Antecipar em 15 dias a conferência de estoque de materiais de "caminho crítico" (pisos, azulejos, louças e tintas).
+   
+  • **Justificativa:** Evitar que a dependência de fornecedores (mesmo os de alto rating) gere paradas por ruptura de estoque.
+
+  
+ • **Métrica de Sucesso:** Zerar o tempo de espera por material no canteiro.
+   
+**2. Proteção de Áreas Internas e Estoque**
+   
+Embora o gráfico de sensibilidade mostre que a chuva impacta menos o acabamento, a umidade excessiva pode impedir a aplicação de gesso e pintura.
+
+
+ • **Ação:** Reforçar a vedação de vãos e janelas em pavimentos onde a pintura será iniciada.
+   
+ • **Justificativa:** Garantir que o cronograma de pintura e gesso não sofra oscilações por conta de infiltrações ou umidade do ar elevada.
+
+   
+**3. Otimização da Mão de Obra Especializada**
+   
+O atraso de 7.2 dias pode ser absorvido com o aumento da produtividade.
+
+ • **Ação:** Implementar o sistema de "Linha de Balanço" (trabalho sequencial por pavimentos) para equipes de revestimento.
+
+   
+ • **Justificativa:** Reduzir o tempo de movimentação dos operários e ferramentas entre os blocos.
+
+  
+  • **Ferramenta:** Utilizar o quadro de gestão visual (Kanban) para monitorar o avanço diário por unidade.
+   
+**4. Contingência de Fornecedores (Backup Plan)**
+
+No cenário de "Confiança Alta" da IA, o modelo assume que o fornecedor atual é estável. No entanto, o alerta de 7.2 dias indica que não há margem para erros.
+
+ * **Ação:** Validar um segundo fornecedor (Backup) para itens de acabamento padrão que tenham longo prazo de entrega.
+
+   
+ * **Justificativa:** Se o fornecedor principal falhar, o plano B entra em ação em menos de 48 horas, mantendo o atraso abaixo da barreira dos 10 dias.
+   
+📉 **Impacto Esperado das Ações**
+
+Se essas ações forem implementadas imediatamente, a tendência é que na próxima rodada do MRV Risk Intelligence, o atraso estimado caia para a zona verde (abaixo de 5 dias), alterando o status de Alerta para Normal.
+
+| Ação | Impacto Estimado no Atraso | Prioridade |
+|---|---|---|
+| Antecipação de Suprimentos | -1.5 dias | Alta |
+| Vedação de Pavimentos | -0.8 dias | Média |
+| Linha de Balanço (Mão de Obra) | -1.2 dias | Alta |
+| Total de Ganho Potencial | -3.5 dias | Status: Verde |
+
+
+
+
 
 ---
 
