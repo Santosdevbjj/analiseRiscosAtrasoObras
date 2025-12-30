@@ -238,7 +238,8 @@ print(previsoes)
   <img src="reports/figures/Pior_Caso.png" width="800" title="Interface do Simulador MRV">
 </p> 
 
-**Pior Caso**
+**^Pior Caso^**
+
 
 
 
@@ -246,7 +247,8 @@ print(previsoes)
   <img src="reports/figures/Caso_Otimizado.png" width="800" title="Interface do Simulador MRV">
 </p> 
 
-**Caso Otimizado**
+**^Caso Otimizado^**
+
 
 
 
@@ -284,9 +286,9 @@ Sugestão de Estrutura para o seu Slide Executivo
 | Status | Alerta Crítico | Alerta Gerenciável | Redução de Stress Operacional |
 Conclusão para a Diretoria:
 
-"Ao utilizarmos o MRV Risk Intelligence, identificamos que a fase de Acabamento, embora ainda em estado de alerta, oferece uma janela de 71% de confiança alta contra apenas uma confiança média na Fundação. 
+Ao utilizarmos o MRV Risk Intelligence, identificamos que a fase de Acabamento, embora ainda em estado de alerta, oferece uma janela de 71% de confiança alta contra apenas uma confiança média na Fundação. 
 
-Isto permite-nos focar esforços de contingência (como tendas ou drenagem) onde a IA aponta maior vulnerabilidade (Fundação) e focar em eficiência logística onde o clima já não é o vilão (Acabamento)."
+Isto permite-nos focar esforços de contingência (como tendas ou drenagem) onde a IA aponta maior vulnerabilidade (Fundação) e focar em eficiência logística onde o clima já não é o vilão (Acabamento).
 
 
 
