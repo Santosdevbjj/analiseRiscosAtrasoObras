@@ -1,9 +1,23 @@
 ## 🏗️ Simulador de Riscos Logísticos - MRV
  
 <p align="center">
-  <img src="reports/figures/Previsao_Atual.png" width="800" title="Interface do Simulador MRV">
-</p>
+  <img src="reports/figures/Previsao_Real.png" width="800" title="Interface do Simulador MRV">
+</p> 
 
+
+<p align="center">
+  <img src="reports/figures/Slider_Controle01.png" width="800" title="Interface do Simulador MRV">
+</p> 
+
+
+<p align="center">
+  <img src="reports/figures/Slider_Controle02.png" width="800" title="Interface do Simulador MRV">
+</p> 
+
+
+<p align="center">
+  <img src="reports/figures/Slider_Controle03.png" width="800" title="Interface do Simulador MRV">
+</p> 
 
 
 Transformando dados operacionais em previsões acionáveis para reduzir multas e aumentar satisfação do cliente
