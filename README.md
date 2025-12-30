@@ -235,7 +235,7 @@ print(previsoes)
   <img src="reports/figures/Pior_Caso.png" width="800" title="Interface do Simulador MRV">
 </p> 
 
-**^Pior Caso^**
+> **Pior Caso**
 
 
 
@@ -244,7 +244,7 @@ print(previsoes)
   <img src="reports/figures/Caso_Otimizado.png" width="800" title="Interface do Simulador MRV">
 </p> 
 
-**^Caso Otimizado^**
+> **Caso Otimizado**
 
 
 
