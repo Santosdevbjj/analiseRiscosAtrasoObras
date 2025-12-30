@@ -1,5 +1,5 @@
 id_obra,orcamento_estimado,rating_confiabilidade,taxa_insucesso_fornecedor,complexidade_obra,risco_etapa,material,cidade,etapa
-MRV-100,5375161.33,1.6,0.16666666666666666,15.497299332452194,10.08,Cimento,Belo Horizonte,Fundação
+MRV-100,5375161.33,1. 6,0.16666666666666666,15.497299332452194,10.08,Cimento,Belo Horizonte,Fundação
 MRV-100,5375161.33,1.6,0.16666666666666666,15.497299332452194,10.08,Brita,Belo Horizonte,Fundação
 MRV-100,5375161.33,2.4,0.6666666666666666,15.497299332452194,8.48,Aço,Belo Horizonte,Estrutura
 MRV-100,5375161.33,2.4,0.6666666666666666,15.497299332452194,8.48,Madeira,Belo Horizonte,Estrutura
