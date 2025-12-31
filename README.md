@@ -519,7 +519,7 @@ Ao unir estas três visões, a MRV deixa de ser reativa. O modelo permite:
 
 ---
 
-📚 **12. Aprendizados Individuais (Minha Reflexão Técnica)**
+# 📚 **12. Aprendizados Individuais (Minha Reflexão Técnica)**
 
 
 **• O que mais aprendi neste projeto:**
