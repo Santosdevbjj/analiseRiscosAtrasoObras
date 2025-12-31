@@ -1,5 +1,5 @@
 """
-scripts/telegram_bot.py — Bot de Inteligência Preditiva MRV 2.0
+scripts/telegram_bot.py — Bot de Inteligência Preditiva Construção Civil 2.0
 Foco: Decisão de Diretoria, Logística e Engenharia de Campo
 """
 
@@ -120,7 +120,7 @@ def gerar_grafico_etapas(id_obra: str, df_obra: pd.DataFrame) -> BytesIO:
     plt.style.use('ggplot')
     fig, ax = plt.subplots(figsize=(8, 5))
     
-    # Cores MRV (Verde e Azul)
+    # Cores CC (Verde e Azul)
     colors = ['#00A859' if x < 7 else '#EE3124' for x in etapas_prev]
     bars = ax.bar(etapas_prev.index, etapas_prev.values, color=colors, edgecolor='white')
     
@@ -176,9 +176,9 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
     await update.message.reply_text(
         f"Olá {user.first_name}! 👋\n\n"
-        "Bem-vindo ao *MRV Risk Intelligence Bot*.\n"
+        "Bem-vindo ao *Construção Civil Risk Intelligence Bot*.\n"
         "Eu utilizo modelos de Machine Learning para prever gargalos logísticos e geológicos nas nossas obras.\n\n"
-        "👉 *Para começar:* Envie o código da obra (ex: `MRV-100`)",
+        "👉 *Para começar:* Envie o código da obra (ex: `CC-100`)",
         parse_mode=ParseMode.MARKDOWN
     )
 
