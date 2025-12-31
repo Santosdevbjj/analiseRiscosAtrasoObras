@@ -18,7 +18,7 @@ tipos_solo = ['Arenoso', 'Argiloso', 'Rochoso', 'Siltoso']
 
 for i in range(NUM_OBRAS):
     obras.append({
-        'id_obra': f'MRV-{100+i}',
+        'id_obra': f'CC-{100+i}',
         'nome_empreendimento': f'Residencial {fake.street_name()}',
         'cidade': random.choice(cidades),
         'tipo_solo': random.choice(tipos_solo), # Nova variável
