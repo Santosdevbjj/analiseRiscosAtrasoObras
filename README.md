@@ -398,6 +398,68 @@ A linha diagonal representa a perfeição. Se um ponto estiver exatamente sobre 
 
 
 
+ # Insights Estratégicos e Análise de Modelagem
+
+Abaixo apresentamos a interpretação técnica dos três pilares de análise do projeto: impacto operacional, exposição financeira e precisão estatística.
+
+**A. Impacto de Atraso por Variável ** Impacto_Atraso_Obras.png
+
+
+<p align="center">
+  <img src="reports/figures/Impacto_Atraso_Obras.png" width="800" title="Interface do Simulador MRV">
+</p> 
+
+
+Este gráfico identifica os "vilões" do cronograma.
+
+ • **O que ele revela:** Mostra a sensibilidade do atraso em relação a variáveis como pluviosidade, tipo de solo e rating do fornecedor.
+   
+ • Insight: Etapas de Fundação em Solos Arenosos combinadas com Chuvas acima de 150mm são os cenários de maior vulnerabilidade.
+ 
+ • A IA indica que a gestão preventiva deve ser intensificada nestes clusters para evitar que o atraso supere a barreira dos 10 dias.
+   
+**B. Exposição Financeira ao Risco**
+ Exposicao_Financeira_ao_Risco.png
+
+
+<p align="center">
+  <img src="reports/figures/Exposicao_Financeira_ao_Risco.png" width="800" title="Interface do Simulador MRV">
+</p> 
+
+Este gráfico traduz dias de atraso em impacto monetário.
+
+ • **O que ele revela:** Cruza o orçamento estimado da obra com a probabilidade de atraso gerada pelo modelo.
+   
+ • **Insight:** Obras com orçamentos elevados e "Status de Alerta" representam a maior exposição de capital da companhia.
+
+O gráfico permite priorizar a alocação de fiscais e recursos de contingência em projetos onde cada dia de atraso tem o maior custo de oportunidade.
+   
+**C. Qualidade da Predição: Real vs. Preditivo**  Qualidade_da_Predicao.png
+
+<p align="center">
+  <img src="reports/figures/Qualidade_da_Predicao.png" width="800" title="Interface do Simulador MRV">
+</p> 
+
+
+Este é o certificado de confiança da nossa Inteligência Artificial.
+
+ • **O que ele revela:** A proximidade dos pontos em relação à linha diagonal de 45° indica o quão precisa é a previsão da IA comparada ao que realmente aconteceu no canteiro.
+   
+ • **Insight:** A forte concentração de pontos sobre a diagonal demonstra que o modelo é robusto e confiável, especialmente para atrasos de médio prazo. 
+ 
+ A dispersão controlada (baixo erro residual) garante que as decisões tomadas pelo gestor através do simulador são baseadas em padrões históricos reais, e não em ruídos estatísticos.
+
+   
+**Por que estes insights são valiosos?**
+
+Ao unir estas três visões, a MRV deixa de ser reativa. O modelo permite:
+
+ • Negociar melhor com fornecedores (sabendo o impacto real do rating deles no prazo).
+   
+ • Ajustar o provisionamento financeiro (com base na exposição real).
+   
+ • Garantir a entrega das chaves (atuando preventivamente onde a IA aponta risco alto).
+
 
 
 ---
