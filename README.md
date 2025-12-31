@@ -361,7 +361,7 @@ Se essas ações forem implementadas imediatamente, a tendência é que na próx
 
 
 
- • # Insights de Performance: Análise de Resíduos
+ # Insights de Performance: Análise de Resíduos
  
 O gráfico de dispersão "Qualidade da Predição (Real vs. IA)" é a principal ferramenta para validar a confiabilidade do modelo. Abaixo, detalhamos como interpretar o comportamento da IA da MRV:
 
