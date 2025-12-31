@@ -402,7 +402,7 @@ A linha diagonal representa a perfeição. Se um ponto estiver exatamente sobre 
 
 Abaixo apresentamos a interpretação técnica dos três pilares de análise do projeto: impacto operacional, exposição financeira e precisão estatística.
 
-**A. Impacto de Atraso por Variável ** Impacto_Atraso_Obras.png
+**A. Impacto de Atraso por Variável ** 
 
 
 <p align="center">
@@ -419,7 +419,7 @@ Este gráfico identifica os "vilões" do cronograma.
  • A IA indica que a gestão preventiva deve ser intensificada nestes clusters para evitar que o atraso supere a barreira dos 10 dias.
    
 **B. Exposição Financeira ao Risco**
- Exposicao_Financeira_ao_Risco.png
+ 
 
 
 <p align="center">
@@ -434,7 +434,7 @@ Este gráfico traduz dias de atraso em impacto monetário.
 
 O gráfico permite priorizar a alocação de fiscais e recursos de contingência em projetos onde cada dia de atraso tem o maior custo de oportunidade.
    
-**C. Qualidade da Predição: Real vs. Preditivo**  Qualidade_da_Predicao.png
+**C. Qualidade da Predição: Real vs. Preditivo**  
 
 <p align="center">
   <img src="reports/figures/Qualidade_da_Predicao.png" width="800" title="Interface do Simulador MRV">
