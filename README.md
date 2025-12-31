@@ -4,10 +4,6 @@
   <img src="reports/figures/Previsao_Real.png" width="800" title="Interface do Simulador MRV">
 </p> 
 
-<p align="center">
-  <img src="reports/figures/Analise_Residuos_Real_Preditivo.png" width="800" title="Interface do Simulador MRV">
-</p> 
-
 
 Transformando dados operacionais em previsões acionáveis para reduzir multas e aumentar satisfação do cliente
 
@@ -16,8 +12,6 @@ Transformando dados operacionais em previsões acionáveis para reduzir multas e
 **Atenção:** Barra de controle do simulador a esquerda. Na seção 6 ative o simulador 
 
 
-
- 
 
 <p align="center">
   <img src="reports/figures/Slider_Controle03.png" width="800" title="Interface do Simulador MRV">
@@ -362,6 +356,45 @@ Se essas ações forem implementadas imediatamente, a tendência é que na próx
 | Vedação de Pavimentos | -0.8 dias | Média |
 | Linha de Balanço (Mão de Obra) | -1.2 dias | Alta |
 | Total de Ganho Potencial | -3.5 dias | Status: Verde |
+
+
+
+
+
+ • **Insights de Performance: Análise de Resíduos**
+ 
+O gráfico de dispersão "Qualidade da Predição (Real vs. IA)" é a principal ferramenta para validar a confiabilidade do modelo. Abaixo, detalhamos como interpretar o comportamento da IA da MRV:
+
+<p align="center">
+  <img src="reports/figures/Analise_Residuos_Real_Preditivo.png" width="800" title="Interface do Simulador MRV">
+</p> 
+
+
+**A Linha Vermelha Tracejada (A Referência)**
+
+A linha diagonal representa a perfeição. Se um ponto estiver exatamente sobre ela, significa que o atraso previsto pela IA foi idêntico ao atraso que ocorreu na obra real.
+
+
+**Distribuição dos Pontos (O Comportamento)**
+
+ • Agrupamento Longitudinal: Observamos que os pontos seguem a tendência da linha diagonal. Isso indica que o modelo possui uma alta correlação, conseguindo distinguir obras de baixo risco daquelas com alto potencial de atraso.
+   
+ • **Simetria dos Erros:** Os pontos estão distribuídos de forma relativamente equilibrada acima e abaixo da linha. Isso sugere que o modelo não tem um "vício" (bias) de sempre otimizar ou sempre ser pessimista demais.
+   
+**Insights Estratégicos para Gestão**
+
+ • **Confiabilidade em Prazos Curtos:** O modelo é extremamente preciso para prever atrasos entre 0 e 5 dias. Nesta zona, a dispersão é mínima, permitindo uma gestão de suprimentos "Just-in-Time".
+   
+ • **Identificação de Outliers:** Pontos que se afastam muito da linha (ex: um atraso real de 15 dias que a IA previu como 5) sinalizam eventos atípicos, como greves ou quebras catastróficas de fornecedores, que fogem ao padrão histórico de chuva e solo.
+   
+  • **Margem de Segurança (MAE):** A dispersão visual confirma o nosso MAE (Erro Médio Absoluto). O gestor pode utilizar o valor previsto pela IA com uma margem de confiança baseada nessa largura da "nuvem" de pontos.
+   
+> **Conclusão do Insight:** O modelo demonstra robustez para escalas operacionais de construção civil, sendo capaz de antecipar gargalos críticos antes mesmo do início da etapa, permitindo que a diretoria atue na causa raiz (fornecedor ou logística) para trazer o ponto de volta para a linha da normalidade.
+
+
+**Observação:** O modelo tende a apresentar maior incerteza em atrasos extremos, sugerindo que eventos de longa duração na MRV possuem variáveis externas mais complexas que o clima e solo.
+
+
 
 
 
