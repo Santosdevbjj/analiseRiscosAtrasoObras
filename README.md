@@ -1,4 +1,23 @@
-## 🏗️ Simulador de Riscos Logísticos - MRV
+## 🏗️ Simulador de Riscos Logísticos - em empresas de Construção Civil de Engenharia 
+
+---
+
+Projeto de Ciência de Dados - Estudo sobre Construção Civil de Engenharia
+
+ **Descrição**
+Este projeto foi desenvolvido como parte de um estudo técnico/portfólio pessoal.  
+
+O objetivo é analisar e demonstrar práticas de engenharia, construção civil e gestão de projetos, tomando como referência uma empresa **de Engenharia de Construção Civil**.
+
+⚠️ **Disclaimer:**  
+Este projeto é apenas um exercício acadêmico e de portfólio.  
+
+Não possui qualquer vínculo oficial com qualquer empresa de Engenharia de Construção Civil
+Todos os nomes e referências utilizadas são Fictícios e são utilizados apenas para fins de estudo.
+
+
+
+---
    
 <p align="center">
   <img src="reports/figures/Previsao_Real.png" width="800" title="Interface do Simulador MRV">
@@ -363,7 +382,7 @@ Se essas ações forem implementadas imediatamente, a tendência é que na próx
 
  # Insights de Performance: Análise de Resíduos
  
-O gráfico de dispersão "Qualidade da Predição (Real vs. IA)" é a principal ferramenta para validar a confiabilidade do modelo. Abaixo, detalhamos como interpretar o comportamento da IA da MRV:
+O gráfico de dispersão "Qualidade da Predição (Real vs. IA)" é a principal ferramenta para validar a confiabilidade do modelo. Abaixo, detalhamos como interpretar o comportamento da IA da Construção Civil:
 
 <p align="center">
   <img src="reports/figures/Analise_Residuos_Real_Preditivo.png" width="800" title="Interface do Simulador MRV">
@@ -452,7 +471,7 @@ Este é o certificado de confiança da nossa Inteligência Artificial.
    
 **Por que estes insights são valiosos?**
 
-Ao unir estas três visões, a MRV deixa de ser reativa. O modelo permite:
+Ao unir estas três visões, a Construção Civil deixa de ser reativa. O modelo permite:
 
  • Negociar melhor com fornecedores (sabendo o impacto real do rating deles no prazo).
    
@@ -539,7 +558,7 @@ Ao unir estas três visões, a MRV deixa de ser reativa. O modelo permite:
 
 # 13. Conclusão e Próximos Passos
     
-A implementação do MRV Risk Intelligence marca a transição da gestão de obras reativa para uma cultura orientada a dados. 
+A implementação do Construção Civil Risk Intelligence marca a transição da gestão de obras reativa para uma cultura orientada a dados. 
 
 Através deste modelo de Inteligência Artificial, a companhia agora possui a capacidade de antecipar gargalos operacionais antes mesmo da primeira escavação.
 
@@ -562,7 +581,7 @@ Para maximizar o retorno sobre este investimento tecnológico, recomendamos à d
    
  • **Certificação de Fornecedores:** Utilizar o "Rating de Confiabilidade" gerado pela IA como critério obrigatório na homologação de novos parceiros logísticos.
    
-> O risco não pode ser totalmente eliminado na construção civil, mas com o MRV Risk Intelligence, ele agora é totalmente visível e gerenciável.
+> O risco não pode ser totalmente eliminado na construção civil, mas com o Construção Civil Risk Intelligence, ele agora é totalmente visível e gerenciável.
 > 
 
 
