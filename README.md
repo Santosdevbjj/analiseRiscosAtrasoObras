@@ -20,7 +20,7 @@ Todos os nomes e referências utilizadas são Fictícios e são utilizados apena
 ---
    
 <p align="center">
-  <img src="reports/figures/Previsao_Real.png" width="800" title="Interface do Simulador MRV">
+  <img src="reports/figures/Previsao_Real.png" width="800" title="Interface do Simulador CCbjj">
 </p> 
 
 
@@ -33,7 +33,7 @@ Transformando dados operacionais em previsões acionáveis para reduzir multas e
 
 
 <p align="center">
-  <img src="reports/figures/Slider_Controle03.png" width="800" title="Interface do Simulador MRV">
+  <img src="reports/figures/Slider_Controle03.png" width="800" title="Interface do Simulador CCbjj">
 </p> 
 
 
@@ -134,7 +134,7 @@ Chuvas	paralisação de obra
 
 
 <p align="center">
-  <img src="reports/figures/Analise_Sensibilidade.png" width="800" title="Interface do Simulador MRV">
+  <img src="reports/figures/Analise_Sensibilidade.png" width="800" title="Interface do Simulador CCbjj">
 </p>
 
 
@@ -247,7 +247,7 @@ print(previsoes)
 
 
 <p align="center">
-  <img src="reports/figures/Pior_Caso.png" width="800" title="Interface do Simulador MRV">
+  <img src="reports/figures/Pior_Caso.png" width="800" title="Interface do Simulador CCbjj">
 </p> 
 
 > **Pior Caso**
@@ -256,7 +256,7 @@ print(previsoes)
 
 
 <p align="center">
-  <img src="reports/figures/Caso_Otimizado.png" width="800" title="Interface do Simulador MRV">
+  <img src="reports/figures/Caso_Otimizado.png" width="800" title="Interface do Simulador CCbjj">
 </p> 
 
 > **Caso Otimizado**
@@ -309,7 +309,7 @@ Isto permite-nos focar esforços de contingência (como tendas ou drenagem) onde
  • **Plano de Resposta ao Risco" identificado pela Inteligência Artificial** 
 
 <p align="center">
-  <img src="reports/figures/Caso_Otimizado.png" width="800" title="Interface do Simulador MRV">
+  <img src="reports/figures/Caso_Otimizado.png" width="800" title="Interface do Simulador CCbjj">
 </p> 
 
 > **Caso Otimizado**
@@ -385,7 +385,7 @@ Se essas ações forem implementadas imediatamente, a tendência é que na próx
 O gráfico de dispersão "Qualidade da Predição (Real vs. IA)" é a principal ferramenta para validar a confiabilidade do modelo. Abaixo, detalhamos como interpretar o comportamento da IA da Construção Civil:
 
 <p align="center">
-  <img src="reports/figures/Analise_Residuos_Real_Preditivo.png" width="800" title="Interface do Simulador MRV">
+  <img src="reports/figures/Analise_Residuos_Real_Preditivo.png" width="800" title="Interface do Simulador CCbjj">
 </p> 
 
 
@@ -425,7 +425,7 @@ Abaixo apresentamos a interpretação técnica dos três pilares de análise do 
 
 
 <p align="center">
-  <img src="reports/figures/Impacto_Atraso_Obras.png" width="800" title="Interface do Simulador MRV">
+  <img src="reports/figures/Impacto_Atraso_Obras.png" width="800" title="Interface do Simulador CCbjj">
 </p> 
 
 
@@ -442,7 +442,7 @@ Este gráfico identifica os "vilões" do cronograma.
 
 
 <p align="center">
-  <img src="reports/figures/Exposicao_Financeira_ao_Risco.png" width="800" title="Interface do Simulador MRV">
+  <img src="reports/figures/Exposicao_Financeira_ao_Risco.png" width="800" title="Interface do Simulador CCbjj">
 </p> 
 
 Este gráfico traduz dias de atraso em impacto monetário.
@@ -456,7 +456,7 @@ O gráfico permite priorizar a alocação de fiscais e recursos de contingência
 **C. Qualidade da Predição: Real vs. Preditivo**  
 
 <p align="center">
-  <img src="reports/figures/Qualidade_da_Predicao.png" width="800" title="Interface do Simulador MRV">
+  <img src="reports/figures/Qualidade_da_Predicao.png" width="800" title="Interface do Simulador CCbjj">
 </p> 
 
 
@@ -513,7 +513,7 @@ Ao unir estas três visões, a Construção Civil deixa de ser reativa. O modelo
 
 
 <p align="center">
-  <img src="reports/figures/Importancia_das_Features.png" width="800" title="Interface do Simulador MRV">
+  <img src="reports/figures/Importancia_das_Features.png" width="800" title="Interface do Simulador CCbjj">
 </p>
 
 ---
