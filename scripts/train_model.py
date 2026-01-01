@@ -13,10 +13,11 @@ from sklearn.metrics import mean_absolute_error, r2_score
 # 1. Configurações de Caminhos
 DATA_PATH = "data/raw/base_consulta_botccbjj.csv"
 MODEL_PATH = "models/pipeline_random_forest.pkl"
+META_PATH = "models/features_metadata.joblib"
 os.makedirs("models", exist_ok=True)
 
 def train():
-    print("🚀 Iniciando treinamento do modelo CCbjj...")
+    print("🚀 Iniciando treinamento do modelo CCbjj IA...")
 
     # 2. Carregamento dos dados
     if not os.path.exists(DATA_PATH):
@@ -26,35 +27,46 @@ def train():
     df = pd.read_csv(DATA_PATH)
 
     # 3. Separação de Features e Target
-    # O objetivo é prever o 'risco_etapa' (que representa os dias de atraso simulados)
-    X = df.drop(columns=['id_obra', 'risco_etapa'])
-    y = df['risco_etapa']
+    # O alvo é prever o risco (atraso em dias)
+    target = 'risco_etapa'
+    X = df.drop(columns=['id_obra', target])
+    y = df[target]
+
+    # [IMPORTANTE] Salvar a ordem das colunas para o deploy (App/Bot)
+    feature_names = X.columns.tolist()
+    joblib.dump(feature_names, META_PATH)
+    print(f"📝 Metadados de colunas salvos em: {META_PATH}")
 
     # 4. Definição das colunas por tipo
-    # O pipeline precisa saber quem é texto e quem é número
     cat_features = ['cidade', 'tipo_solo', 'material', 'etapa']
     num_features = ['orcamento_estimado', 'rating_confiabilidade', 
                     'complexidade_obra', 'nivel_chuva', 'taxa_insucesso_fornecedor']
 
-    # 5. Criação do Processador de Dados (Feature Engineering)
+    # 5. Criação do Processador de Dados
+    # Usamos sparse_output=False para facilitar manipulações posteriores se necessário
+    
     preprocessor = ColumnTransformer(
         transformers=[
-            ('cat', OneHotEncoder(handle_unknown='ignore'), cat_features),
+            ('cat', OneHotEncoder(handle_unknown='ignore', sparse_output=False), cat_features),
             ('num', StandardScaler(), num_features)
         ])
 
     # 6. Montagem do Pipeline Completo
-    # O Pipeline une o tratamento de dados + o Algoritmo em um único objeto .pkl
     model_pipeline = Pipeline(steps=[
         ('preprocessor', preprocessor),
-        ('regressor', RandomForestRegressor(n_estimators=200, max_depth=10, random_state=42))
+        ('regressor', RandomForestRegressor(
+            n_estimators=300, # Aumentado para maior estabilidade
+            max_depth=12,      # Aumentado para capturar correlações solo/chuva
+            random_state=42,
+            n_jobs=-1          # Usa todos os núcleos do processador
+        ))
     ])
 
     # 7. Divisão Treino/Teste
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
     # 8. Treinamento
-    print("🧠 Otimizando floresta aleatória (Random Forest)...")
+    print(f"🧠 Treinando com {len(X_train)} amostras...")
     model_pipeline.fit(X_train, y_train)
 
     # 9. Avaliação
@@ -64,11 +76,11 @@ def train():
 
     print(f"\n✅ Treinamento concluído!")
     print(f"📊 Erro Médio (MAE): {mae:.2f} dias")
-    print(f"📈 Score R²: {r2:.2f}")
+    print(f"📈 Precisão R²: {r2*100:.1f}%")
 
     # 10. Salvamento Serializado
     joblib.dump(model_pipeline, MODEL_PATH)
-    print(f"💾 Modelo salvo com sucesso em: {MODEL_PATH}")
+    print(f"💾 Pipeline de IA salvo em: {MODEL_PATH}")
 
 if __name__ == "__main__":
     train()
