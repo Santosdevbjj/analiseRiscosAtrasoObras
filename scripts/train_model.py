@@ -8,10 +8,12 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.impute import SimpleImputer # Importante para segurança
 from sklearn.metrics import mean_absolute_error, r2_score
 
-# 1. Configurações de Caminhos
-DATA_PATH = "data/raw/base_consulta_botccbjj.csv"
+# 1. Configurações de Caminhos Sincronizados
+# Agora usamos o dado PROCESSADO pela célula 18
+DATA_PATH = "data/processed/df_mestre_consolidado.csv"
 MODEL_PATH = "models/pipeline_random_forest.pkl"
 META_PATH = "models/features_metadata.joblib"
 os.makedirs("models", exist_ok=True)
@@ -21,47 +23,58 @@ def train():
 
     # 2. Carregamento dos dados
     if not os.path.exists(DATA_PATH):
-        print(f"❌ Erro: Arquivo {DATA_PATH} não encontrado. Rode o gerar_dados.py primeiro.")
+        print(f"❌ Erro: Arquivo processado {DATA_PATH} não encontrado. Rode consolidar_base.py primeiro.")
         return
 
     df = pd.read_csv(DATA_PATH)
 
-    # 3. Pré-processamento Preventivo (Sincronia com Célula 18)
-    # Garantimos que os dados de treino estejam em minúsculo para evitar conflitos
+    # 3. Pré-processamento Preventivo
     for col in df.select_dtypes(include=['object']).columns:
         df[col] = df[col].astype(str).str.lower().str.strip()
 
-    # 4. Separação de Features e Target
+    # 4. Definição de Features e Target
+    # O alvo ideal é o risco calculado ou atraso real (aqui usamos risco_etapa conforme seu design)
     target = 'risco_etapa'
-    # Removemos IDs e a variável alvo
+    
+    # Removemos colunas que não são preditivas (IDs)
     X = df.drop(columns=['id_obra', target], errors='ignore')
     y = df[target]
 
-    # [CONTRATO] Salvar a ordem exata das colunas para o App/Bot
+    # Salvar contrato de variáveis
     feature_names = X.columns.tolist()
     joblib.dump(feature_names, META_PATH)
-    print(f"📝 Contrato de variáveis salvo em: {META_PATH}")
 
-    # 5. Definição Automática de Colunas por Tipo
+    # 5. Definição de Colunas por Tipo
     cat_features = ['cidade', 'tipo_solo', 'material', 'etapa']
     num_features = [col for col in X.columns if col not in cat_features]
 
     
 
-    # 6. Criação do Processador de Dados
+    # 6. Criação do Processador (Pipeline Robusto)
+    # Adicionamos SimpleImputer para que o modelo não quebre se houver nulos em produção
+    numeric_transformer = Pipeline(steps=[
+        ('imputer', SimpleImputer(strategy='median')),
+        ('scaler', StandardScaler())
+    ])
+
+    categorical_transformer = Pipeline(steps=[
+        ('imputer', SimpleImputer(strategy='constant', fill_value='desconhecido')),
+        ('onehot', OneHotEncoder(handle_unknown='ignore', sparse_output=False))
+    ])
+
     preprocessor = ColumnTransformer(
         transformers=[
-            ('cat', OneHotEncoder(handle_unknown='ignore', sparse_output=False), cat_features),
-            ('num', StandardScaler(), num_features)
+            ('cat', categorical_transformer, cat_features),
+            ('num', numeric_transformer, num_features)
         ])
 
-    # 7. Pipeline de Produção
+    # 7. Pipeline de Produção CCbjj
     model_pipeline = Pipeline(steps=[
         ('preprocessor', preprocessor),
         ('regressor', RandomForestRegressor(
             n_estimators=300,
             max_depth=12,
-            min_samples_leaf=2,  # Evita que o modelo decore ruídos dos dados
+            min_samples_leaf=2,
             random_state=42,
             n_jobs=-1
         ))
@@ -71,23 +84,23 @@ def train():
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
     # 9. Execução do Treinamento
-    print(f"🧠 Processando {len(X_train)} registros e otimizando floresta...")
+    print(f"🧠 Treinando floresta com {len(X_train)} exemplos...")
     model_pipeline.fit(X_train, y_train)
 
-    # 10. Avaliação de Performance
+    # 10. Avaliação
     preds = model_pipeline.predict(X_test)
     mae = mean_absolute_error(y_test, preds)
     r2 = r2_score(y_test, preds)
 
-    print("-" * 30)
-    print(f"✅ TREINAMENTO CCBJJ CONCLUÍDO!")
-    print(f"📊 Margem de Erro (MAE): {mae:.2f} dias")
-    print(f"📈 Poder de Explicação (R²): {r2*100:.1f}%")
-    print("-" * 30)
+    print("-" * 40)
+    print(f"✅ MODELO CCBJJ PRONTO!")
+    print(f"📊 Erro Médio: {mae:.2f} dias")
+    print(f"📈 Acurácia (R²): {r2*100:.1f}%")
+    print("-" * 40)
 
-    # 11. Salvamento do Ativo Final
+    # 11. Exportação
     joblib.dump(model_pipeline, MODEL_PATH)
-    print(f"💾 Pipeline IA exportado: {MODEL_PATH}")
+    print(f"💾 Modelo salvo em: {MODEL_PATH}")
 
 if __name__ == "__main__":
     train()
