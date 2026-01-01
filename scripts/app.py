@@ -7,153 +7,159 @@ import os
 
 # 1. Configuração da Página
 st.set_page_config(
-    page_title="Cons.Civil Risk Intelligence",
+    page_title="CCbjj - Risk Intelligence",
     page_icon="🏗️",
     layout="wide"
 )
 
-# Customização visual básica
+# Customização visual para as cores da CCbjj (Verde e Azul Profissional)
 st.markdown("""
     <style>
     .main {
-        background-color: #f5f7f9;
+        background-color: #f8f9fa;
     }
     .stMetric {
         background-color: #ffffff;
-        padding: 15px;
-        border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        border-left: 5px solid #004A2F;
+    }
+    div[data-testid="stMetricValue"] {
+        color: #004A2F;
     }
     </style>
     """, unsafe_allow_html=True)
 
 # =====================
-# 1. Carregamento do Pipeline (IA)
+# 1. Carregamento de Recursos
 # =====================
 @st.cache_resource
 def load_pipeline():
-    # Prioriza o pipeline que contém o encoder + modelo
     path = "models/pipeline_random_forest.pkl"
     if os.path.exists(path):
         return joblib.load(path)
-    raise FileNotFoundError("Pipeline de IA não encontrado em /models. Certifique-se de retreinar o modelo.")
+    return None
+
+@st.cache_data
+def load_base_data():
+    path = "data/raw/base_consulta_botccbjj.csv"
+    if os.path.exists(path):
+        return pd.read_csv(path)
+    return pd.DataFrame()
 
 pipeline = load_pipeline()
+df_base = load_base_data()
 
 # =====================
 # 2. Interface Lateral (Parâmetros)
 # =====================
-st.sidebar.header("🏗️ Painel de Controle de Riscos")
+st.sidebar.image("https://img.icons8.com/fluency/96/construction.png", width=80)
+st.sidebar.header("🕹️ Painel de Controle CCbjj")
 
 with st.sidebar:
-    st.subheader("📍 Identificação")
-    id_obra = st.text_input("ID da Obra", "MRV-100")
-    cidade = st.selectbox("Cidade", ['Belo Horizonte', 'São Paulo', 'Rio de Janeiro', 'Curitiba', 'Salvador'])
-    etapa = st.selectbox("Etapa da Obra", ['Fundação', 'Estrutura', 'Acabamento'])
+    st.markdown("---")
+    st.subheader("📍 Localização e Etapa")
+    
+    # Busca dinamicamente as cidades e etapas da sua nova base CCbjj
+    cidades_disponiveis = df_base['cidade'].unique() if not df_base.empty else ['Recife', 'São Paulo', 'Manaus']
+    cidade = st.selectbox("Cidade do Empreendimento", sorted(cidades_disponiveis))
+    
+    etapa = st.selectbox("Etapa Atual", ['Fundação', 'Estrutura', 'Acabamento'])
     
     st.divider()
-    st.subheader("🌦️ Condições de Campo")
-    val_chuva = st.slider("Previsão de Chuva Mensal (mm)", 0, 500, 150, help="Impacto direto na drenagem e concretagem.")
-    tipo_solo = st.selectbox("Geologia do Terreno (Solo)", ['Arenoso', 'Argiloso', 'Rochoso', 'Siltoso'])
+    st.subheader("🌦️ Fatores Ambientais")
+    val_chuva = st.slider("Previsão de Chuva (mm)", 0, 600, 150)
+    tipo_solo = st.selectbox("Geologia do Terreno", ['Arenoso', 'Argiloso', 'Rochoso', 'Siltoso'])
     
     st.divider()
-    st.subheader("💰 Gestão e Logística")
-    val_orcamento = st.number_input("Orçamento Estimado (R$)", min_value=1000000, value=12000000)
-    val_rating = st.slider("Rating de Confiabilidade Fornecedor", 0.0, 5.0, 3.5)
-    material = st.selectbox("Material Principal em Uso", ['Cimento', 'Aço', 'Brita', 'Madeira', 'Piso', 'Tintas', 'Revestimento'])
+    st.subheader("📦 Logística de Suprimentos")
+    material = st.selectbox("Insumo Crítico", ['Cimento', 'Aço', 'Brita', 'Madeira', 'Piso', 'Tintas', 'Revestimento', 'Areia'])
+    val_rating = st.slider("Rating do Fornecedor", 0.0, 5.0, 3.5, help="Nível de confiança histórica do fornecedor escolhido.")
 
 # =====================
-# 3. Preparação dos Dados para a IA
+# 3. Cabeçalho e Disclaimer (Ética de Dados)
 # =====================
-# Criamos o DataFrame com as colunas EXATAMENTE como o modelo foi treinado no notebook
-input_df = pd.DataFrame([{
-    'orcamento_estimado': val_orcamento,
-    'rating_confiabilidade': val_rating,
-    'taxa_insucesso_fornecedor': 0.15, # Valor médio padrão
-    'complexidade_obra': np.log1p(val_orcamento),
-    'risco_etapa': 8.5, # Valor base histórico
-    'nivel_chuva': val_chuva,
-    'tipo_solo': tipo_solo,
-    'material': material,
-    'cidade': cidade,
-    'etapa': etapa
-}])
-
-# =====================
-# 4. Dashboard Principal
-# =====================
-st.title("🛡️ Sistema de Antecipação de Riscos - MRV")
-st.caption(f"Análise preditiva em tempo real para: **{id_obra}**")
-
-col1, col2, col3 = st.columns(3)
-
-try:
-    # Predição Única
-    predicao_final = pipeline.predict(input_df)[0]
+st.title("🛡️ CCbjj - Sistema de Antecipação de Riscos")
+st.markdown("""
+    *Análise Preditiva de Cronograma para Engenharia e Construção Civil.*
     
-    with col1:
-        st.metric("Atraso Estimado (IA)", f"{predicao_final:.1f} dias")
-    with col2:
-        confianca = "Alta" if val_rating > 4 else "Média"
-        st.metric("Grau de Confiança", confianca)
-    with col3:
-        status = "Crítico" if predicao_final > 15 else "Alerta" if predicao_final > 7 else "Normal"
-        st.metric("Status Operacional", status)
+    ---
+    ⚠️ **Nota Legal:** Este sistema é um simulador de portfólio para estudos de Ciência de Dados. 
+    Os dados e previsões são baseados em modelos estatísticos fictícios para demonstração técnica.
+""")
 
-    st.divider()
+# =====================
+# 4. Lógica de Predição
+# =====================
+if pipeline is None:
+    st.error("❌ Erro: Pipeline de IA não encontrado na pasta /models.")
+else:
+    # Preparação do dado conforme os novos CSVs analisados
+    input_df = pd.DataFrame([{
+        'orcamento_estimado': 15000000.0, # Valor médio baseado na sua base CCbjj
+        'rating_confiabilidade': val_rating,
+        'taxa_insucesso_fornecedor': 0.20,
+        'complexidade_obra': 16.5, 
+        'risco_etapa': 9.0,
+        'nivel_chuva': val_chuva,
+        'tipo_solo': tipo_solo,
+        'material': material,
+        'cidade': cidade,
+        'etapa': etapa
+    }])
 
-    # Gráficos de Análise
-    c_graf1, c_graf2 = st.columns(2)
-
-    with c_graf1:
-        st.subheader("📉 Sensibilidade: Chuva vs Atraso")
-        # Simulação de variação de chuva para o gráfico
-        range_chuva = np.linspace(0, 500, 20)
-        cenarios = []
-        for c in range_chuva:
-            copy_df = input_df.copy()
-            copy_df['nivel_chuva'] = c
-            cenarios.append(copy_df)
+    try:
+        # Predição em Tempo Real
+        pred_dias = pipeline.predict(input_df)[0]
         
-        df_cenarios = pd.concat(cenarios)
-        preds_chuva = pipeline.predict(df_cenarios)
-        
-        fig_chuva = px.line(
-            x=range_chuva, 
-            y=preds_chuva,
-            labels={'x': 'Chuva (mm)', 'y': 'Dias de Atraso'},
-            title=f"Relação Clima-Cronograma ({tipo_solo})",
-            line_shape='spline'
-        )
-        fig_chuva.update_traces(line_color='#2E86C1')
-        st.plotly_chart(fig_chuva, use_container_width=True)
+        # Dashboard de Métricas
+        m1, m2, m3 = st.columns(3)
+        with m1:
+            st.metric("Atraso Estimado", f"{pred_dias:.1f} dias")
+        with m2:
+            status_cor = "🔴" if pred_dias > 12 else "🟡" if pred_dias > 6 else "🟢"
+            st.metric("Status do Cronograma", f"{status_cor} {'Crítico' if pred_dias > 12 else 'Alerta' if pred_dias > 6 else 'Normal'}")
+        with m3:
+            # Impacto Financeiro Estimado (Diferencial para Gestores)
+            impacto_financeiro = pred_dias * 1250.0 # Exemplo: R$ 1250/dia de custo fixo extra
+            st.metric("Impacto Financeiro Est.", f"R$ {impacto_financeiro:,.2f}")
 
-    with c_graf2:
-        st.subheader("🏗️ Riscos por Tipo de Solo")
-        # Simulação de comparação de solos
-        solos = ['Arenoso', 'Argiloso', 'Rochoso', 'Siltoso']
-        cenarios_solo = []
-        for s in solos:
-            copy_df = input_df.copy()
-            copy_df['tipo_solo'] = s
-            cenarios_solo.append(copy_df)
-        
-        df_solos = pd.concat(cenarios_solo)
-        preds_solo = pipeline.predict(df_solos)
-        
-        fig_solo = px.bar(
-            x=solos, 
-            y=preds_solo,
-            labels={'x': 'Tipo de Solo', 'y': 'Atraso Estimado'},
-            title="Impacto Geológico na Etapa Atual",
-            color=preds_solo,
-            color_continuous_scale='Reds'
-        )
-        st.plotly_chart(fig_solo, use_container_width=True)
+        st.markdown("---")
 
-    st.info(f"💡 **Recomendação:** Para a etapa de {etapa} em solo {tipo_solo}, cada 50mm de chuva extra pode impactar o cronograma em aproximadamente {(preds_chuva[-1] - preds_chuva[0])/10:.1f} dias.")
+        # Gráficos de Simulação de Cenários
+        c1, c2 = st.columns(2)
 
-except Exception as e:
-    st.error(f"Ocorreu um erro na predição: {e}")
-    st.warning("Certifique-se de que o arquivo 'pipeline_random_forest.pkl' foi treinado com as colunas: nivel_chuva e tipo_solo.")
+        with c1:
+            st.subheader("📉 Sensibilidade Climática")
+            # Simula impacto da chuva
+            chuvas = np.linspace(0, 600, 15)
+            cenarios = pd.concat([input_df.assign(nivel_chuva=c) for c in chuvas])
+            preds = pipeline.predict(cenarios)
+            
+            fig_chuva = px.area(x=chuvas, y=preds, 
+                               labels={'x': 'Precipitação (mm)', 'y': 'Dias de Atraso'},
+                               title="Curva de Atraso por Volume de Chuva",
+                               color_discrete_sequence=['#004A2F'])
+            st.plotly_chart(fig_chuva, use_container_width=True)
 
+        with c2:
+            st.subheader("⛰️ Comparativo Geológico")
+            solos = ['Arenoso', 'Argiloso', 'Rochoso', 'Siltoso']
+            cenarios_s = pd.concat([input_df.assign(tipo_solo=s) for s in solos])
+            preds_s = pipeline.predict(cenarios_s)
+            
+            fig_solo = px.bar(x=solos, y=preds_s, color=preds_s,
+                             labels={'x': 'Solo', 'y': 'Atraso'},
+                             title="Risco Estimado por Tipo de Solo",
+                             color_continuous_scale='Greens')
+            st.plotly_chart(fig_solo, use_container_width=True)
+
+        # Insight de Negócio Final
+        st.success(f"💡 **Decisão Recomendada:** Para a unidade em **{cidade}**, sob chuva de {val_chuva}mm, o modelo sugere reforçar o estoque de **{material}** e revisar o cronograma de drenagem da etapa de **{etapa}**.")
+
+    except Exception as e:
+        st.warning(f"Ajuste necessário: O modelo espera colunas que podem estar ausentes. Erro: {e}")
+
+# Rodapé
+st.markdown("<br><hr><center>Desenvolvido como Portfólio Técnico - CCbjj Engenharia</center>", unsafe_allow_html=True)
