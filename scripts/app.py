@@ -12,7 +12,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Estilização institucional
+# Estilização institucional CCbjj
 st.markdown("""
     <style>
     .main { background-color: #f8f9fa; }
@@ -65,62 +65,72 @@ with st.sidebar:
     
     st.divider()
     val_chuva = st.slider("Previsão de Chuva (mm)", 0, 800, 150)
-    val_rating = st.slider("Rating do Fornecedor", 1.0, 5.0, 3.5)
+    # Adicionado controle para o Rating que afeta a taxa de insucesso
+    val_rating = st.slider("Rating de Confiança", 1.0, 5.0, 3.5)
 
 # =====================
 # 3. Lógica de Predição
 # =====================
 st.title("🛡️ CCbjj - Sistema de Antecipação de Riscos")
+st.markdown("*Plataforma de IA para análise preditiva de cronogramas.*")
 
 if pipeline is None or features_order is None:
-    st.warning("⚠️ Aguardando modelos de IA. Certifique-se de rodar o pipeline de treinamento.")
+    st.warning("⚠️ Ativos de IA não encontrados. Execute o pipeline de treinamento primeiro.")
 else:
-    # Construção do input respeitando o contrato do modelo
+    # Cálculo dinâmico simples para simular a taxa de insucesso baseada no rating
+    taxa_simulada = max(0.05, (5.5 - val_rating) / 10)
+
     input_dict = {
         'orcamento_estimado': 15000000.0,
         'rating_confiabilidade': float(val_rating),
-        'taxa_insucesso_fornecedor': 0.15, 
+        'taxa_insucesso_fornecedor': taxa_simulada, 
         'complexidade_obra': np.log1p(15000000.0),
+        'risco_etapa': 0.0, # Valor base
         'nivel_chuva': float(val_chuva),
         'tipo_solo': tipo_solo_ui.lower(),
         'material': material_ui.lower(),
         'cidade': cidade_ui.lower(),
-        'etapa': etapa_ui.lower()
+        'etapa': etapa_ui.lower(),
+        'id_obra': 'PREDICT_MODE' # ID dummy para manter consistência com o treino
     }
     
-    # Criar DataFrame e garantir colunas do modelo (inclusive as faltantes)
     input_df = pd.DataFrame([input_dict])
+    
+    # Garantia de contrato: Se o treino teve colunas que não estão aqui, preenchemos com 0
     for col in features_order:
         if col not in input_df.columns:
-            input_df[col] = 0 # Valor default para colunas extras do treino
-    
+            input_df[col] = 0
+            
     input_df = input_df[features_order]
 
-    with st.spinner('Analisando cenários de risco...'):
+    
+
+    with st.spinner('Processando modelos de floresta randômica...'):
         pred_dias = max(0, pipeline.predict(input_df)[0])
         
-        # Dashboard Superior
         m1, m2, m3 = st.columns(3)
         m1.metric("Atraso Estimado", f"{pred_dias:.1f} dias")
         
-        status_map = {
-            "Crítico": ("🔴", pred_dias > 12),
-            "Alerta": ("🟡", 7 < pred_dias <= 12),
-            "Normal": ("🟢", pred_dias <= 7)
-        }
-        label = [k for k, v in status_map.items() if v[1]][0]
-        m2.metric("Status do Cronograma", f"{status_map[label][0]} {label}")
+        # Lógica de status
+        if pred_dias > 12:
+            status, cor = "🔴 Crítico", "erro"
+        elif pred_dias > 7:
+            status, cor = "🟡 Alerta", "aviso"
+        else:
+            status, cor = "🟢 Normal", "sucesso"
+            
+        m2.metric("Status do Cronograma", status)
         m3.metric("Impacto Financeiro Est.", f"R$ {pred_dias * 3500:,.2f}")
 
     st.markdown("---")
 
     # 4. Gráficos de Simulação
-    
     c1, c2 = st.columns(2)
 
     with c1:
         st.subheader("📉 Sensibilidade Climática")
         faixa_chuva = np.linspace(0, 800, 20)
+        # Gera predições para toda a faixa de chuva mantendo o resto constante
         sim_chuva = pd.concat([input_df.assign(nivel_chuva=c) for c in faixa_chuva])
         preds_chuva = [max(0, p) for p in pipeline.predict(sim_chuva)]
         fig_chuva = px.area(x=faixa_chuva, y=preds_chuva, 
@@ -134,9 +144,10 @@ else:
         sim_solo = pd.concat([input_df.assign(tipo_solo=s) for s in solos_ref])
         preds_solo = [max(0, p) for p in pipeline.predict(sim_solo)]
         fig_solo = px.bar(x=[s.title() for s in solos_ref], y=preds_solo,
-                         color=preds_solo, color_continuous_scale='Greens')
+                         color=preds_solo, color_continuous_scale='Greens',
+                         labels={'x': 'Tipo de Solo', 'y': 'Dias de Atraso'})
         st.plotly_chart(fig_solo, use_container_width=True)
 
-    st.info(f"💡 **Insight:** Obra em solo **{tipo_solo_ui}** sob chuva de **{val_chuva}mm** requer reforço logístico em **{material_ui}**.")
+    st.info(f"💡 **Recomendação CCbjj:** O cenário em **{cidade_ui}** com solo **{tipo_solo_ui}** indica que o insumo **{material_ui}** deve ter margem de segurança de estoque para mitigar os {pred_dias:.1f} dias de risco.")
 
 st.markdown("<br><hr><center>Desenvolvido para Portfólio Técnico - CCbjj Engenharia</center>", unsafe_allow_html=True)
