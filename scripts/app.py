@@ -1,62 +1,27 @@
-import streamlit as st
-import pandas as pd
-import joblib
-import plotly.express as px
-import numpy as np
-import os
-
-# 1. Configuração da Página
-st.set_page_config(
-    page_title="CCbjj - Risk Intelligence",
-    page_icon="🏗️",
-    layout="wide"
-)
-
-# Estilização institucional CCbjj
-st.markdown("""
-    <style>
-    .main { background-color: #f8f9fa; }
-    .stMetric {
-        background-color: #ffffff;
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        border-left: 5px solid #004A2F;
-    }
-    div[data-testid="stMetricValue"] { color: #004A2F; }
-    </style>
-    """, unsafe_allow_html=True)
-
-@st.cache_resource
-def load_assets():
-    m_path = "models/pipeline_random_forest.pkl"
-    f_path = "models/features_metadata.joblib"
-    d_path = "data/processed/df_mestre_consolidado.csv"
-    
-    pipeline = joblib.load(m_path) if os.path.exists(m_path) else None
-    features = joblib.load(f_path) if os.path.exists(f_path) else None
-    df_base = pd.read_csv(d_path) if os.path.exists(d_path) else pd.DataFrame()
-    
-    return pipeline, features, df_base
-
-pipeline, features_order, df_base = load_assets()
-
 # =====================
-# 2. Interface Lateral
+# 2. Interface Lateral (Versão à Prova de Falhas)
 # =====================
-st.sidebar.image("https://img.icons8.com/fluency/96/construction.png", width=80)
-st.sidebar.header("🕹️ Painel de Controle CCbjj")
-
 with st.sidebar:
+    st.sidebar.image("https://img.icons8.com/fluency/96/construction.png", width=80)
+    st.sidebar.header("🕹️ Painel de Controle CCbjj")
     st.markdown("---")
-    if not df_base.empty:
-        cidades_list = sorted([c.title() for c in df_base['cidade'].dropna().unique()])
-        etapas_list = sorted([e.title() for e in df_base['etapa'].dropna().unique()])
-        solos_list = sorted([s.title() for s in df_base['tipo_solo'].dropna().unique()])
-        materiais_list = sorted([m.title() for m in df_base['material'].dropna().unique()])
-    else:
-        cidades_list, etapas_list = ['Recife', 'São Paulo'], ['Fundação', 'Estrutura']
-        solos_list, materiais_list = ['Argiloso', 'Rochoso'], ['Cimento', 'Aço']
+    
+    # Função auxiliar para extrair opções ou usar fallback se a coluna for só 'nan'
+    def get_safe_options(df, column, default_values):
+        if not df.empty and column in df.columns:
+            # Filtra nulos e converte para string
+            options = df[column].dropna().unique().tolist()
+            # Se a lista estiver vazia ou só contiver a string 'nan'
+            options = [str(x).title() for x in options if str(x).lower() != 'nan']
+            if options:
+                return sorted(options)
+        return default_values
+
+    # Listas de opções com Fallbacks caso o CSV venha com 'nan'
+    cidades_list = get_safe_options(df_base, 'cidade', ['Recife', 'São Paulo', 'Manaus', 'Curitiba'])
+    etapas_list = get_options = get_safe_options(df_base, 'etapa', ['Fundação', 'Estrutura', 'Acabamento'])
+    solos_list = get_safe_options(df_base, 'tipo_solo', ['Argiloso', 'Arenoso', 'Rochoso', 'Siltoso'])
+    materiais_list = get_safe_options(df_base, 'material', ['Cimento', 'Aço', 'Areia', 'Brita'])
 
     cidade_ui = st.selectbox("Cidade", cidades_list)
     etapa_ui = st.selectbox("Etapa Atual", etapas_list)
@@ -65,89 +30,29 @@ with st.sidebar:
     
     st.divider()
     val_chuva = st.slider("Previsão de Chuva (mm)", 0, 800, 150)
-    # Adicionado controle para o Rating que afeta a taxa de insucesso
     val_rating = st.slider("Rating de Confiança", 1.0, 5.0, 3.5)
 
 # =====================
-# 3. Lógica de Predição
+# 3. Lógica de Predição (Protegida)
 # =====================
-st.title("🛡️ CCbjj - Sistema de Antecipação de Riscos")
-st.markdown("*Plataforma de IA para análise preditiva de cronogramas.*")
-
 if pipeline is None or features_order is None:
-    st.warning("⚠️ Ativos de IA não encontrados. Execute o pipeline de treinamento primeiro.")
+    st.error("❌ Erro: Ativos de IA (models/) não encontrados no repositório.")
 else:
-    # Cálculo dinâmico simples para simular a taxa de insucesso baseada no rating
-    taxa_simulada = max(0.05, (5.5 - val_rating) / 10)
+    # Verificação de segurança: se o usuário não selecionou nada, evita o .lower() no None
+    cidade_val = str(cidade_ui).lower() if cidade_ui else "recife"
+    etapa_val = str(etapa_ui).lower() if etapa_ui else "fundação"
+    solo_val = str(tipo_solo_ui).lower() if tipo_solo_ui else "argiloso"
+    material_val = str(material_ui).lower() if material_ui else "cimento"
 
     input_dict = {
         'orcamento_estimado': 15000000.0,
         'rating_confiabilidade': float(val_rating),
-        'taxa_insucesso_fornecedor': taxa_simulada, 
+        'taxa_insucesso_fornecedor': 0.15,
         'complexidade_obra': np.log1p(15000000.0),
-        'risco_etapa': 0.0, # Valor base
+        'risco_etapa': 0.0,
         'nivel_chuva': float(val_chuva),
-        'tipo_solo': tipo_solo_ui.lower(),
-        'material': material_ui.lower(),
-        'cidade': cidade_ui.lower(),
-        'etapa': etapa_ui.lower(),
-        'id_obra': 'PREDICT_MODE' # ID dummy para manter consistência com o treino
+        'tipo_solo': solo_val,
+        'material': material_val,
+        'cidade': cidade_val,
+        'etapa': etapa_val
     }
-    
-    input_df = pd.DataFrame([input_dict])
-    
-    # Garantia de contrato: Se o treino teve colunas que não estão aqui, preenchemos com 0
-    for col in features_order:
-        if col not in input_df.columns:
-            input_df[col] = 0
-            
-    input_df = input_df[features_order]
-
-    
-
-    with st.spinner('Processando modelos de floresta randômica...'):
-        pred_dias = max(0, pipeline.predict(input_df)[0])
-        
-        m1, m2, m3 = st.columns(3)
-        m1.metric("Atraso Estimado", f"{pred_dias:.1f} dias")
-        
-        # Lógica de status
-        if pred_dias > 12:
-            status, cor = "🔴 Crítico", "erro"
-        elif pred_dias > 7:
-            status, cor = "🟡 Alerta", "aviso"
-        else:
-            status, cor = "🟢 Normal", "sucesso"
-            
-        m2.metric("Status do Cronograma", status)
-        m3.metric("Impacto Financeiro Est.", f"R$ {pred_dias * 3500:,.2f}")
-
-    st.markdown("---")
-
-    # 4. Gráficos de Simulação
-    c1, c2 = st.columns(2)
-
-    with c1:
-        st.subheader("📉 Sensibilidade Climática")
-        faixa_chuva = np.linspace(0, 800, 20)
-        # Gera predições para toda a faixa de chuva mantendo o resto constante
-        sim_chuva = pd.concat([input_df.assign(nivel_chuva=c) for c in faixa_chuva])
-        preds_chuva = [max(0, p) for p in pipeline.predict(sim_chuva)]
-        fig_chuva = px.area(x=faixa_chuva, y=preds_chuva, 
-                            labels={'x': 'Chuva (mm)', 'y': 'Atraso (Dias)'},
-                            color_discrete_sequence=['#004A2F'])
-        st.plotly_chart(fig_chuva, use_container_width=True)
-
-    with c2:
-        st.subheader("⛰️ Risco por Geologia")
-        solos_ref = ['arenoso', 'argiloso', 'rochoso', 'siltoso']
-        sim_solo = pd.concat([input_df.assign(tipo_solo=s) for s in solos_ref])
-        preds_solo = [max(0, p) for p in pipeline.predict(sim_solo)]
-        fig_solo = px.bar(x=[s.title() for s in solos_ref], y=preds_solo,
-                         color=preds_solo, color_continuous_scale='Greens',
-                         labels={'x': 'Tipo de Solo', 'y': 'Dias de Atraso'})
-        st.plotly_chart(fig_solo, use_container_width=True)
-
-    st.info(f"💡 **Recomendação CCbjj:** O cenário em **{cidade_ui}** com solo **{tipo_solo_ui}** indica que o insumo **{material_ui}** deve ter margem de segurança de estoque para mitigar os {pred_dias:.1f} dias de risco.")
-
-st.markdown("<br><hr><center>Desenvolvido para Portfólio Técnico - CCbjj Engenharia</center>", unsafe_allow_html=True)
