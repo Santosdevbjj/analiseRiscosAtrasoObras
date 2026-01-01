@@ -1,4 +1,4 @@
-## 🏗️ Simulador de Riscos Logísticos - CCbjj - Engenharia de Construção Civil 
+## 🏗️ Simulador de Riscos Logísticos - CCbjj Engenharia de Construção Civil 
 
 
 ---
