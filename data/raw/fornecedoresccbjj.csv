@@ -1,0 +1,1001 @@
+Id_fornecedor,nome_ornecedor,rating_confiabilidade
+FORN-1,Pereira Construções,3.5
+FORN-2,Macedo S/A,4.4
+FORN-3,Silva & Filhos,4.8
+FORN-4,Pereira Construções,1.6
+FORN-5,Ribeiro Ltda,4.7
+FORN-6,Silva & Filhos,3.0
+FORN-7,Silva & Filhos,2.0
+FORN-8,Pereira Construções,2.8
+FORN-9,Duarte,4.9
+FORN-10,Ribeiro Ltda,3.0
+FORN-11,Pereira Construções,2.3
+FORN-12,Ribeiro Ltda,3.5
+FORN-13,Ribeiro Ltda,2.0
+FORN-14,Silva & Filhos,1.3
+FORN-15,Macedo S/A,1.5
+FORN-16,Ribeiro Ltda,1.5
+FORN-17,Oliveira Tec,1.6
+FORN-18,Silva & Filhos,1.6
+FORN-19,Duarte,3.6
+FORN-20,Macedo S/A,1.7
+FORN-21,Oliveira Tec,2.4
+FORN-22,Oliveira Tec,4.6
+FORN-23,Duarte,2.9
+FORN-24,Macedo S/A,3.7
+FORN-25,Silva & Filhos,1.7
+FORN-26,Carvalho ME,1.8
+FORN-27,Macedo S/A,1.2
+FORN-28,Duarte,1.7
+FORN-29,Oliveira Tec,2.1
+FORN-30,Silva & Filhos,1.7
+FORN-31,Macedo S/A,1.4
+FORN-32,Carvalho ME,1.5
+FORN-33,Carvalho ME,2.8
+FORN-34,Ribeiro Ltda,1.8
+FORN-35,Ribeiro Ltda,2.5
+FORN-36,Pereira Construções,3.0
+FORN-37,Duarte,3.8
+FORN-38,Macedo S/A,1.2
+FORN-39,Macedo S/A,4.2
+FORN-40,Pereira Construções,3.5
+FORN-41,Oliveira Tec,1.3
+FORN-42,Oliveira Tec,4.5
+FORN-43,Pereira Construções,4.7
+FORN-44,Oliveira Tec,1.2
+FORN-45,Ribeiro Ltda,2.1
+FORN-46,Macedo S/A,4.2
+FORN-47,Pereira Construções,4.0
+FORN-48,Macedo S/A,1.7
+FORN-49,Carvalho ME,1.8
+FORN-50,Ribeiro Ltda,2.5
+FORN-51,Silva & Filhos,2.9
+FORN-52,Ribeiro Ltda,3.5
+FORN-53,Pereira Construções,2.5
+FORN-54,Silva & Filhos,2.9
+FORN-55,Carvalho ME,4.0
+FORN-56,Pereira Construções,1.1
+FORN-57,Duarte,2.0
+FORN-58,Macedo S/A,3.9
+FORN-59,Carvalho ME,4.6
+FORN-60,Macedo S/A,3.0
+FORN-61,Oliveira Tec,3.1
+FORN-62,Duarte,1.4
+FORN-63,Duarte,2.8
+FORN-64,Carvalho ME,3.1
+FORN-65,Duarte,2.0
+FORN-66,Silva & Filhos,2.1
+FORN-67,Duarte,2.5
+FORN-68,Macedo S/A,1.1
+FORN-69,Macedo S/A,2.3
+FORN-70,Pereira Construções,1.8
+FORN-71,Macedo S/A,2.3
+FORN-72,Pereira Construções,1.5
+FORN-73,Macedo S/A,4.6
+FORN-74,Silva & Filhos,3.4
+FORN-75,Pereira Construções,3.7
+FORN-76,Ribeiro Ltda,4.2
+FORN-77,Oliveira Tec,3.0
+FORN-78,Carvalho ME,1.3
+FORN-79,Macedo S/A,3.1
+FORN-80,Duarte,3.3
+FORN-81,Macedo S/A,4.0
+FORN-82,Duarte,2.7
+FORN-83,Oliveira Tec,1.5
+FORN-84,Oliveira Tec,2.1
+FORN-85,Oliveira Tec,2.5
+FORN-86,Duarte,3.6
+FORN-87,Macedo S/A,3.3
+FORN-88,Oliveira Tec,2.4
+FORN-89,Silva & Filhos,4.9
+FORN-90,Pereira Construções,3.4
+FORN-91,Duarte,1.9
+FORN-92,Duarte,1.4
+FORN-93,Macedo S/A,1.6
+FORN-94,Duarte,2.0
+FORN-95,Duarte,1.6
+FORN-96,Oliveira Tec,1.7
+FORN-97,Macedo S/A,2.1
+FORN-98,Oliveira Tec,1.7
+FORN-99,Pereira Construções,4.6
+FORN-100,Pereira Construções,1.3
+FORN-101,Oliveira Tec,3.1
+FORN-102,Pereira Construções,2.6
+FORN-103,Macedo S/A,4.9
+FORN-104,Carvalho ME,1.4
+FORN-105,Oliveira Tec,2.6
+FORN-106,Silva & Filhos,4.9
+FORN-107,Silva & Filhos,4.5
+FORN-108,Duarte,4.3
+FORN-109,Pereira Construções,2.0
+FORN-110,Silva & Filhos,1.7
+FORN-111,Duarte,3.7
+FORN-112,Carvalho ME,4.7
+FORN-113,Macedo S/A,3.2
+FORN-114,Macedo S/A,3.3
+FORN-115,Macedo S/A,2.1
+FORN-116,Silva & Filhos,4.1
+FORN-117,Carvalho ME,1.7
+FORN-118,Silva & Filhos,2.3
+FORN-119,Pereira Construções,2.7
+FORN-120,Silva & Filhos,3.0
+FORN-121,Carvalho ME,2.0
+FORN-122,Carvalho ME,1.5
+FORN-123,Pereira Construções,3.4
+FORN-124,Carvalho ME,2.2
+FORN-125,Carvalho ME,3.3
+FORN-126,Macedo S/A,1.6
+FORN-127,Pereira Construções,2.9
+FORN-128,Ribeiro Ltda,3.1
+FORN-129,Ribeiro Ltda,1.2
+FORN-130,Carvalho ME,2.3
+FORN-131,Ribeiro Ltda,1.5
+FORN-132,Ribeiro Ltda,1.3
+FORN-133,Carvalho ME,5.0
+FORN-134,Ribeiro Ltda,2.3
+FORN-135,Silva & Filhos,4.2
+FORN-136,Duarte,2.0
+FORN-137,Pereira Construções,3.7
+FORN-138,Duarte,4.0
+FORN-139,Carvalho ME,3.4
+FORN-140,Macedo S/A,2.9
+FORN-141,Pereira Construções,2.6
+FORN-142,Carvalho ME,2.4
+FORN-143,Macedo S/A,4.7
+FORN-144,Duarte,4.3
+FORN-145,Carvalho ME,4.9
+FORN-146,Pereira Construções,1.5
+FORN-147,Pereira Construções,3.9
+FORN-148,Oliveira Tec,4.8
+FORN-149,Silva & Filhos,1.7
+FORN-150,Ribeiro Ltda,1.3
+FORN-151,Macedo S/A,4.0
+FORN-152,Oliveira Tec,3.3
+FORN-153,Ribeiro Ltda,4.4
+FORN-154,Ribeiro Ltda,1.6
+FORN-155,Carvalho ME,4.2
+FORN-156,Ribeiro Ltda,1.8
+FORN-157,Silva & Filhos,1.7
+FORN-158,Pereira Construções,1.7
+FORN-159,Oliveira Tec,4.3
+FORN-160,Ribeiro Ltda,3.7
+FORN-161,Carvalho ME,3.1
+FORN-162,Silva & Filhos,2.4
+FORN-163,Duarte,4.5
+FORN-164,Pereira Construções,2.6
+FORN-165,Pereira Construções,4.3
+FORN-166,Oliveira Tec,2.8
+FORN-167,Pereira Construções,2.5
+FORN-168,Ribeiro Ltda,2.9
+FORN-169,Carvalho ME,2.2
+FORN-170,Pereira Construções,4.0
+FORN-171,Pereira Construções,3.0
+FORN-172,Duarte,1.9
+FORN-173,Duarte,4.6
+FORN-174,Macedo S/A,2.5
+FORN-175,Silva & Filhos,3.2
+FORN-176,Ribeiro Ltda,4.6
+FORN-177,Pereira Construções,3.5
+FORN-178,Pereira Construções,1.5
+FORN-179,Carvalho ME,4.8
+FORN-180,Macedo S/A,3.5
+FORN-181,Silva & Filhos,2.3
+FORN-182,Macedo S/A,1.6
+FORN-183,Oliveira Tec,4.2
+FORN-184,Silva & Filhos,3.5
+FORN-185,Pereira Construções,3.1
+FORN-186,Pereira Construções,4.6
+FORN-187,Silva & Filhos,4.2
+FORN-188,Pereira Construções,1.6
+FORN-189,Ribeiro Ltda,2.2
+FORN-190,Silva & Filhos,2.0
+FORN-191,Macedo S/A,4.0
+FORN-192,Silva & Filhos,1.1
+FORN-193,Pereira Construções,3.3
+FORN-194,Ribeiro Ltda,4.0
+FORN-195,Ribeiro Ltda,4.5
+FORN-196,Oliveira Tec,2.4
+FORN-197,Macedo S/A,4.3
+FORN-198,Duarte,1.4
+FORN-199,Duarte,4.4
+FORN-200,Silva & Filhos,1.5
+FORN-201,Oliveira Tec,2.6
+FORN-202,Carvalho ME,4.2
+FORN-203,Silva & Filhos,1.6
+FORN-204,Oliveira Tec,1.9
+FORN-205,Macedo S/A,3.9
+FORN-206,Macedo S/A,3.9
+FORN-207,Macedo S/A,3.6
+FORN-208,Macedo S/A,3.8
+FORN-209,Macedo S/A,3.2
+FORN-210,Oliveira Tec,2.0
+FORN-211,Oliveira Tec,2.4
+FORN-212,Ribeiro Ltda,1.7
+FORN-213,Duarte,4.6
+FORN-214,Pereira Construções,3.3
+FORN-215,Macedo S/A,2.6
+FORN-216,Carvalho ME,2.8
+FORN-217,Pereira Construções,4.8
+FORN-218,Oliveira Tec,1.6
+FORN-219,Carvalho ME,3.3
+FORN-220,Carvalho ME,3.0
+FORN-221,Carvalho ME,3.4
+FORN-222,Ribeiro Ltda,1.1
+FORN-223,Oliveira Tec,4.5
+FORN-224,Carvalho ME,4.7
+FORN-225,Macedo S/A,3.3
+FORN-226,Silva & Filhos,3.8
+FORN-227,Carvalho ME,4.7
+FORN-228,Ribeiro Ltda,3.8
+FORN-229,Pereira Construções,1.6
+FORN-230,Oliveira Tec,3.3
+FORN-231,Ribeiro Ltda,3.4
+FORN-232,Carvalho ME,2.7
+FORN-233,Oliveira Tec,3.9
+FORN-234,Silva & Filhos,4.7
+FORN-235,Carvalho ME,4.7
+FORN-236,Ribeiro Ltda,2.8
+FORN-237,Duarte,1.5
+FORN-238,Macedo S/A,4.9
+FORN-239,Pereira Construções,4.4
+FORN-240,Ribeiro Ltda,1.5
+FORN-241,Oliveira Tec,4.7
+FORN-242,Carvalho ME,4.5
+FORN-243,Macedo S/A,3.1
+FORN-244,Carvalho ME,3.4
+FORN-245,Oliveira Tec,2.6
+FORN-246,Carvalho ME,1.2
+FORN-247,Duarte,2.3
+FORN-248,Macedo S/A,4.2
+FORN-249,Macedo S/A,1.0
+FORN-250,Oliveira Tec,2.3
+FORN-251,Pereira Construções,2.6
+FORN-252,Duarte,3.1
+FORN-253,Ribeiro Ltda,4.7
+FORN-254,Carvalho ME,2.4
+FORN-255,Silva & Filhos,2.4
+FORN-256,Carvalho ME,4.0
+FORN-257,Carvalho ME,2.8
+FORN-258,Ribeiro Ltda,1.9
+FORN-259,Carvalho ME,2.8
+FORN-260,Duarte,1.6
+FORN-261,Duarte,1.7
+FORN-262,Macedo S/A,3.0
+FORN-263,Oliveira Tec,2.7
+FORN-264,Pereira Construções,4.7
+FORN-265,Silva & Filhos,2.4
+FORN-266,Carvalho ME,3.3
+FORN-267,Carvalho ME,3.5
+FORN-268,Ribeiro Ltda,1.1
+FORN-269,Oliveira Tec,3.7
+FORN-270,Duarte,1.7
+FORN-271,Silva & Filhos,4.8
+FORN-272,Macedo S/A,1.6
+FORN-273,Duarte,2.7
+FORN-274,Oliveira Tec,1.3
+FORN-275,Pereira Construções,5.0
+FORN-276,Macedo S/A,3.0
+FORN-277,Pereira Construções,3.4
+FORN-278,Ribeiro Ltda,1.3
+FORN-279,Ribeiro Ltda,4.0
+FORN-280,Carvalho ME,1.8
+FORN-281,Pereira Construções,4.6
+FORN-282,Oliveira Tec,1.8
+FORN-283,Silva & Filhos,1.8
+FORN-284,Macedo S/A,1.1
+FORN-285,Duarte,2.9
+FORN-286,Oliveira Tec,3.3
+FORN-287,Oliveira Tec,1.3
+FORN-288,Ribeiro Ltda,4.1
+FORN-289,Pereira Construções,2.8
+FORN-290,Carvalho ME,3.1
+FORN-291,Carvalho ME,2.8
+FORN-292,Macedo S/A,2.6
+FORN-293,Ribeiro Ltda,3.2
+FORN-294,Oliveira Tec,1.6
+FORN-295,Silva & Filhos,1.7
+FORN-296,Ribeiro Ltda,4.4
+FORN-297,Macedo S/A,4.8
+FORN-298,Macedo S/A,2.5
+FORN-299,Ribeiro Ltda,2.1
+FORN-300,Macedo S/A,3.6
+FORN-301,Ribeiro Ltda,2.6
+FORN-302,Duarte,1.1
+FORN-303,Ribeiro Ltda,1.6
+FORN-304,Pereira Construções,3.9
+FORN-305,Ribeiro Ltda,3.6
+FORN-306,Macedo S/A,1.1
+FORN-307,Pereira Construções,1.9
+FORN-308,Macedo S/A,1.9
+FORN-309,Carvalho ME,3.7
+FORN-310,Carvalho ME,1.1
+FORN-311,Pereira Construções,1.4
+FORN-312,Duarte,4.2
+FORN-313,Carvalho ME,1.7
+FORN-314,Ribeiro Ltda,3.6
+FORN-315,Macedo S/A,2.0
+FORN-316,Carvalho ME,1.4
+FORN-317,Carvalho ME,2.0
+FORN-318,Duarte,3.9
+FORN-319,Pereira Construções,4.4
+FORN-320,Pereira Construções,4.3
+FORN-321,Oliveira Tec,2.6
+FORN-322,Duarte,3.7
+FORN-323,Ribeiro Ltda,1.8
+FORN-324,Pereira Construções,2.2
+FORN-325,Macedo S/A,4.6
+FORN-326,Duarte,1.1
+FORN-327,Carvalho ME,1.3
+FORN-328,Macedo S/A,1.8
+FORN-329,Macedo S/A,1.1
+FORN-330,Carvalho ME,1.7
+FORN-331,Duarte,3.3
+FORN-332,Carvalho ME,2.7
+FORN-333,Oliveira Tec,4.6
+FORN-334,Macedo S/A,4.3
+FORN-335,Silva & Filhos,2.4
+FORN-336,Silva & Filhos,2.0
+FORN-337,Ribeiro Ltda,2.5
+FORN-338,Pereira Construções,3.4
+FORN-339,Carvalho ME,2.1
+FORN-340,Carvalho ME,3.5
+FORN-341,Ribeiro Ltda,2.6
+FORN-342,Ribeiro Ltda,3.2
+FORN-343,Ribeiro Ltda,2.7
+FORN-344,Macedo S/A,2.2
+FORN-345,Oliveira Tec,4.8
+FORN-346,Carvalho ME,4.1
+FORN-347,Macedo S/A,1.6
+FORN-348,Ribeiro Ltda,4.5
+FORN-349,Carvalho ME,2.9
+FORN-350,Macedo S/A,4.6
+FORN-351,Oliveira Tec,4.2
+FORN-352,Macedo S/A,2.7
+FORN-353,Oliveira Tec,1.1
+FORN-354,Ribeiro Ltda,2.1
+FORN-355,Oliveira Tec,3.2
+FORN-356,Carvalho ME,3.5
+FORN-357,Ribeiro Ltda,2.0
+FORN-358,Carvalho ME,1.6
+FORN-359,Silva & Filhos,4.3
+FORN-360,Duarte,4.9
+FORN-361,Oliveira Tec,3.1
+FORN-362,Duarte,1.7
+FORN-363,Duarte,2.1
+FORN-364,Oliveira Tec,1.1
+FORN-365,Ribeiro Ltda,4.7
+FORN-366,Silva & Filhos,1.5
+FORN-367,Carvalho ME,3.3
+FORN-368,Macedo S/A,2.1
+FORN-369,Carvalho ME,3.2
+FORN-370,Macedo S/A,3.6
+FORN-371,Carvalho ME,4.3
+FORN-372,Oliveira Tec,1.8
+FORN-373,Silva & Filhos,1.0
+FORN-374,Macedo S/A,1.5
+FORN-375,Pereira Construções,4.6
+FORN-376,Ribeiro Ltda,4.5
+FORN-377,Carvalho ME,3.4
+FORN-378,Carvalho ME,3.4
+FORN-379,Macedo S/A,3.7
+FORN-380,Ribeiro Ltda,1.7
+FORN-381,Ribeiro Ltda,4.7
+FORN-382,Oliveira Tec,2.7
+FORN-383,Pereira Construções,2.5
+FORN-384,Oliveira Tec,3.1
+FORN-385,Oliveira Tec,1.2
+FORN-386,Oliveira Tec,1.7
+FORN-387,Oliveira Tec,4.0
+FORN-388,Oliveira Tec,1.3
+FORN-389,Silva & Filhos,3.4
+FORN-390,Ribeiro Ltda,2.0
+FORN-391,Oliveira Tec,2.6
+FORN-392,Ribeiro Ltda,2.2
+FORN-393,Ribeiro Ltda,2.4
+FORN-394,Duarte,3.9
+FORN-395,Silva & Filhos,2.2
+FORN-396,Oliveira Tec,3.3
+FORN-397,Carvalho ME,2.9
+FORN-398,Macedo S/A,3.7
+FORN-399,Pereira Construções,4.7
+FORN-400,Carvalho ME,3.9
+FORN-401,Silva & Filhos,1.9
+FORN-402,Macedo S/A,1.1
+FORN-403,Silva & Filhos,2.0
+FORN-404,Ribeiro Ltda,3.4
+FORN-405,Macedo S/A,1.2
+FORN-406,Ribeiro Ltda,3.0
+FORN-407,Carvalho ME,3.4
+FORN-408,Carvalho ME,2.3
+FORN-409,Macedo S/A,4.1
+FORN-410,Macedo S/A,1.4
+FORN-411,Oliveira Tec,1.3
+FORN-412,Silva & Filhos,3.9
+FORN-413,Oliveira Tec,3.0
+FORN-414,Silva & Filhos,3.8
+FORN-415,Oliveira Tec,2.7
+FORN-416,Ribeiro Ltda,2.0
+FORN-417,Macedo S/A,4.3
+FORN-418,Carvalho ME,4.2
+FORN-419,Silva & Filhos,3.8
+FORN-420,Silva & Filhos,2.1
+FORN-421,Carvalho ME,3.4
+FORN-422,Oliveira Tec,2.4
+FORN-423,Silva & Filhos,1.4
+FORN-424,Pereira Construções,4.7
+FORN-425,Ribeiro Ltda,1.5
+FORN-426,Macedo S/A,4.8
+FORN-427,Carvalho ME,2.8
+FORN-428,Macedo S/A,1.7
+FORN-429,Pereira Construções,3.2
+FORN-430,Silva & Filhos,4.5
+FORN-431,Silva & Filhos,3.9
+FORN-432,Pereira Construções,4.2
+FORN-433,Carvalho ME,3.6
+FORN-434,Ribeiro Ltda,3.8
+FORN-435,Duarte,4.4
+FORN-436,Carvalho ME,2.0
+FORN-437,Duarte,3.0
+FORN-438,Pereira Construções,1.9
+FORN-439,Oliveira Tec,5.0
+FORN-440,Duarte,4.8
+FORN-441,Ribeiro Ltda,1.2
+FORN-442,Oliveira Tec,3.8
+FORN-443,Duarte,4.7
+FORN-444,Pereira Construções,1.7
+FORN-445,Oliveira Tec,3.3
+FORN-446,Pereira Construções,4.7
+FORN-447,Duarte,1.1
+FORN-448,Pereira Construções,3.8
+FORN-449,Ribeiro Ltda,2.2
+FORN-450,Duarte,4.7
+FORN-451,Duarte,4.9
+FORN-452,Duarte,4.8
+FORN-453,Carvalho ME,2.9
+FORN-454,Carvalho ME,4.4
+FORN-455,Carvalho ME,4.4
+FORN-456,Ribeiro Ltda,2.3
+FORN-457,Oliveira Tec,4.3
+FORN-458,Pereira Construções,1.1
+FORN-459,Silva & Filhos,3.4
+FORN-460,Duarte,1.9
+FORN-461,Pereira Construções,1.5
+FORN-462,Duarte,1.3
+FORN-463,Ribeiro Ltda,3.8
+FORN-464,Duarte,2.4
+FORN-465,Carvalho ME,3.9
+FORN-466,Silva & Filhos,1.3
+FORN-467,Macedo S/A,2.3
+FORN-468,Duarte,3.2
+FORN-469,Pereira Construções,4.2
+FORN-470,Carvalho ME,2.3
+FORN-471,Macedo S/A,3.5
+FORN-472,Silva & Filhos,4.5
+FORN-473,Macedo S/A,3.5
+FORN-474,Carvalho ME,1.9
+FORN-475,Oliveira Tec,1.1
+FORN-476,Oliveira Tec,4.5
+FORN-477,Macedo S/A,1.1
+FORN-478,Ribeiro Ltda,4.5
+FORN-479,Pereira Construções,3.1
+FORN-480,Pereira Construções,4.8
+FORN-481,Macedo S/A,4.2
+FORN-482,Duarte,5.0
+FORN-483,Duarte,2.4
+FORN-484,Pereira Construções,4.1
+FORN-485,Pereira Construções,2.6
+FORN-486,Oliveira Tec,2.9
+FORN-487,Ribeiro Ltda,3.5
+FORN-488,Carvalho ME,4.5
+FORN-489,Duarte,4.9
+FORN-490,Pereira Construções,4.1
+FORN-491,Oliveira Tec,2.7
+FORN-492,Silva & Filhos,2.7
+FORN-493,Oliveira Tec,4.0
+FORN-494,Duarte,2.0
+FORN-495,Duarte,1.4
+FORN-496,Oliveira Tec,2.4
+FORN-497,Carvalho ME,2.1
+FORN-498,Macedo S/A,2.2
+FORN-499,Duarte,1.9
+FORN-500,Oliveira Tec,1.2
+FORN-501,Pereira Construções,1.1
+FORN-502,Oliveira Tec,5.0
+FORN-503,Ribeiro Ltda,2.7
+FORN-504,Macedo S/A,2.5
+FORN-505,Silva & Filhos,3.7
+FORN-506,Carvalho ME,1.9
+FORN-507,Silva & Filhos,4.8
+FORN-508,Macedo S/A,4.1
+FORN-509,Macedo S/A,1.4
+FORN-510,Macedo S/A,2.7
+FORN-511,Silva & Filhos,4.5
+FORN-512,Pereira Construções,4.8
+FORN-513,Macedo S/A,2.9
+FORN-514,Oliveira Tec,3.5
+FORN-515,Silva & Filhos,1.7
+FORN-516,Macedo S/A,5.0
+FORN-517,Oliveira Tec,1.9
+FORN-518,Pereira Construções,4.8
+FORN-519,Ribeiro Ltda,3.6
+FORN-520,Pereira Construções,3.4
+FORN-521,Macedo S/A,3.1
+FORN-522,Silva & Filhos,1.9
+FORN-523,Duarte,1.7
+FORN-524,Macedo S/A,1.9
+FORN-525,Duarte,1.7
+FORN-526,Oliveira Tec,4.1
+FORN-527,Ribeiro Ltda,2.4
+FORN-528,Carvalho ME,1.2
+FORN-529,Pereira Construções,4.9
+FORN-530,Ribeiro Ltda,4.5
+FORN-531,Macedo S/A,4.7
+FORN-532,Duarte,5.0
+FORN-533,Pereira Construções,1.7
+FORN-534,Duarte,2.6
+FORN-535,Silva & Filhos,4.0
+FORN-536,Duarte,3.8
+FORN-537,Silva & Filhos,1.6
+FORN-538,Oliveira Tec,4.3
+FORN-539,Pereira Construções,1.9
+FORN-540,Pereira Construções,1.9
+FORN-541,Carvalho ME,3.1
+FORN-542,Macedo S/A,3.4
+FORN-543,Silva & Filhos,3.3
+FORN-544,Carvalho ME,1.4
+FORN-545,Duarte,4.5
+FORN-546,Duarte,2.1
+FORN-547,Carvalho ME,1.5
+FORN-548,Pereira Construções,4.6
+FORN-549,Duarte,4.8
+FORN-550,Oliveira Tec,4.4
+FORN-551,Oliveira Tec,4.2
+FORN-552,Carvalho ME,3.6
+FORN-553,Silva & Filhos,3.2
+FORN-554,Silva & Filhos,1.3
+FORN-555,Carvalho ME,2.6
+FORN-556,Silva & Filhos,2.5
+FORN-557,Pereira Construções,2.0
+FORN-558,Pereira Construções,3.9
+FORN-559,Silva & Filhos,3.0
+FORN-560,Oliveira Tec,1.3
+FORN-561,Silva & Filhos,1.9
+FORN-562,Pereira Construções,3.7
+FORN-563,Ribeiro Ltda,1.3
+FORN-564,Macedo S/A,4.4
+FORN-565,Duarte,3.0
+FORN-566,Ribeiro Ltda,2.9
+FORN-567,Silva & Filhos,3.4
+FORN-568,Oliveira Tec,4.3
+FORN-569,Carvalho ME,2.4
+FORN-570,Silva & Filhos,3.7
+FORN-571,Oliveira Tec,3.3
+FORN-572,Macedo S/A,2.1
+FORN-573,Silva & Filhos,4.5
+FORN-574,Pereira Construções,4.2
+FORN-575,Carvalho ME,3.6
+FORN-576,Oliveira Tec,4.4
+FORN-577,Oliveira Tec,4.5
+FORN-578,Oliveira Tec,3.8
+FORN-579,Macedo S/A,4.3
+FORN-580,Silva & Filhos,3.8
+FORN-581,Macedo S/A,3.7
+FORN-582,Duarte,3.5
+FORN-583,Duarte,4.0
+FORN-584,Silva & Filhos,1.6
+FORN-585,Pereira Construções,4.5
+FORN-586,Macedo S/A,4.5
+FORN-587,Carvalho ME,1.1
+FORN-588,Oliveira Tec,4.3
+FORN-589,Oliveira Tec,1.5
+FORN-590,Silva & Filhos,2.3
+FORN-591,Pereira Construções,4.0
+FORN-592,Duarte,1.6
+FORN-593,Duarte,4.3
+FORN-594,Oliveira Tec,4.3
+FORN-595,Silva & Filhos,3.0
+FORN-596,Macedo S/A,1.0
+FORN-597,Duarte,2.1
+FORN-598,Macedo S/A,3.5
+FORN-599,Pereira Construções,4.9
+FORN-600,Duarte,3.5
+FORN-601,Duarte,2.0
+FORN-602,Ribeiro Ltda,3.5
+FORN-603,Duarte,3.2
+FORN-604,Carvalho ME,4.1
+FORN-605,Silva & Filhos,1.4
+FORN-606,Silva & Filhos,4.0
+FORN-607,Macedo S/A,3.2
+FORN-608,Pereira Construções,4.9
+FORN-609,Duarte,2.4
+FORN-610,Carvalho ME,3.5
+FORN-611,Macedo S/A,4.7
+FORN-612,Ribeiro Ltda,1.4
+FORN-613,Macedo S/A,4.7
+FORN-614,Macedo S/A,3.8
+FORN-615,Duarte,1.3
+FORN-616,Ribeiro Ltda,2.2
+FORN-617,Macedo S/A,3.8
+FORN-618,Carvalho ME,1.3
+FORN-619,Carvalho ME,3.3
+FORN-620,Silva & Filhos,2.4
+FORN-621,Ribeiro Ltda,3.5
+FORN-622,Ribeiro Ltda,1.2
+FORN-623,Silva & Filhos,4.5
+FORN-624,Macedo S/A,4.9
+FORN-625,Ribeiro Ltda,4.9
+FORN-626,Carvalho ME,4.0
+FORN-627,Carvalho ME,1.5
+FORN-628,Duarte,4.0
+FORN-629,Ribeiro Ltda,1.1
+FORN-630,Macedo S/A,1.1
+FORN-631,Silva & Filhos,2.3
+FORN-632,Silva & Filhos,3.0
+FORN-633,Macedo S/A,4.1
+FORN-634,Pereira Construções,3.7
+FORN-635,Oliveira Tec,2.8
+FORN-636,Duarte,2.1
+FORN-637,Silva & Filhos,5.0
+FORN-638,Ribeiro Ltda,2.7
+FORN-639,Duarte,2.8
+FORN-640,Ribeiro Ltda,1.7
+FORN-641,Pereira Construções,4.2
+FORN-642,Carvalho ME,3.8
+FORN-643,Duarte,1.9
+FORN-644,Silva & Filhos,1.3
+FORN-645,Duarte,3.7
+FORN-646,Duarte,3.6
+FORN-647,Duarte,2.1
+FORN-648,Oliveira Tec,4.8
+FORN-649,Duarte,1.6
+FORN-650,Ribeiro Ltda,2.7
+FORN-651,Carvalho ME,4.8
+FORN-652,Pereira Construções,2.7
+FORN-653,Macedo S/A,3.6
+FORN-654,Duarte,2.6
+FORN-655,Silva & Filhos,2.1
+FORN-656,Duarte,4.9
+FORN-657,Silva & Filhos,2.6
+FORN-658,Ribeiro Ltda,4.6
+FORN-659,Silva & Filhos,1.9
+FORN-660,Macedo S/A,1.9
+FORN-661,Carvalho ME,1.1
+FORN-662,Silva & Filhos,3.6
+FORN-663,Silva & Filhos,2.5
+FORN-664,Carvalho ME,4.5
+FORN-665,Macedo S/A,2.9
+FORN-666,Duarte,4.9
+FORN-667,Silva & Filhos,1.7
+FORN-668,Carvalho ME,4.5
+FORN-669,Ribeiro Ltda,4.1
+FORN-670,Carvalho ME,4.1
+FORN-671,Ribeiro Ltda,4.4
+FORN-672,Macedo S/A,4.0
+FORN-673,Duarte,3.5
+FORN-674,Carvalho ME,1.5
+FORN-675,Pereira Construções,1.1
+FORN-676,Pereira Construções,4.7
+FORN-677,Oliveira Tec,3.5
+FORN-678,Silva & Filhos,4.2
+FORN-679,Macedo S/A,2.9
+FORN-680,Carvalho ME,1.5
+FORN-681,Pereira Construções,1.5
+FORN-682,Silva & Filhos,3.7
+FORN-683,Pereira Construções,2.7
+FORN-684,Carvalho ME,1.8
+FORN-685,Ribeiro Ltda,3.0
+FORN-686,Carvalho ME,1.3
+FORN-687,Oliveira Tec,3.3
+FORN-688,Carvalho ME,2.1
+FORN-689,Carvalho ME,4.2
+FORN-690,Oliveira Tec,2.2
+FORN-691,Macedo S/A,2.8
+FORN-692,Carvalho ME,1.0
+FORN-693,Oliveira Tec,1.3
+FORN-694,Silva & Filhos,2.6
+FORN-695,Ribeiro Ltda,2.9
+FORN-696,Ribeiro Ltda,3.4
+FORN-697,Carvalho ME,2.2
+FORN-698,Macedo S/A,3.8
+FORN-699,Macedo S/A,4.4
+FORN-700,Silva & Filhos,4.1
+FORN-701,Carvalho ME,1.2
+FORN-702,Ribeiro Ltda,2.9
+FORN-703,Macedo S/A,1.4
+FORN-704,Carvalho ME,2.0
+FORN-705,Pereira Construções,4.9
+FORN-706,Macedo S/A,1.6
+FORN-707,Oliveira Tec,3.0
+FORN-708,Pereira Construções,3.5
+FORN-709,Macedo S/A,3.8
+FORN-710,Ribeiro Ltda,3.2
+FORN-711,Duarte,1.0
+FORN-712,Pereira Construções,2.3
+FORN-713,Silva & Filhos,3.1
+FORN-714,Silva & Filhos,1.4
+FORN-715,Ribeiro Ltda,2.4
+FORN-716,Macedo S/A,1.1
+FORN-717,Carvalho ME,1.3
+FORN-718,Macedo S/A,2.6
+FORN-719,Ribeiro Ltda,1.5
+FORN-720,Silva & Filhos,3.3
+FORN-721,Macedo S/A,3.8
+FORN-722,Silva & Filhos,4.2
+FORN-723,Pereira Construções,1.8
+FORN-724,Carvalho ME,1.7
+FORN-725,Pereira Construções,1.4
+FORN-726,Silva & Filhos,3.5
+FORN-727,Silva & Filhos,3.8
+FORN-728,Duarte,1.1
+FORN-729,Duarte,4.7
+FORN-730,Pereira Construções,1.2
+FORN-731,Oliveira Tec,3.2
+FORN-732,Pereira Construções,3.8
+FORN-733,Duarte,4.5
+FORN-734,Silva & Filhos,3.9
+FORN-735,Ribeiro Ltda,4.2
+FORN-736,Pereira Construções,2.4
+FORN-737,Silva & Filhos,4.3
+FORN-738,Ribeiro Ltda,1.3
+FORN-739,Ribeiro Ltda,4.6
+FORN-740,Duarte,3.2
+FORN-741,Pereira Construções,4.3
+FORN-742,Macedo S/A,2.8
+FORN-743,Carvalho ME,3.6
+FORN-744,Duarte,3.1
+FORN-745,Duarte,3.9
+FORN-746,Macedo S/A,1.3
+FORN-747,Carvalho ME,1.2
+FORN-748,Silva & Filhos,2.0
+FORN-749,Oliveira Tec,1.6
+FORN-750,Pereira Construções,4.5
+FORN-751,Oliveira Tec,1.9
+FORN-752,Silva & Filhos,4.9
+FORN-753,Duarte,2.3
+FORN-754,Carvalho ME,1.7
+FORN-755,Duarte,4.2
+FORN-756,Ribeiro Ltda,3.6
+FORN-757,Duarte,3.0
+FORN-758,Duarte,3.2
+FORN-759,Silva & Filhos,3.9
+FORN-760,Silva & Filhos,1.9
+FORN-761,Silva & Filhos,5.0
+FORN-762,Oliveira Tec,4.9
+FORN-763,Ribeiro Ltda,3.6
+FORN-764,Silva & Filhos,1.8
+FORN-765,Carvalho ME,3.7
+FORN-766,Oliveira Tec,1.3
+FORN-767,Macedo S/A,1.1
+FORN-768,Carvalho ME,2.0
+FORN-769,Pereira Construções,2.9
+FORN-770,Pereira Construções,4.5
+FORN-771,Carvalho ME,3.9
+FORN-772,Silva & Filhos,4.0
+FORN-773,Macedo S/A,2.7
+FORN-774,Macedo S/A,2.4
+FORN-775,Oliveira Tec,2.5
+FORN-776,Macedo S/A,5.0
+FORN-777,Pereira Construções,1.2
+FORN-778,Ribeiro Ltda,4.5
+FORN-779,Silva & Filhos,3.3
+FORN-780,Macedo S/A,2.8
+FORN-781,Oliveira Tec,3.9
+FORN-782,Pereira Construções,2.9
+FORN-783,Ribeiro Ltda,4.5
+FORN-784,Duarte,4.6
+FORN-785,Duarte,2.7
+FORN-786,Ribeiro Ltda,2.1
+FORN-787,Pereira Construções,3.4
+FORN-788,Oliveira Tec,4.6
+FORN-789,Ribeiro Ltda,1.8
+FORN-790,Silva & Filhos,3.5
+FORN-791,Silva & Filhos,3.5
+FORN-792,Duarte,3.9
+FORN-793,Macedo S/A,1.5
+FORN-794,Oliveira Tec,3.9
+FORN-795,Duarte,4.6
+FORN-796,Macedo S/A,1.7
+FORN-797,Macedo S/A,2.0
+FORN-798,Silva & Filhos,4.9
+FORN-799,Pereira Construções,1.7
+FORN-800,Carvalho ME,4.4
+FORN-801,Pereira Construções,3.0
+FORN-802,Carvalho ME,2.0
+FORN-803,Ribeiro Ltda,4.5
+FORN-804,Silva & Filhos,2.8
+FORN-805,Macedo S/A,3.1
+FORN-806,Oliveira Tec,2.4
+FORN-807,Carvalho ME,3.4
+FORN-808,Pereira Construções,1.7
+FORN-809,Macedo S/A,2.6
+FORN-810,Carvalho ME,4.9
+FORN-811,Carvalho ME,2.0
+FORN-812,Carvalho ME,3.6
+FORN-813,Oliveira Tec,2.3
+FORN-814,Silva & Filhos,4.1
+FORN-815,Oliveira Tec,1.5
+FORN-816,Duarte,4.9
+FORN-817,Macedo S/A,2.8
+FORN-818,Silva & Filhos,1.9
+FORN-819,Silva & Filhos,1.3
+FORN-820,Silva & Filhos,1.7
+FORN-821,Pereira Construções,3.1
+FORN-822,Silva & Filhos,2.3
+FORN-823,Oliveira Tec,4.3
+FORN-824,Silva & Filhos,2.7
+FORN-825,Ribeiro Ltda,2.0
+FORN-826,Macedo S/A,3.5
+FORN-827,Silva & Filhos,3.8
+FORN-828,Macedo S/A,1.7
+FORN-829,Ribeiro Ltda,1.7
+FORN-830,Ribeiro Ltda,1.1
+FORN-831,Macedo S/A,3.9
+FORN-832,Carvalho ME,3.7
+FORN-833,Duarte,2.9
+FORN-834,Pereira Construções,4.4
+FORN-835,Carvalho ME,4.2
+FORN-836,Carvalho ME,3.3
+FORN-837,Oliveira Tec,4.5
+FORN-838,Pereira Construções,1.8
+FORN-839,Pereira Construções,1.4
+FORN-840,Carvalho ME,2.1
+FORN-841,Silva & Filhos,1.2
+FORN-842,Oliveira Tec,3.1
+FORN-843,Oliveira Tec,4.7
+FORN-844,Ribeiro Ltda,1.2
+FORN-845,Pereira Construções,1.5
+FORN-846,Carvalho ME,2.8
+FORN-847,Ribeiro Ltda,4.7
+FORN-848,Macedo S/A,2.3
+FORN-849,Duarte,3.0
+FORN-850,Oliveira Tec,1.2
+FORN-851,Macedo S/A,1.6
+FORN-852,Macedo S/A,4.9
+FORN-853,Silva & Filhos,4.9
+FORN-854,Duarte,1.0
+FORN-855,Macedo S/A,4.8
+FORN-856,Macedo S/A,3.6
+FORN-857,Duarte,4.5
+FORN-858,Duarte,2.8
+FORN-859,Macedo S/A,3.1
+FORN-860,Duarte,3.0
+FORN-861,Macedo S/A,3.7
+FORN-862,Macedo S/A,1.6
+FORN-863,Silva & Filhos,1.1
+FORN-864,Carvalho ME,2.2
+FORN-865,Macedo S/A,3.8
+FORN-866,Ribeiro Ltda,1.8
+FORN-867,Oliveira Tec,3.7
+FORN-868,Pereira Construções,4.9
+FORN-869,Carvalho ME,1.4
+FORN-870,Carvalho ME,3.7
+FORN-871,Carvalho ME,2.8
+FORN-872,Silva & Filhos,4.5
+FORN-873,Macedo S/A,1.7
+FORN-874,Silva & Filhos,3.8
+FORN-875,Macedo S/A,4.4
+FORN-876,Silva & Filhos,4.8
+FORN-877,Silva & Filhos,3.7
+FORN-878,Oliveira Tec,3.0
+FORN-879,Ribeiro Ltda,3.5
+FORN-880,Silva & Filhos,4.5
+FORN-881,Oliveira Tec,3.3
+FORN-882,Duarte,1.1
+FORN-883,Ribeiro Ltda,4.7
+FORN-884,Silva & Filhos,3.8
+FORN-885,Pereira Construções,3.7
+FORN-886,Carvalho ME,1.9
+FORN-887,Duarte,3.6
+FORN-888,Duarte,2.6
+FORN-889,Oliveira Tec,3.6
+FORN-890,Duarte,1.4
+FORN-891,Ribeiro Ltda,3.6
+FORN-892,Silva & Filhos,5.0
+FORN-893,Silva & Filhos,1.2
+FORN-894,Pereira Construções,4.9
+FORN-895,Carvalho ME,2.6
+FORN-896,Oliveira Tec,4.5
+FORN-897,Carvalho ME,4.1
+FORN-898,Duarte,3.3
+FORN-899,Pereira Construções,4.0
+FORN-900,Carvalho ME,4.5
+FORN-901,Ribeiro Ltda,2.6
+FORN-902,Silva & Filhos,2.3
+FORN-903,Duarte,3.7
+FORN-904,Pereira Construções,4.2
+FORN-905,Carvalho ME,4.0
+FORN-906,Oliveira Tec,4.2
+FORN-907,Ribeiro Ltda,2.7
+FORN-908,Ribeiro Ltda,4.3
+FORN-909,Carvalho ME,1.5
+FORN-910,Silva & Filhos,3.2
+FORN-911,Carvalho ME,1.0
+FORN-912,Duarte,2.3
+FORN-913,Carvalho ME,2.5
+FORN-914,Ribeiro Ltda,2.6
+FORN-915,Pereira Construções,3.8
+FORN-916,Carvalho ME,2.6
+FORN-917,Silva & Filhos,2.8
+FORN-918,Pereira Construções,2.0
+FORN-919,Oliveira Tec,2.5
+FORN-920,Macedo S/A,1.9
+FORN-921,Carvalho ME,1.3
+FORN-922,Silva & Filhos,3.4
+FORN-923,Pereira Construções,3.7
+FORN-924,Silva & Filhos,3.5
+FORN-925,Oliveira Tec,2.9
+FORN-926,Ribeiro Ltda,2.5
+FORN-927,Silva & Filhos,4.5
+FORN-928,Pereira Construções,3.1
+FORN-929,Silva & Filhos,2.9
+FORN-930,Silva & Filhos,1.1
+FORN-931,Silva & Filhos,2.4
+FORN-932,Duarte,2.5
+FORN-933,Duarte,2.6
+FORN-934,Ribeiro Ltda,3.3
+FORN-935,Carvalho ME,3.1
+FORN-936,Silva & Filhos,3.4
+FORN-937,Oliveira Tec,4.1
+FORN-938,Carvalho ME,4.3
+FORN-939,Oliveira Tec,3.9
+FORN-940,Carvalho ME,4.8
+FORN-941,Ribeiro Ltda,1.1
+FORN-942,Silva & Filhos,1.8
+FORN-943,Silva & Filhos,1.0
+FORN-944,Macedo S/A,3.6
+FORN-945,Oliveira Tec,4.6
+FORN-946,Carvalho ME,2.0
+FORN-947,Carvalho ME,4.7
+FORN-948,Duarte,1.2
+FORN-949,Macedo S/A,4.7
+FORN-950,Pereira Construções,2.4
+FORN-951,Pereira Construções,1.4
+FORN-952,Duarte,2.9
+FORN-953,Duarte,2.0
+FORN-954,Duarte,2.1
+FORN-955,Oliveira Tec,2.2
+FORN-956,Oliveira Tec,4.2
+FORN-957,Ribeiro Ltda,3.2
+FORN-958,Ribeiro Ltda,2.2
+FORN-959,Duarte,3.4
+FORN-960,Macedo S/A,3.9
+FORN-961,Carvalho ME,2.1
+FORN-962,Oliveira Tec,2.7
+FORN-963,Macedo S/A,1.5
+FORN-964,Silva & Filhos,1.7
+FORN-965,Oliveira Tec,3.7
+FORN-966,Oliveira Tec,1.7
+FORN-967,Ribeiro Ltda,3.1
+FORN-968,Carvalho ME,3.8
+FORN-969,Carvalho ME,1.4
+FORN-970,Pereira Construções,3.3
+FORN-971,Pereira Construções,2.0
+FORN-972,Pereira Construções,4.9
+FORN-973,Pereira Construções,2.9
+FORN-974,Silva & Filhos,4.2
+FORN-975,Silva & Filhos,3.2
+FORN-976,Oliveira Tec,1.2
+FORN-977,Duarte,3.5
+FORN-978,Ribeiro Ltda,4.8
+FORN-979,Ribeiro Ltda,3.4
+FORN-980,Pereira Construções,4.3
+FORN-981,Oliveira Tec,4.5
+FORN-982,Macedo S/A,1.9
+FORN-983,Duarte,1.8
+FORN-984,Oliveira Tec,3.4
+FORN-985,Duarte,2.6
+FORN-986,Duarte,4.4
+FORN-987,Duarte,4.6
+FORN-988,Oliveira Tec,2.4
+FORN-989,Pereira Construções,1.9
+FORN-990,Ribeiro Ltda,4.1
+FORN-991,Ribeiro Ltda,2.1
+FORN-992,Pereira Construções,4.3
+FORN-993,Duarte,2.7
+FORN-994,Macedo S/A,3.7
+FORN-995,Carvalho ME,1.4
+FORN-996,Oliveira Tec,3.5
+FORN-997,Carvalho ME,2.8
+FORN-998,Pereira Construções,3.3
+FORN-999,Macedo S/A,1.7
+FORN-1000,Oliveira Tec,3.9
