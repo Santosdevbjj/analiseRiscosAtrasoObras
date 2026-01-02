@@ -369,7 +369,11 @@ No cenário de "Confiança Alta" da IA, o modelo assume que o fornecedor atual �
    
 📉 **Impacto Esperado das Ações**
 
-Se essas ações forem implementadas imediatamente, a tendência é que na próxima rodada do MRV Risk Intelligence, o atraso estimado caia para a zona verde (abaixo de 5 dias), alterando o status de Alerta para Normal.
+
+Com a implementação imediata dessas ações, a expectativa é que, na próxima avaliação do CCbjj Risk Intelligence, o atraso estimado seja reduzido para a zona verde (abaixo de 5 dias), promovendo a transição do status de Alerta para Normal.
+
+A análise conduzida pelo CCbjj Risk Intelligence indica que a fase de Acabamento, embora ainda demande atenção, apresenta maior previsibilidade e menor exposição a riscos externos quando comparada às etapas iniciais da obra.
+
 
 | Ação | Impacto Estimado no Atraso | Prioridade |
 |---|---|---|
