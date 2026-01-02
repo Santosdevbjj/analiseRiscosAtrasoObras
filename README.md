@@ -12,7 +12,11 @@ Este projeto foi desenvolvido como parte de um estudo técnico/portfólio pessoa
 O objetivo é analisar e demonstrar práticas de engenharia, construção civil e gestão de projetos, tomando como referência uma empresa **de Engenharia de Construção Civil**.
 
 ⚠️ **Disclaimer:**  
-Este projeto é apenas um exercício acadêmico e de portfólio.  
+
+Todos os nomes de produtos, empresas e sistemas mencionados neste projeto
+são fictícios e criados exclusivamente para fins acadêmicos e de portfólio.
+
+Este projeto é apenas um exercício acadêmico e de portfólio de Ciência de Dados.
 
 Não possui qualquer vínculo oficial com qualquer empresa de Engenharia de Construção Civil
 Todos os nomes e referências utilizadas são Fictícios e são utilizados apenas para fins de estudo.
@@ -300,7 +304,7 @@ Sugestão de Estrutura para o seu Slide Executivo
 | Status | Alerta Crítico | Alerta Gerenciável | Redução de Stress Operacional |
 Conclusão para a Diretoria:
 
-Ao utilizarmos o MRV Risk Intelligence, identificamos que a fase de Acabamento, embora ainda em estado de alerta, oferece uma janela de 71% de confiança alta contra apenas uma confiança média na Fundação. 
+Ao utilizarmos o CCbjj Risk Intelligence, identificamos que a fase de Acabamento, embora ainda em estado de alerta, oferece uma janela de 71% de confiança alta contra apenas uma confiança média na Fundação. 
 
 Isto permite-nos focar esforços de contingência (como tendas ou drenagem) onde a IA aponta maior vulnerabilidade (Fundação) e focar em eficiência logística onde o clima já não é o vilão (Acabamento).
 
