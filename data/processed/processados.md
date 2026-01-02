@@ -1,3 +1,0 @@
-processados
-.
-.
