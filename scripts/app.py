@@ -114,7 +114,8 @@ else:
             st.subheader("Sensibilidade Climática")
             faixa_chuva = np.linspace(0, 800, 20)
             # Criamos um mini-lote de teste para o gráfico ser dinâmico
-            df_sim_chuva = pd.concat([input_df.assign(nivel_chuva=c) for c in faixa_chuva])
+            df_sim_chuva = pd.concat([input_df.assign(nivel_chuva=c) for c in faixa_chuva]) 
+            
             preds_chuva = pipeline.predict(df_sim_chuva)
             fig_chuva = px.area(x=faixa_chuva, y=preds_chuva, 
                                labels={'x':'Chuva (mm)', 'y':'Atraso (Dias)'},
@@ -133,6 +134,25 @@ else:
 
         st.info(f"**Insight CCbjj:** Para {cidade_ui}, solo {solo_ui} e chuva de {val_chuva}mm, o risco estimado é de {pred_dias:.1f} dias.")
 
+    @st.cache_resource
+def load_assets():
+    m_path = "models/pipeline_random_forest.pkl"
+    f_path = "models/features_metadata.joblib"
+    # 1. Altere o caminho para o arquivo .gz
+    d_path = "data/processed/df_mestre_consolidado.csv.gz" 
+    
+    pipeline = joblib.load(m_path) if os.path.exists(m_path) else None
+    features = joblib.load(f_path) if os.path.exists(f_path) else None
+    
+    # 2. Adicione o parâmetro compression='gzip' na leitura
+    if os.path.exists(d_path):
+        df = pd.read_csv(d_path, compression='gzip')
+    else:
+        df = pd.DataFrame()
+        
+    return pipeline, features, df
+
+    
     except Exception as e:
         st.error(f"Erro no processamento da IA: {e}")
 
