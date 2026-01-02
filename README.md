@@ -422,7 +422,9 @@ A linha diagonal representa a perfeição. Se um ponto estiver exatamente sobre 
 > **Conclusão do Insight:** O modelo demonstra robustez para escalas operacionais de construção civil, sendo capaz de antecipar gargalos críticos antes mesmo do início da etapa, permitindo que a diretoria atue na causa raiz (fornecedor ou logística) para trazer o ponto de volta para a linha da normalidade.
 
 
-**Observação:** O modelo tende a apresentar maior incerteza em atrasos extremos, sugerindo que eventos de longa duração na MRV possuem variáveis externas mais complexas que o clima e solo.
+
+**Observação:** O modelo tende a apresentar maior incerteza em atrasos extremos, sugerindo que eventos de longa duração na CCbjj Engenharia de Construção Civil envolvem variáveis externas mais complexas do que clima e solo.
+
 
 
 
