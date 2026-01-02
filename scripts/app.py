@@ -12,11 +12,20 @@ st.set_page_config(page_title="CCbjj - Risk Intelligence", page_icon="🏗️", 
 def load_assets():
     m_path = "models/pipeline_random_forest.pkl"
     f_path = "models/features_metadata.joblib"
-    d_path = "data/processed/df_mestre_consolidado.csv"
+    # IMPORTANTE: Caminho para o arquivo compactado gerado na célula 18
+    d_path = "data/processed/df_mestre_consolidado.csv.gz" 
     
     pipeline = joblib.load(m_path) if os.path.exists(m_path) else None
     features = joblib.load(f_path) if os.path.exists(f_path) else None
-    df = pd.read_csv(d_path) if os.path.exists(d_path) else pd.DataFrame()
+    
+    # Leitura com descompactação automática
+    if os.path.exists(d_path):
+        df = pd.read_csv(d_path, compression='gzip')
+    else:
+        # Tenta ler o CSV normal caso o .gz ainda não exista
+        alt_path = d_path.replace(".gz", "")
+        df = pd.read_csv(alt_path) if os.path.exists(alt_path) else pd.DataFrame()
+        
     return pipeline, features, df
 
 pipeline, features_order, df_base = load_assets()
@@ -28,7 +37,6 @@ with st.sidebar:
     
     def get_options(col, default):
         if not df_base.empty and col in df_base.columns:
-            # Pegamos valores únicos, removemos nulos e 'nan' strings
             opts = [str(x).title() for x in df_base[col].unique() if str(x).lower() != 'nan' and pd.notna(x)]
             if opts: return sorted(opts)
         return default
@@ -48,51 +56,49 @@ st.markdown("---")
 if pipeline is None or features_order is None:
     st.error("❌ Modelos não encontrados na pasta /models. Verifique seu repositório GitHub.")
 else:
-    # --- BUSCA DINÂMICA DE DADOS (O SEGREDO DA PRECISÃO) ---
-    # Em vez de fixar 15M e risco 5.0, buscamos a média real no seu CSV para a cidade/etapa selecionada
-    if not df_base.empty:
-        filtro = (df_base['cidade'] == cidade_ui.lower()) & (df_base['etapa'] == etapa_ui.lower())
-        dados_contexto = df_base[filtro]
-        
-        if not dados_contexto.empty:
-            orcamento = dados_contexto['orcamento_estimado'].mean()
-            complexidade = dados_contexto['complexidade_obra'].mean()
-            risco_etapa = dados_contexto['risco_etapa'].mean()
-            taxa_forn = dados_contexto['taxa_insucesso_fornecedor'].mean()
-        else:
-            # Fallback caso não ache a combinação exata
-            orcamento = df_base['orcamento_estimado'].median()
-            complexidade = df_base['complexidade_obra'].median()
-            risco_etapa = df_base['risco_etapa'].median()
-            taxa_forn = 0.15
-    else:
-        orcamento, complexidade, risco_etapa, taxa_forn = 15000000.0, 16.5, 6.6, 0.15
-
-    # Preparação do Input
-    input_dict = {
-        'orcamento_estimado': float(orcamento),
-        'rating_confiabilidade': float(val_rating),
-        'taxa_insucesso_fornecedor': float(taxa_forn),
-        'complexidade_obra': float(complexidade),
-        'risco_etapa': float(risco_etapa),
-        'nivel_chuva': float(val_chuva),
-        'tipo_solo': solo_ui.lower(),
-        'material': material_ui.lower(),
-        'cidade': cidade_ui.lower(),
-        'etapa': etapa_ui.lower(),
-        'id_obra': 'PRED-CCBJJ'
-    }
-    
-    input_df = pd.DataFrame([input_dict])
-    
-    # Garantia de Ordem das Colunas (Contrato da IA)
-    for col in features_order:
-        if col not in input_df.columns:
-            input_df[col] = 0
-    input_df = input_df[features_order]
-
-    # Predição Real
     try:
+        # --- BUSCA DINÂMICA DE DADOS ---
+        if not df_base.empty:
+            filtro = (df_base['cidade'] == cidade_ui.lower()) & (df_base['etapa'] == etapa_ui.lower())
+            dados_contexto = df_base[filtro]
+            
+            if not dados_contexto.empty:
+                orcamento = dados_contexto['orcamento_estimado'].mean()
+                complexidade = dados_contexto['complexidade_obra'].mean()
+                risco_etapa = dados_contexto['risco_etapa'].mean()
+                taxa_forn = dados_contexto['taxa_insucesso_fornecedor'].mean()
+            else:
+                orcamento = df_base['orcamento_estimado'].median()
+                complexidade = df_base['complexidade_obra'].median()
+                risco_etapa = df_base['risco_etapa'].median()
+                taxa_forn = 0.15
+        else:
+            orcamento, complexidade, risco_etapa, taxa_forn = 15000000.0, 16.5, 6.6, 0.15
+
+        # Preparação do Input
+        input_dict = {
+            'orcamento_estimado': float(orcamento),
+            'rating_confiabilidade': float(val_rating),
+            'taxa_insucesso_fornecedor': float(taxa_forn),
+            'complexidade_obra': float(complexidade),
+            'risco_etapa': float(risco_etapa),
+            'nivel_chuva': float(val_chuva),
+            'tipo_solo': solo_ui.lower(),
+            'material': material_ui.lower(),
+            'cidade': cidade_ui.lower(),
+            'etapa': etapa_ui.lower(),
+            'id_obra': 'PRED-CCBJJ'
+        }
+        
+        input_df = pd.DataFrame([input_dict])
+        
+        # Alinhamento de colunas com o modelo
+        for col in features_order:
+            if col not in input_df.columns:
+                input_df[col] = 0
+        input_df = input_df[features_order]
+
+        # Predição Real
         pred_array = pipeline.predict(input_df)
         pred_dias = max(0, float(pred_array[0]))
         
@@ -113,9 +119,7 @@ else:
         with c1:
             st.subheader("Sensibilidade Climática")
             faixa_chuva = np.linspace(0, 800, 20)
-            # Criamos um mini-lote de teste para o gráfico ser dinâmico
             df_sim_chuva = pd.concat([input_df.assign(nivel_chuva=c) for c in faixa_chuva]) 
-            
             preds_chuva = pipeline.predict(df_sim_chuva)
             fig_chuva = px.area(x=faixa_chuva, y=preds_chuva, 
                                labels={'x':'Chuva (mm)', 'y':'Atraso (Dias)'},
@@ -134,25 +138,6 @@ else:
 
         st.info(f"**Insight CCbjj:** Para {cidade_ui}, solo {solo_ui} e chuva de {val_chuva}mm, o risco estimado é de {pred_dias:.1f} dias.")
 
-    @st.cache_resource
-def load_assets():
-    m_path = "models/pipeline_random_forest.pkl"
-    f_path = "models/features_metadata.joblib"
-    # 1. Altere o caminho para o arquivo .gz
-    d_path = "data/processed/df_mestre_consolidado.csv.gz" 
-    
-    pipeline = joblib.load(m_path) if os.path.exists(m_path) else None
-    features = joblib.load(f_path) if os.path.exists(f_path) else None
-    
-    # 2. Adicione o parâmetro compression='gzip' na leitura
-    if os.path.exists(d_path):
-        df = pd.read_csv(d_path, compression='gzip')
-    else:
-        df = pd.DataFrame()
-        
-    return pipeline, features, df
-
-    
     except Exception as e:
         st.error(f"Erro no processamento da IA: {e}")
 
