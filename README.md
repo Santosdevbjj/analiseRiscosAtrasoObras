@@ -21,6 +21,7 @@ Este projeto é apenas um exercício acadêmico e de portfólio de Ciência de D
 Não possui qualquer vínculo oficial com qualquer empresa de Engenharia de Construção Civil
 Todos os nomes e referências utilizadas são Fictícios e são utilizados apenas para fins de estudo.
 
+A inspiração para esse projeto veio do Bootcamp que eu concluí recentemente: Santander 2025 - Ciência de Dados com Python, ministrado pela DIO. O objetivo é colocar o conhecimento adquirido na prática, seguindo o conceito de lifelongLearning.
 
 
 ---
