@@ -5,10 +5,9 @@ numpy
 scikit-learn==1.5.2
 joblib
 plotly
-# Bibliotecas abaixo são opcionais se o app.py usar apenas Plotly
 matplotlib
 seaborn
-
-
-
-
+# --- Adições para a arquitetura Webhook/API ---
+fastapi
+uvicorn
+python-multipart
