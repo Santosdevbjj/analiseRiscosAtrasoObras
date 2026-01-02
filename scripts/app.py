@@ -141,4 +141,4 @@ else:
     except Exception as e:
         st.error(f"Erro no processamento da IA: {e}")
 
-st.markdown("<br><hr><center>Desenvolvido por Sergio Santos,para Portfólio Técnico - CCbjj Engenharia</center>", unsafe_allow_html=True)
+st.markdown("<br><hr><center>Desenvolvido por Sergio Santos, para Portfólio Técnico - CCbjj Engenharia</center>", unsafe_allow_html=True)
