@@ -72,7 +72,7 @@ with st.sidebar:
     val_rating = st.select_slider("Rating de Confiança do Fornecedor", options=[1, 2, 3, 4, 5], value=3)
 
 # --- CORPO DO DASHBOARD ---
-st.title("🛡️ CCBJJ Risk Intelligence 2.0")
+st.title("🛡️ CCBJJ Engenharia & Inteligência de Risco 2.0")
 st.caption("Sistema Preditivo de Atrasos para Decisão de Diretoria e Logística")
 st.markdown("---")
 
