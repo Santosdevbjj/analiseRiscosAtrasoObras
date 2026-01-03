@@ -1,4 +1,5 @@
-## 🏗️ Simulador de Riscos Logísticos - CCbjj Engenharia & Inteligência de Risco 
+## 🏗️ Simulador de Riscos Logísticos - CCbjj Engenharia & Inteligência de Risco
+  **Disciplina, estratégia e dados aplicados à engenharia civil.*
 
 
 
