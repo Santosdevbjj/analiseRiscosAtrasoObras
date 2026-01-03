@@ -129,7 +129,7 @@ def gerar_relatorio_inteligente(id_obra: str, df_obra: pd.DataFrame) -> str:
         pior_linha = temp_df.loc[temp_df["pred"].idxmax()]
 
         return (
-            f"🏗️ *CCBJJ RISK INTELLIGENCE*\n"
+            f"🏗️ *CCBJJ Engenharia & Inteligência de Risco*\n"
             f"----------------------------------\n"
             f"📍 *Obra:* {id_obra}\n"
             f"🏙️ *Cidade:* {str(df_obra['cidade'].iloc[0]).title()}\n"
