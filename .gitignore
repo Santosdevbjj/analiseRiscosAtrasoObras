@@ -1,68 +1,32 @@
-# ======================================================
-# Ambientes Virtuais
-# ======================================================
+# Ambientes Virtuais e Cache
 venv/
 .venv/
 env/
-
-# ======================================================
-# Jupyter Notebook e Cache
-# ======================================================
-.ipynb_checkpoints
-*/.ipynb_checkpoints/*
 __pycache__/
 *.py[cod]
 
-# ======================================================
-# Variáveis de Ambiente (Segurança)
-# ======================================================
-.env
-
-# ======================================================
-# Sistema e IDEs
-# ======================================================
-.DS_Store
+# IDEs e Sistema
 .vscode/
 .idea/
+.DS_Store
 
-# ======================================================
-# Relatórios e Saídas (Evita sujeira no repo)
-# ======================================================
-data/reports/*.pdf
-data/reports/*.png
-data/reports/*.jpg
+# Segurança (NUNCA suba o .env, use as variáveis do Render)
+.env
+
+# Logs e Temporários
+*.log
+*.tmp
+
+# --- AJUSTE PARA O SEU PROJETO ---
+# Queremos manter os modelos e dados processados para o Render ler
+# Mas ignoramos dados brutos (raw) e relatórios locais
+data/raw/
+data/reports/
 outputs/
 
-# ======================================================
-# Logs
-# ======================================================
-*.log
+# Permitir .pkl e .joblib dentro da pasta models
+!models/*.pkl
+!models/*.joblib
 
-# ======================================================
-# Bancos e Arquivos Compactados
-# ======================================================
-*.sqlite3
-*.db
-*.gz
-*.zip
-*.tar
-*.tar.gz
-
-# ======================================================
-# Modelos de Machine Learning
-# ======================================================
-models/*.pkl
-models/*.joblib
-
-# ======================================================
-# Dados Brutos e Processados (opcional)
-# ======================================================
-data/raw/
-data/processed/
-
-# ======================================================
-# Arquivos Temporários
-# ======================================================
-*.tmp
-*.swp
-*.bak
+# Permitir a base de dados específica, mas ignorar outros arquivos grandes
+!data/processed/df_mestre_consolidado.csv.gz
