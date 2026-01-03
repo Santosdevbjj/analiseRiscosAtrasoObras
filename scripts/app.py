@@ -7,7 +7,7 @@ import os
 
 # 1. CONFIGURAÇÃO DA PÁGINA (Padrão Executivo)
 st.set_page_config(
-    page_title="CCbjj - Engenharia & Inteligência de Risco", 
+    page_title="CCbjj - oi Engenharia & Inteligência de Risco", 
     page_icon="🏗️", 
     layout="wide"
 )
