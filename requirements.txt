@@ -1,1 +1,26 @@
--r requirements_streamlit.txt
+# Core
+streamlit==1.52.2
+pandas==2.3.3
+numpy==2.4.0
+scikit-learn==1.8.0
+joblib==1.5.3
+plotly==6.5.0
+matplotlib==3.10.8
+seaborn==0.13.2
+
+# Extras - comuns em projetos de ciência de dados
+scipy==1.14.1
+statsmodels==0.14.2
+pyarrow==18.0.0
+openpyxl==3.1.5
+xlrd==2.0.1
+sqlalchemy==2.0.36
+requests==2.32.3
+
+# Extras - visualização e dashboards
+altair==5.5.0
+bokeh==3.6.0
+
+# Extras - utilitários
+tqdm==4.67.1
+python-dotenv==1.0.1
