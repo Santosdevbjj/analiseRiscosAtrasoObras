@@ -8,19 +8,15 @@ plotly==6.5.0
 matplotlib==3.10.8
 seaborn==0.13.2
 
-# Extras - comuns em projetos de ciência de dados
-scipy==1.14.1
+# Extras
+scipy>=1.15.0
 statsmodels==0.14.2
 pyarrow==18.0.0
 openpyxl==3.1.5
 xlrd==2.0.1
 sqlalchemy==2.0.36
 requests==2.32.3
-
-# Extras - visualização e dashboards
 altair==5.5.0
 bokeh==3.6.0
-
-# Extras - utilitários
 tqdm==4.67.1
 python-dotenv==1.0.1
