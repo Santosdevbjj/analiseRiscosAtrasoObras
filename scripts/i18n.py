@@ -1,80 +1,42 @@
 TEXTS = {
     "pt": {
         "flag": "🇧🇷",
-
         "start": (
-            "🤖 *CCbjj Risk Intelligence Bot* 🇧🇷\n"
-            "🏗️ *CCbjj Engenharia & Inteligência de Risco*\n\n"
-            "Análise preditiva de riscos e atrasos em obras.\n"
-            "Utilize inteligência artificial para apoiar decisões\n"
-            "e reduzir impactos no cronograma.\n\n"
-            "Digite o ID da obra para iniciar a análise."
+            "🏗️ **CCBJJ Engenharia & Inteligência**\n"
+            "Bem-vindo ao terminal de análise preditiva.\n\n"
+            "Selecione seu idioma / Select your language:"
         ),
-
         "help": (
-            "📘 *Ajuda*\n\n"
-            "📌 Formato do ID:\n"
-            "`CCbjj-<número>`\n\n"
-            "Exemplos:\n"
-            "• CCbjj-100\n"
-            "• CCbjj-101\n"
-            "• CCbjj-107\n"
-            "• CCbjj-117\n\n"
-            "🛠️ Comandos:\n"
-            "/start\n"
-            "/help\n"
-            "/language\n"
-            "/status\n"
-            "/about\n\n"
-            "_Desenvolvido por Sergio Luiz dos Santos_"
+            "📘 **Guia de Comandos**\n"
+            "/start - Iniciar e selecionar idioma\n"
+            "/help - Exibir este guia\n"
+            "/language - Alterar idioma (ex: /language en)\n"
+            "/status - Verificar integridade do sistema\n"
+            "/about - Sobre a CCBJJ\n\n"
+            "📍 **Para analisar:** Digite o ID da obra (ex: `CCBJJ-100`)"
         ),
-
-        "about": (
-            "🏗️ *CCbjj Engenharia & Inteligência de Risco*\n\n"
-            "Soluções em análise preditiva aplicadas à construção civil.\n"
-            "Foco em risco, cronograma e tomada de decisão baseada em dados.\n\n"
-            "_Desenvolvido por Sergio Luiz dos Santos_"
-        ),
-
-        "status": "✅ Bot online e operando normalmente.",
-        "language_changed": "✅ Idioma alterado para Português 🇧🇷"
+        "language_changed": "✅ Idioma alterado para Português 🇧🇷",
+        "health_ok": "🚀 Sistema operando com 100% de integridade.",
+        "example_msg": "📝 **Exemplo Automático:**\nID: `CCBJJ-107`\nStatus: Analisando parâmetros climáticos e logísticos..."
     },
-
     "en": {
         "flag": "🇺🇸",
-
         "start": (
-            "🤖 *CCbjj Risk Intelligence Bot* 🇺🇸\n"
-            "🏗️ *CCbjj Engineering & Risk Intelligence*\n\n"
-            "Predictive analysis of risks and delays in construction projects.\n\n"
-            "Enter the project ID to start the analysis."
+            "🏗️ **CCBJJ Engineering & Intelligence**\n"
+            "Welcome to the predictive analysis terminal.\n\n"
+            "Select your language:"
         ),
-
         "help": (
-            "📘 *Help*\n\n"
-            "📌 Project ID format:\n"
-            "`CCbjj-<number>`\n\n"
-            "Examples:\n"
-            "• CCbjj-100\n"
-            "• CCbjj-101\n"
-            "• CCbjj-107\n"
-            "• CCbjj-117\n\n"
-            "🛠️ Commands:\n"
-            "/start\n"
-            "/help\n"
-            "/language\n"
-            "/status\n"
-            "/about\n\n"
-            "_Developed by Sergio Luiz dos Santos_"
+            "📘 **Command Guide**\n"
+            "/start - Start and select language\n"
+            "/help - Show this guide\n"
+            "/language - Change language (e.g., /language pt)\n"
+            "/status - Check system integrity\n"
+            "/about - About CCBJJ\n\n"
+            "📍 **To analyze:** Type the project ID (e.g., `CCBJJ-100`)"
         ),
-
-        "about": (
-            "🏗️ *CCbjj Engineering & Risk Intelligence*\n\n"
-            "Predictive analytics solutions for construction risk management.\n\n"
-            "_Developed by Sergio Luiz dos Santos_"
-        ),
-
-        "status": "✅ Bot is online and running normally.",
-        "language_changed": "✅ Language changed to English 🇺🇸"
+        "language_changed": "✅ Language changed to English 🇺🇸",
+        "health_ok": "🚀 System operating with 100% integrity.",
+        "example_msg": "📝 **Automatic Example:**\nID: `CCBJJ-107`\nStatus: Analyzing climate and logistic parameters..."
     }
 }
