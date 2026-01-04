@@ -12,8 +12,10 @@ def get_now_br():
     return datetime.now(BR_TIMEZONE).strftime("%d/%m/%Y %H:%M:%S")
 
 def resolve_language(update: Update):
+    """Resolve o idioma do usuário (Database -> Fallback PT)"""
     user_id = update.effective_user.id
-    return get_language(user_id) or "pt"
+    lang = get_language(user_id)
+    return lang if lang else "pt"
 
 async def start_command(update, context):
     lang = resolve_language(update)
@@ -31,6 +33,12 @@ async def help_command(update, context):
     lang = resolve_language(update)
     await update.message.reply_text(TEXTS[lang]["help"], parse_mode=ParseMode.MARKDOWN)
 
+# --- FUNÇÃO QUE ESTAVA FALTANDO ---
+async def about_command(update, context):
+    """Explica sobre a CCBJJ"""
+    lang = resolve_language(update)
+    await update.message.reply_text(TEXTS[lang]["about"], parse_mode=ParseMode.MARKDOWN)
+
 async def language_manual_command(update, context):
     """Implementa /language pt ou /language en"""
     if context.args:
@@ -40,6 +48,17 @@ async def language_manual_command(update, context):
             await update.message.reply_text(TEXTS[new_lang]["language_changed"])
             return
     await update.message.reply_text("Uso / Use: `/language pt` ou `/language en`", parse_mode=ParseMode.MARKDOWN)
+
+# --- FUNÇÃO QUE ESTAVA FALTANDO ---
+async def language_callback(update, context):
+    """Manipula o clique nos botões de idioma do /start"""
+    query = update.callback_query
+    await query.answer()
+    
+    lang = query.data.split("_")[1] # extrai 'pt' ou 'en' de 'lang_pt'
+    set_language(query.from_user.id, lang)
+    
+    await query.edit_message_text(TEXTS[lang]["language_changed"])
 
 async def status_command(update, context):
     """Simula uptime do Render e mostra hora de Brasília"""
