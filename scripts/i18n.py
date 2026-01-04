@@ -15,10 +15,20 @@ TEXTS = {
             "/about - Sobre a CCBJJ\n\n"
             "📍 **Para analisar:** Digite o ID da obra (ex: `CCBJJ-100`)"
         ),
+        "about": (
+            "🏗️ **CCBJJ Engenharia & Inteligência de Risco**\n\n"
+            "Soluções em análise preditiva aplicadas à construção civil.\n"
+            "Foco em risco, cronograma e tomada de decisão baseada em dados.\n\n"
+            "_Desenvolvido por Sergio Luiz dos Santos_"
+        ),
         "language_changed": "✅ Idioma alterado para Português 🇧🇷",
         "health_ok": "🚀 Sistema operando com 100% de integridade.",
-        "example_msg": "📝 **Exemplo Automático:**\nID: `CCBJJ-107`\nStatus: Analisando parâmetros climáticos e logísticos..."
+        "status": "✅ Sistema Online (Render Cloud)\nFuso: Brasília (BRT)",
+        "example_msg": "📝 **Exemplo Automático:**\nID: `CCBJJ-107`\nStatus: Analisando parâmetros climáticos e logísticos...",
+        "not_found": "❌ ID da obra não localizado em nossa base.",
+        "pdf_title": "Relatório de Análise de Risco"
     },
+
     "en": {
         "flag": "🇺🇸",
         "start": (
@@ -35,8 +45,17 @@ TEXTS = {
             "/about - About CCBJJ\n\n"
             "📍 **To analyze:** Type the project ID (e.g., `CCBJJ-100`)"
         ),
+        "about": (
+            "🏗️ **CCBJJ Engineering & Risk Intelligence**\n\n"
+            "Predictive analytics solutions for construction risk management.\n"
+            "Focused on risk, scheduling, and data-driven decision making.\n\n"
+            "_Developed by Sergio Luiz dos Santos_"
+        ),
         "language_changed": "✅ Language changed to English 🇺🇸",
         "health_ok": "🚀 System operating with 100% integrity.",
-        "example_msg": "📝 **Automatic Example:**\nID: `CCBJJ-107`\nStatus: Analyzing climate and logistic parameters..."
+        "status": "✅ System Online (Render Cloud)\nTimezone: Brasilia (BRT)",
+        "example_msg": "📝 **Automatic Example:**\nID: `CCBJJ-107`\nStatus: Analyzing climate and logistic parameters...",
+        "not_found": "❌ Project ID not found in our database.",
+        "pdf_title": "Risk Analysis Report"
     }
 }
