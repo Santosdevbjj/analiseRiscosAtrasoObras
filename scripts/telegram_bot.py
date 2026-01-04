@@ -1,4 +1,5 @@
 import os
+import sys
 import logging
 import warnings
 import joblib
@@ -9,12 +10,17 @@ from io import BytesIO
 from pathlib import Path
 from datetime import datetime
 
+# Adiciona o diretório scripts ao PATH para evitar erros de importação no servidor
+current_dir = Path(__file__).resolve().parent
+if str(current_dir) not in sys.path:
+    sys.path.append(str(current_dir))
+
 # Servidor e API
 from fastapi import FastAPI, Request, Response
 import uvicorn
 
 # Telegram
-from telegram import Update, InputFile, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update, InputFile
 from telegram.constants import ParseMode
 from telegram.ext import (
     ApplicationBuilder,
@@ -35,7 +41,7 @@ try:
 except ImportError:
     REPORTLAB_AVAILABLE = False
 
-# Importações customizadas do seu projeto
+# Importações customizadas (agora com path resolvido)
 from i18n import TEXTS
 from database import get_language, set_language
 from handlers import (
@@ -176,8 +182,8 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     df_obra = df_base[df_base["id_obra"] == id_obra]
     if df_obra.empty:
-        msg = "❌ Obra não encontrada." if lang == "pt" else "❌ Project not found."
-        await update.message.reply_text(msg)
+        # USA O TEXTO DO i18n
+        await update.message.reply_text(TEXTS[lang].get("not_found", "❌ ID Error"))
         return
 
     # Processamento de IA
