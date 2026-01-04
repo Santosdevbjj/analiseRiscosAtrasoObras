@@ -218,6 +218,10 @@ previsoes = model.predict(X)
 print(previsoes)
 
 
+​📱 **Acesso Mobile:** Além do simulador web, a diretoria recebe alertas e faz consultas rápidas via Bot do Telegram, integrando a inteligência de dados diretamente no campo de obras. O projeto esta acessivel pelo Telegram.
+
+
+
 ---
 
 📊 **7. Estratégia da Solução**
