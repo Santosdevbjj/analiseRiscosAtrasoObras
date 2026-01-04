@@ -162,4 +162,4 @@ else:
     except Exception as e:
         st.error(f"Erro no processamento da IA: {e}")
 
-st.markdown("<br><hr><center><b>CCBJJ Engenharia & Inteligência de Risco v2.0</b> | Inteligência Artificial Aplicada à Construção Civil | Desenvolvido por Sérgio Santos</center>", unsafe_allow_html=True)
+st.markdown("<br><hr><center><b>CCBJJ Engenharia & Inteligência de Risco v2.0</b> | Inteligência Artificial Aplicada à Construção Civil | Desenvolvido por Sergio Luiz Santos</center>", unsafe_allow_html=True)
