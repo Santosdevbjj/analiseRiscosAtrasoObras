@@ -5,7 +5,7 @@ from io import BytesIO
 from pathlib import Path
 
 import matplotlib
-matplotlib.use("Agg")  # Backend não-interativo para ambientes sem display (ex.: Render)
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import pandas as pd
 import joblib
@@ -13,20 +13,23 @@ import joblib
 from fastapi import FastAPI, Request, Response, HTTPException
 import uvicorn
 
-from telegram import Update
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.constants import ParseMode
 from telegram.ext import (
     ApplicationBuilder,
     CommandHandler,
     MessageHandler,
+    CallbackQueryHandler,
     ContextTypes,
     filters,
 )
 
+import sqlite3
+
 warnings.filterwarnings("ignore", category=UserWarning)
 
 # ======================================================
-# CONFIGURAÇÃO DE LOG
+# LOG
 # ======================================================
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
@@ -35,7 +38,7 @@ logging.basicConfig(
 logger = logging.getLogger("ccbjj_telegram_bot")
 
 # ======================================================
-# RESOLUÇÃO DE PATH (ROBUSTA PARA CLOUD / RENDER)
+# PATHS
 # ======================================================
 BASE_DIR = Path(__file__).resolve().parent.parent
 PIPELINE_PATH = BASE_DIR / "models" / "pipeline_random_forest.pkl"
@@ -44,253 +47,222 @@ DB_PATH = BASE_DIR / "data" / "processed" / "df_mestre_consolidado.csv.gz"
 DB_PATH_PARQUET = BASE_DIR / "data" / "processed" / "df_mestre_consolidado.parquet"
 
 # ======================================================
-# VARIÁVEIS DE AMBIENTE
+# ENV
 # ======================================================
 TOKEN = os.getenv("TELEGRAM_TOKEN")
 WEBHOOK_URL = os.getenv("WEBHOOK_URL")
-# Token secreto para validar requisições no webhook (opcional, mas recomendado)
 TELEGRAM_SECRET_TOKEN = os.getenv("TELEGRAM_SECRET_TOKEN")
 
 if not TOKEN or not WEBHOOK_URL:
-    # Fail-fast: não iniciar sem configuração crítica
-    raise RuntimeError("❌ TELEGRAM_TOKEN ou WEBHOOK_URL não definidos no ambiente.")
+    raise RuntimeError("❌ TELEGRAM_TOKEN ou WEBHOOK_URL não definidos.")
 
 # ======================================================
-# FUNÇÃO DE VALIDAÇÃO DE ARQUIVOS
+# DATABASE (IDIOMA)
 # ======================================================
-def validar_arquivo(path: Path, nome: str):
-    if not path.exists():
-        raise FileNotFoundError(f"{nome} não encontrado em: {path}")
+conn = sqlite3.connect("users.db", check_same_thread=False)
+cursor = conn.cursor()
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS users (
+    user_id INTEGER PRIMARY KEY,
+    language TEXT
+)
+""")
+conn.commit()
 
-# ======================================================
-# CARREGAMENTO DOS RECURSOS (FAIL FAST)
-# ======================================================
-try:
-    validar_arquivo(PIPELINE_PATH, "Pipeline")
-    validar_arquivo(FEATURES_PATH, "Features")
+def get_language(user_id: int) -> str:
+    cursor.execute("SELECT language FROM users WHERE user_id = ?", (user_id,))
+    row = cursor.fetchone()
+    return row[0] if row else "pt"
 
-    pipeline = joblib.load(PIPELINE_PATH)
-    features_order = joblib.load(FEATURES_PATH)
-
-    # Preferir Parquet se existir (performance e menor uso de memória)
-    if DB_PATH_PARQUET.exists():
-        df_base = pd.read_parquet(DB_PATH_PARQUET)
-        logger.info("✅ Base de dados carregada (Parquet).")
-    else:
-        validar_arquivo(DB_PATH, "Base de Dados (CSV gzip)")
-        # Carregamento com opções que reduzem overhead
-        df_base = pd.read_csv(
-            DB_PATH,
-            compression="gzip",
-            low_memory=False,
-            memory_map=True,
-        )
-        logger.info("✅ Base de dados carregada (CSV gzip).")
-
-    # Checagem mínima de colunas usadas nos handlers
-    required_cols = {"id_obra", "cidade", "tipo_solo", "nivel_chuva", "etapa", "material"}
-    missing_required = required_cols.difference(df_base.columns)
-    if missing_required:
-        raise ValueError(f"Colunas obrigatórias ausentes na base: {missing_required}")
-
-    logger.info("✅ Pipeline, features e base de dados carregados com sucesso.")
-
-except Exception as e:
-    logger.exception("❌ Erro crítico no carregamento dos recursos.")
-    raise RuntimeError("Falha fatal ao iniciar a aplicação.") from e
+def set_language(user_id: int, lang: str):
+    cursor.execute(
+        "INSERT OR REPLACE INTO users (user_id, language) VALUES (?, ?)",
+        (user_id, lang),
+    )
+    conn.commit()
 
 # ======================================================
-# FUNÇÕES DE NEGÓCIO
+# i18n
 # ======================================================
-def emoji_risco(dias: float) -> str:
+TEXTS = {
+    "pt": {
+        "start": (
+            "🤖 *CCbjj Risk Intelligence Bot* 🇧🇷\n"
+            "🏗️ *CCbjj Engenharia & Inteligência de Risco*\n\n"
+            "Análise preditiva de riscos e atrasos em obras.\n\n"
+            "📌 Formato do ID:\n`CCbjj-<número>`\n"
+            "Exemplo: CCbjj-100\n\n"
+            "Digite o ID da obra para iniciar."
+        ),
+        "help": (
+            "📘 *Ajuda*\n\n"
+            "Use o formato:\n`CCbjj-<número>`\n\n"
+            "Comandos:\n"
+            "/start\n/help\n/about\n/status\n/language\n\n"
+            "_Desenvolvido por Sergio Luiz dos Santos_"
+        ),
+        "about": (
+            "🏗️ *CCbjj Engenharia & Inteligência de Risco*\n\n"
+            "IA aplicada à análise de risco em construção civil.\n\n"
+            "_Desenvolvido por Sergio Luiz dos Santos_"
+        ),
+        "status": "✅ Bot online e operando normalmente.",
+        "language": "Idioma alterado para Português 🇧🇷",
+        "not_found": "❌ Obra não encontrada.",
+        "processing": "🔍 Processando análise preditiva..."
+    },
+    "en": {
+        "start": (
+            "🤖 *CCbjj Risk Intelligence Bot* 🇺🇸\n"
+            "🏗️ *CCbjj Engineering & Risk Intelligence*\n\n"
+            "Predictive risk analysis for construction projects.\n\n"
+            "Project ID format:\n`CCbjj-<number>`\n"
+            "Example: CCbjj-100\n\n"
+            "Send the project ID to start."
+        ),
+        "help": (
+            "📘 *Help*\n\n"
+            "Use format:\n`CCbjj-<number>`\n\n"
+            "Commands:\n"
+            "/start\n/help\n/about\n/status\n/language\n\n"
+            "_Developed by Sergio Luiz dos Santos_"
+        ),
+        "about": (
+            "🏗️ *CCbjj Engineering & Risk Intelligence*\n\n"
+            "AI-driven construction risk intelligence.\n\n"
+            "_Developed by Sergio Luiz dos Santos_"
+        ),
+        "status": "✅ Bot is online and running.",
+        "language": "Language changed to English 🇺🇸",
+        "not_found": "❌ Project not found.",
+        "processing": "🔍 Processing predictive analysis..."
+    },
+}
+
+# ======================================================
+# LOAD MODELS & DATA
+# ======================================================
+pipeline = joblib.load(PIPELINE_PATH)
+features_order = joblib.load(FEATURES_PATH)
+
+if DB_PATH_PARQUET.exists():
+    df_base = pd.read_parquet(DB_PATH_PARQUET)
+else:
+    df_base = pd.read_csv(DB_PATH, compression="gzip", low_memory=False)
+
+# ======================================================
+# BUSINESS
+# ======================================================
+def emoji_risco(dias):
     if dias > 10:
         return "🔴 Crítico"
     if dias > 7:
         return "🟡 Alerta"
     return "🟢 Normal"
 
-
-def preparar_dados_predicao(df_obra: pd.DataFrame) -> pd.DataFrame:
-    X = df_obra.copy()
+def preparar_dados_predicao(df):
+    X = df.copy()
     for col in features_order:
         if col not in X.columns:
             X[col] = 0
     return X[features_order]
 
-
-def gerar_relatorio_inteligente(id_obra: str, df_obra: pd.DataFrame) -> str:
-    try:
-        X = preparar_dados_predicao(df_obra)
-        preds = pipeline.predict(X)
-        risco_medio = float(preds.mean())
-
-        temp_df = df_obra.copy()
-        temp_df["pred"] = preds
-        pior_linha = temp_df.loc[temp_df["pred"].idxmax()]
-
-        return (
-            f"🏗️ *CCBJJ Engenharia & Inteligência de Risco*\n"
-            f"----------------------------------\n"
-            f"📍 *Obra:* {id_obra}\n"
-            f"🏙️ *Cidade:* {str(df_obra['cidade'].iloc[0]).title()}\n"
-            f"⛰️ *Solo:* {str(df_obra['tipo_solo'].iloc[0]).title()}\n"
-            f"🌧️ *Chuva:* {float(df_obra['nivel_chuva'].iloc[0]):.0f} mm\n"
-            f"----------------------------------\n"
-            f"📊 *Diagnóstico da IA*\n"
-            f"• Risco médio: `{risco_medio:.1f} dias`\n"
-            f"• Status: {emoji_risco(risco_medio)}\n\n"
-            f"⚠️ *Ponto Crítico*\n"
-            f"A etapa mais sensível é *{pior_linha['etapa'].title()}*.\n"
-            f"----------------------------------\n"
-            f"💡 *Insight:* Revisar logística de *{pior_linha['material']}*."
-        )
-
-    except Exception:
-        logger.exception(f"Erro ao gerar relatório para {id_obra}")
-        return "⚠️ Não foi possível gerar relatório da obra."
-
 # ======================================================
-# HANDLERS DO TELEGRAM
+# HANDLERS
 # ======================================================
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user = update.effective_user.first_name
+    lang = get_language(update.effective_user.id)
+    keyboard = InlineKeyboardMarkup([
+        [
+            InlineKeyboardButton("🇧🇷", callback_data="lang_pt"),
+            InlineKeyboardButton("🇺🇸", callback_data="lang_en"),
+        ]
+    ])
     await update.message.reply_text(
-        f"Olá {user}! 👋\n\n"
-        "Sou o *CCBJJ Bot Preditivo*.\n"
-        "Envie o *ID da obra* para análise de risco.\n\n"
-        "Exemplo:\n`CCbjj-100`",
+        TEXTS[lang]["start"],
+        reply_markup=keyboard,
         parse_mode=ParseMode.MARKDOWN,
     )
 
+async def help_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    lang = get_language(update.effective_user.id)
+    await update.message.reply_text(TEXTS[lang]["help"], parse_mode=ParseMode.MARKDOWN)
+
+async def about_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    lang = get_language(update.effective_user.id)
+    await update.message.reply_text(TEXTS[lang]["about"], parse_mode=ParseMode.MARKDOWN)
+
+async def status_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    lang = get_language(update.effective_user.id)
+    await update.message.reply_text(TEXTS[lang]["status"])
+
+async def language_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    lang = query.data.split("_")[1]
+    set_language(query.from_user.id, lang)
+    await query.answer()
+    await query.edit_message_text(TEXTS[lang]["language"])
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    lang = get_language(update.effective_user.id)
     id_obra = update.message.text.strip()
-    df_obra = df_base[df_base["id_obra"] == id_obra]
 
-    if df_obra.empty:
-        await update.message.reply_text(
-            f"❌ Obra `{id_obra}` não encontrada.",
-            parse_mode=ParseMode.MARKDOWN,
-        )
+    df = df_base[df_base["id_obra"] == id_obra]
+    if df.empty:
+        await update.message.reply_text(TEXTS[lang]["not_found"])
         return
 
-    status_msg = await update.message.reply_text(
-        "🔍 Processando análise preditiva...",
-        parse_mode=ParseMode.MARKDOWN,
-    )
+    status_msg = await update.message.reply_text(TEXTS[lang]["processing"])
 
-    try:
-        # Relatório textual
-        await update.message.reply_text(
-            gerar_relatorio_inteligente(id_obra, df_obra),
-            parse_mode=ParseMode.MARKDOWN,
-        )
+    X = preparar_dados_predicao(df)
+    preds = pipeline.predict(X)
 
-        # Gráfico
-        plt.style.use("ggplot")
-        X = preparar_dados_predicao(df_obra)
-        preds = pipeline.predict(X)
+    fig, ax = plt.subplots(figsize=(8, 4))
+    ax.bar(df["etapa"], preds)
+    ax.set_title(id_obra)
+    ax.set_ylabel("Dias")
 
-        fig, ax = plt.subplots(figsize=(8, 4))
-        ax.bar(df_obra["etapa"], preds, color="#1B5E20")
-        ax.set_title(f"Risco por Etapa — {id_obra}")
-        ax.set_ylabel("Dias de atraso")
-        ax.set_xlabel("Etapas")
+    buf = BytesIO()
+    plt.tight_layout()
+    plt.savefig(buf, format="png")
+    buf.seek(0)
+    plt.close(fig)
 
-        img_buf = BytesIO()
-        plt.tight_layout()
-        plt.savefig(img_buf, format="png")
-        img_buf.seek(0)
-        plt.close(fig)
-
-        await update.message.reply_photo(photo=img_buf)
-    except Exception:
-        logger.exception(f"Erro no processamento da obra {id_obra}")
-        await update.message.reply_text(
-            "⚠️ Erro ao processar a análise. Tente novamente.",
-            parse_mode=ParseMode.MARKDOWN,
-        )
-    finally:
-        # Garantir que o status seja removido sem quebrar fluxo
-        try:
-            await status_msg.delete()
-        except Exception:
-            logger.debug("Não foi possível remover a mensagem de status.")
+    await update.message.reply_photo(photo=buf)
+    await status_msg.delete()
 
 # ======================================================
-# FASTAPI + TELEGRAM WEBHOOK
+# FASTAPI + WEBHOOK
 # ======================================================
 app = FastAPI()
-
-# ptb_app será inicializado no startup (evita duplicações em reinícios)
 ptb_app = None
 
 @app.on_event("startup")
-async def on_startup():
+async def startup():
     global ptb_app
-
-    # Construção da aplicação PTB dentro do ciclo de vida do FastAPI
     ptb_app = ApplicationBuilder().token(TOKEN).build()
 
     ptb_app.add_handler(CommandHandler("start", start))
+    ptb_app.add_handler(CommandHandler("help", help_cmd))
+    ptb_app.add_handler(CommandHandler("about", about_cmd))
+    ptb_app.add_handler(CommandHandler("status", status_cmd))
+    ptb_app.add_handler(CallbackQueryHandler(language_callback))
     ptb_app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 
     await ptb_app.initialize()
-
-    webhook_dest = f"{WEBHOOK_URL}/webhook"
-
-    # Se token secreto estiver definido, configurar no webhook para validar origem
-    if TELEGRAM_SECRET_TOKEN:
-        await ptb_app.bot.set_webhook(
-            url=webhook_dest,
-            secret_token=TELEGRAM_SECRET_TOKEN,
-            allowed_updates=["message"]
-        )
-        logger.info("✅ Webhook configurado com token secreto.")
-    else:
-        await ptb_app.bot.set_webhook(
-            url=webhook_dest,
-            allowed_updates=["message"]
-        )
-        logger.info("⚠️ Webhook configurado sem token secreto (recomendado definir TELEGRAM_SECRET_TOKEN).")
-
+    await ptb_app.bot.set_webhook(f"{WEBHOOK_URL}/webhook")
     await ptb_app.start()
 
-    logger.info(f"🚀 Webhook configurado em: {webhook_dest}")
-
-
-@app.on_event("shutdown")
-async def on_shutdown():
-    if ptb_app is not None:
-        try:
-            await ptb_app.stop()
-            await ptb_app.shutdown()
-        except Exception:
-            logger.exception("Erro ao encerrar aplicação Telegram.")
-
-
 @app.post("/webhook")
-async def webhook_endpoint(request: Request):
-    # Validação de origem via token secreto, se configurado
-    if TELEGRAM_SECRET_TOKEN:
-        header_token = request.headers.get("X-Telegram-Bot-Api-Secret-Token")
-        if not header_token or header_token != TELEGRAM_SECRET_TOKEN:
-            logger.warning("Requisição ao webhook sem token secreto válido.")
-            raise HTTPException(status_code=401, detail="Unauthorized")
-
+async def webhook(request: Request):
     data = await request.json()
     update = Update.de_json(data, ptb_app.bot)
     await ptb_app.process_update(update)
     return Response(status_code=200)
 
-
 @app.get("/")
-async def healthcheck():
-    return {"status": "CCBJJ API Online", "mode": "Webhook"}
+async def health():
+    return {"status": "online"}
 
-# ======================================================
-# ENTRYPOINT
-# ======================================================
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8000))
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", 8000)))
