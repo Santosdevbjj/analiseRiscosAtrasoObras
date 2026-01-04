@@ -1,32 +1,31 @@
 import os
 import logging
 import warnings
+import joblib
+import pandas as pd
+import pytz
 import csv
 from io import BytesIO
 from pathlib import Path
 from datetime import datetime
 
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
-
-import pandas as pd
-import joblib
-
+# Servidor e API
 from fastapi import FastAPI, Request, Response
 import uvicorn
 
-from telegram import Update, InputFile
+# Telegram
+from telegram import Update, InputFile, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.constants import ParseMode
 from telegram.ext import (
     ApplicationBuilder,
     CommandHandler,
     MessageHandler,
+    CallbackQueryHandler,
     ContextTypes,
     filters,
 )
 
-# Tentativa de importação do ReportLab
+# Relatórios PDF (ReportLab)
 try:
     from reportlab.lib.pagesizes import A4
     from reportlab.pdfgen import canvas
@@ -36,10 +35,24 @@ try:
 except ImportError:
     REPORTLAB_AVAILABLE = False
 
+# Importações customizadas do seu projeto
+from i18n import TEXTS
+from database import get_language, set_language
+from handlers import (
+    start_command, help_command, about_command, 
+    status_command, language_callback, resolve_language,
+    language_manual_command, example_command, healthcheck_command
+)
+
+# Configurações de Gráficos
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+
 warnings.filterwarnings("ignore", category=UserWarning)
 
 # ======================================================
-# CONFIGURAÇÕES E CAMINHOS
+# CONFIGURAÇÕES DE CAMINHOS E FUSO
 # ======================================================
 BASE_DIR = Path(__file__).resolve().parent.parent
 PIPELINE_PATH = BASE_DIR / "models/pipeline_random_forest.pkl"
@@ -48,11 +61,12 @@ DB_PATH = BASE_DIR / "data/processed/df_mestre_consolidado.csv.gz"
 LOGO_PATH = BASE_DIR / "assets/logo_ccbjj.png"
 HISTORY_PATH = BASE_DIR / "data/history/analises_history.csv"
 
-# Garante que a pasta de histórico existe
+# Garantir diretórios
 HISTORY_PATH.parent.mkdir(parents=True, exist_ok=True)
 
 TOKEN = os.getenv("TELEGRAM_TOKEN")
 WEBHOOK_URL = os.getenv("WEBHOOK_URL")
+BR_TIMEZONE = pytz.timezone('America/Sao_Paulo')
 
 # Carregamento de Modelos e Dados
 pipeline = joblib.load(PIPELINE_PATH)
@@ -60,99 +74,76 @@ features_order = joblib.load(FEATURES_PATH)
 df_base = pd.read_csv(DB_PATH, compression="gzip")
 
 # ======================================================
-# SISTEMA DE HISTÓRICO
+# FUNÇÕES AUXILIARES E RELATÓRIOS
 # ======================================================
-def salvar_historico(user_id, id_obra, risco_medio, status, modo="Técnico"):
-    """Registra cada consulta em um arquivo CSV para auditoria."""
+
+def salvar_historico(user_id, id_obra, risco_medio, status, modo, lang):
+    """Registra a consulta no histórico CSV com timestamp de Brasília."""
+    data_hora = datetime.now(BR_TIMEZONE).strftime("%Y-%m-%d %H:%M:%S")
     file_exists = HISTORY_PATH.exists()
-    
     with open(HISTORY_PATH, mode='a', newline='', encoding='utf-8') as f:
         writer = csv.writer(f)
         if not file_exists:
-            writer.writerow(["data_hora", "usuario_id", "id_obra", "risco_medio", "status", "modo"])
-        
-        writer.writerow([
-            datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
-            user_id,
-            id_obra,
-            f"{risco_medio:.2f}",
-            status,
-            modo
-        ])
+            writer.writerow(["timestamp", "user_id", "id_obra", "risco_medio", "status", "modo", "lang"])
+        writer.writerow([data_hora, user_id, id_obra, f"{risco_medio:.2f}", status, modo, lang])
 
-# ======================================================
-# GERAÇÃO DE PDF CORPORATIVO
-# ======================================================
-def gerar_pdf_corporativo(id_obra, texto_md, grafico_buf, modo="Diretor"):
+def gerar_pdf_corporativo(id_obra, texto_md, grafico_buf, lang="pt", modo="Diretor"):
+    """Gera PDF com Capa, Logo centralizada e Rodapé Interno."""
     if not REPORTLAB_AVAILABLE: return None
     
     pdf_buf = BytesIO()
     c = canvas.Canvas(pdf_buf, pagesize=A4)
     largura, altura = A4
-    data_analise = datetime.now().strftime("%d/%m/%Y %H:%M")
+    data_br = datetime.now(BR_TIMEZONE).strftime("%d/%m/%Y %H:%M")
 
-    # --- PÁGINA 1: CAPA ---
+    # --- PÁGINA 1: CAPA CORPORATIVA ---
     if LOGO_PATH.exists():
-        c.drawImage(str(LOGO_PATH), (largura/2) - 3*cm, altura - 10*cm, width=6*cm, preserveAspectRatio=True)
+        c.drawImage(str(LOGO_PATH), (largura/2) - 3*cm, altura - 8*cm, width=6*cm, preserveAspectRatio=True)
     
     c.setFont("Helvetica-Bold", 22)
-    c.drawCentredString(largura/2, altura - 12*cm, "Relatório de Análise de Risco")
+    c.drawCentredString(largura/2, altura - 11*cm, TEXTS[lang].get("pdf_title", "Relatório de Risco"))
     
-    c.setFont("Helvetica", 14)
-    c.drawCentredString(largura/2, altura - 13.5*cm, "CCBJJ Engenharia & Inteligência")
+    c.setFont("Helvetica", 12)
+    c.drawCentredString(largura/2, altura - 12*cm, "CCBJJ Engenharia & Inteligência de Risco")
     
-    # Box de Informações da Capa
-    c.setStrokeColor(colors.lightgrey)
-    c.roundRect(4*cm, 10*cm, largura - 8*cm, 2.5*cm, 10, stroke=1, fill=0)
-    
+    # Box de Informações
+    c.setStrokeColor(colors.dodgerblue)
+    c.roundRect(3*cm, 8*cm, largura - 6*cm, 3*cm, 10, stroke=1, fill=0)
     c.setFont("Helvetica-Bold", 10)
-    c.drawString(4.5*cm, 12*cm, f"ID DA OBRA: {id_obra}")
-    c.drawString(4.5*cm, 11.5*cm, f"DATA DA ANÁLISE: {data_analise}")
-    c.drawString(4.5*cm, 11*cm, f"MODO DE EMISSÃO: {modo}")
-    c.drawString(4.5*cm, 10.5*cm, "RESPONSÁVEL: Sergio Luiz dos Santos")
-
-    c.showPage() # Finaliza a capa
-
-    # --- PÁGINA 2: CONTEÚDO TÉCNICO ---
-    # Rodapé Interno (Logo reaparece pequeno)
-    if LOGO_PATH.exists():
-        c.drawImage(str(LOGO_PATH), largura - 3.5*cm, 1*cm, width=2*cm, preserveAspectRatio=True)
+    c.drawString(3.5*cm, 10.3*cm, f"ID DA OBRA: {id_obra}")
+    c.drawString(3.5*cm, 9.6*cm, f"DATA/HORA (BRT): {data_br}")
+    c.drawString(3.5*cm, 8.9*cm, f"MODO: {modo} | STATUS: OFICIAL")
+    c.drawString(3.5*cm, 8.2*cm, "RESPONSÁVEL TÉCNICO: Sergio Luiz dos Santos")
     
-    c.setFont("Helvetica", 8)
-    c.drawString(2*cm, 1.5*cm, f"Relatório Gerencial - Obra {id_obra} | Gerado em {data_analise}")
-    c.line(2*cm, 2.2*cm, largura - 2*cm, 2.2*cm)
+    c.showPage() # Quebra de página
 
-    # Conteúdo (Texto e Gráfico)
+    # --- PÁGINA 2: ANÁLISE DETALHADA ---
+    # Rodapé Interno com Logo
+    if LOGO_PATH.exists():
+        c.drawImage(str(LOGO_PATH), largura - 3.5*cm, 0.8*cm, width=2*cm, preserveAspectRatio=True)
+    c.setFont("Helvetica-Oblique", 8)
+    c.drawString(2*cm, 1*cm, f"CCBJJ Risk Intelligence - {id_obra} - Gerado em {data_br}")
+    
+    # Conteúdo
     texto_limpo = texto_md.replace("**", "").replace("`", "")
     text_obj = c.beginText(2*cm, altura - 3*cm)
-    text_obj.setFont("Helvetica", 11)
+    text_obj.setFont("Helvetica", 10)
     text_obj.setLeading(14)
     for line in texto_limpo.split('\n'):
         text_obj.textLine(line)
     c.drawText(text_obj)
 
     # Gráfico
-    img_path = f"temp_{id_obra}.png"
+    img_path = f"temp_plot_{id_obra}.png"
     with open(img_path, "wb") as f:
         f.write(grafico_buf.getbuffer())
-    c.drawImage(img_path, 2*cm, 3.5*cm, width=17*cm, preserveAspectRatio=True)
+    c.drawImage(img_path, 2*cm, 3*cm, width=17*cm, preserveAspectRatio=True)
     
     c.showPage()
     c.save()
-    
     if os.path.exists(img_path): os.remove(img_path)
     pdf_buf.seek(0)
     return pdf_buf
-
-# ======================================================
-# LOGICA DE PREDICÃO E HANDLERS
-# ======================================================
-
-# (Funções emoji_risco, preparar_X e gerar_grafico permanecem as mesmas do anterior)
-def emoji_risco(dias: float) -> str:
-    if dias > 10: return "🔴 Crítico"
-    if dias > 7: return "🟡 Alerta"
-    return "🟢 Normal"
 
 def preparar_X(df):
     X = df.copy()
@@ -160,12 +151,13 @@ def preparar_X(df):
         if col not in X.columns: X[col] = 0
     return X[features_order]
 
-def gerar_grafico(df_obra, preds):
-    plt.figure(figsize=(8, 5))
-    plt.bar(df_obra["etapa"], preds, color='steelblue')
-    plt.title(f"Distribuição de Risco - {df_obra['id_obra'].iloc[0]}")
-    plt.ylabel("Atraso Estimado (Dias)")
-    plt.xticks(rotation=30)
+def gerar_grafico(df_obra, preds, id_obra):
+    plt.figure(figsize=(8, 4))
+    plt.bar(df_obra["etapa"], preds, color='#2c3e50')
+    plt.title(f"Atraso Estimado por Etapa - {id_obra}", fontsize=12)
+    plt.ylabel("Dias")
+    plt.grid(axis='y', linestyle='--', alpha=0.7)
+    plt.xticks(rotation=25)
     buf = BytesIO()
     plt.tight_layout()
     plt.savefig(buf, format="png", dpi=120)
@@ -173,62 +165,59 @@ def gerar_grafico(df_obra, preds):
     plt.close()
     return buf
 
-def gerar_texto_executivo(id_obra, df_obra, preds):
-    risco_medio = preds.mean()
-    pior_idx = preds.argmax()
-    pior_etapa = df_obra.iloc[pior_idx]
-    return (
-        f"🏗️ **CCBJJ Engenharia & Inteligência**\n"
-        f"----------------------------------\n"
-        f"📍 **Obra:** {id_obra}\n"
-        f"🏙️ **Cidade:** {df_obra['cidade'].iloc[0]}\n"
-        f"----------------------------------\n"
-        f"📊 **Diagnóstico IA**\n"
-        f"• Risco médio: `{risco_medio:.1f} dias`\n"
-        f"• Status: {emoji_risco(risco_medio)}\n\n"
-        f"⚠️ **Ponto Crítico:** {pior_etapa['etapa']}\n"
-        f"----------------------------------\n"
-        f"_Relatório Automático v2.0_"
-    )
+# ======================================================
+# HANDLER PRINCIPAL DE ANÁLISE
+# ======================================================
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    id_obra = update.message.text.strip()
-    user_id = update.message.from_user.id
+    id_obra = update.message.text.strip().upper()
+    lang = resolve_language(update)
+    user_id = update.effective_user.id
+    
     df_obra = df_base[df_base["id_obra"] == id_obra]
-
     if df_obra.empty:
-        await update.message.reply_text("❌ ID da obra não localizado em nossa base.")
+        msg = "❌ Obra não encontrada." if lang == "pt" else "❌ Project not found."
+        await update.message.reply_text(msg)
         return
 
-    # Processamento
+    # Processamento de IA
     X = preparar_X(df_obra)
     preds = pipeline.predict(X)
     risco_medio = preds.mean()
-    status = emoji_risco(risco_medio)
+    status_ia = "🔴 Crítico" if risco_medio > 10 else "🟡 Alerta" if risco_medio > 7 else "🟢 Normal"
     
-    # 1. Salvar no Histórico CSV
-    salvar_historico(user_id, id_obra, risco_medio, status)
+    # Registrar Histórico
+    salvar_historico(user_id, id_obra, risco_medio, status_ia, "Automático", lang)
+
+    # Gerar Texto e Gráfico
+    texto_resp = (
+        f"🏗️ **CCBJJ Intelligence Report**\n"
+        f"----------------------------------\n"
+        f"📍 **ID:** `{id_obra}`\n"
+        f"📊 **Risco Médio:** `{risco_medio:.1f} dias`\n"
+        f"🚦 **Status:** {status_ia}\n"
+        f"----------------------------------\n"
+    )
     
-    # 2. Gerar Visualizações
-    texto = gerar_texto_executivo(id_obra, df_obra, preds)
-    grafico_img = gerar_grafico(df_obra, preds)
+    graf_buf = gerar_grafico(df_obra, preds, id_obra)
     
-    # 3. Enviar Respostas no Telegram
-    await update.message.reply_text(texto, parse_mode=ParseMode.MARKDOWN)
+    # Resposta via Telegram
+    await update.message.reply_text(texto_resp, parse_mode=ParseMode.MARKDOWN)
     
-    grafico_img.seek(0)
-    await update.message.reply_photo(photo=grafico_img, caption="📈 Gráfico de Tendência de Atrasos")
+    graf_buf.seek(0)
+    await update.message.reply_photo(photo=graf_buf, caption="📈 Análise de Tendência")
     
+    # Enviar PDF
     if REPORTLAB_AVAILABLE:
-        grafico_img.seek(0)
-        pdf_file = gerar_pdf_corporativo(id_obra, texto, grafico_img, modo="Diretor")
+        graf_buf.seek(0)
+        pdf_file = gerar_pdf_corporativo(id_obra, texto_resp, graf_buf, lang=lang)
         await update.message.reply_document(
-            document=InputFile(pdf_file, filename=f"Relatorio_{id_obra}_{datetime.now().strftime('%Y%m%d')}.pdf"),
-            caption="📄 Relatório Executivo assinado digitalmente."
+            document=InputFile(pdf_file, filename=f"Relatorio_{id_obra}.pdf"),
+            caption="📄 Relatório Executivo Completo"
         )
 
 # ======================================================
-# INICIALIZAÇÃO DO APP (FastAPI)
+# APLICAÇÃO FASTAPI + BOT
 # ======================================================
 app = FastAPI()
 ptb_app = None
@@ -237,13 +226,26 @@ ptb_app = None
 async def startup():
     global ptb_app
     ptb_app = ApplicationBuilder().token(TOKEN).build()
+    
+    # Handlers do Sistema
+    ptb_app.add_handler(CommandHandler("start", start_command))
+    ptb_app.add_handler(CommandHandler("help", help_command))
+    ptb_app.add_handler(CommandHandler("about", about_command))
+    ptb_app.add_handler(CommandHandler("status", status_command))
+    ptb_app.add_handler(CommandHandler("language", language_manual_command))
+    ptb_app.add_handler(CommandHandler("example", example_command))
+    ptb_app.add_handler(CommandHandler("healthcheck", healthcheck_command))
+    
+    # Callbacks e Mensagens
+    ptb_app.add_handler(CallbackQueryHandler(language_callback))
     ptb_app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
+    
     await ptb_app.initialize()
     await ptb_app.bot.set_webhook(f"{WEBHOOK_URL}/webhook")
     await ptb_app.start()
 
 @app.post("/webhook")
-async def webhook(request: Request):
+async def webhook_handler(request: Request):
     data = await request.json()
     update = Update.de_json(data, ptb_app.bot)
     await ptb_app.process_update(update)
