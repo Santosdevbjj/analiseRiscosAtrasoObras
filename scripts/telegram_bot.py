@@ -97,7 +97,7 @@ def salvar_historico(user_id, id_obra, risco_medio, status, modo, lang):
         writer.writerow([data_hora, user_id, id_obra, f"{risco_medio:.2f}", status, modo, lang])
 
 def gerar_pdf_corporativo(id_obra, texto_md, grafico_buf, lang="pt", modo="Diretor"):
-    """Gera PDF com Capa, Logo centralizada e Rodapé Interno."""
+    """Gera PDF com Capa, Logo centralizada e Rodapé Interno ajustado."""
     if not REPORTLAB_AVAILABLE: return None
     
     pdf_buf = BytesIO()
@@ -110,7 +110,9 @@ def gerar_pdf_corporativo(id_obra, texto_md, grafico_buf, lang="pt", modo="Diret
         c.drawImage(str(LOGO_PATH), (largura/2) - 3*cm, altura - 8*cm, width=6*cm, preserveAspectRatio=True)
     
     c.setFont("Helvetica-Bold", 22)
-    c.drawCentredString(largura/2, altura - 11*cm, "Relatório de Inteligência de Risco")
+    # Título traduzido
+    pdf_title = "Risk Intelligence Report" if lang == "en" else "Relatório de Inteligência de Risco"
+    c.drawCentredString(largura/2, altura - 11*cm, pdf_title)
     
     c.setFont("Helvetica", 12)
     c.drawCentredString(largura/2, altura - 12*cm, "CCBJJ Engenharia & Inteligência")
@@ -119,18 +121,21 @@ def gerar_pdf_corporativo(id_obra, texto_md, grafico_buf, lang="pt", modo="Diret
     c.setStrokeColor(colors.dodgerblue)
     c.roundRect(3*cm, 8*cm, largura - 6*cm, 3*cm, 10, stroke=1, fill=0)
     c.setFont("Helvetica-Bold", 10)
-    c.drawString(3.5*cm, 10.3*cm, f"ID DA OBRA: {id_obra}")
-    c.drawString(3.5*cm, 9.6*cm, f"DATA/HORA (BRT): {data_br}")
-    c.drawString(3.5*cm, 8.9*cm, f"STATUS DO DOCUMENTO: OFICIAL")
-    c.drawString(3.5*cm, 8.2*cm, "RESPONSÁVEL TÉCNICO: Sergio Luiz dos Santos")
+    c.drawString(3.5*cm, 10.3*cm, f"PROJECT ID: {id_obra}" if lang == "en" else f"ID DA OBRA: {id_obra}")
+    c.drawString(3.5*cm, 9.6*cm, f"DATE/TIME (BRT): {data_br}" if lang == "en" else f"DATA/HORA (BRT): {data_br}")
+    c.drawString(3.5*cm, 8.9*cm, "DOCUMENT STATUS: OFFICIAL" if lang == "en" else "STATUS DO DOCUMENTO: OFICIAL")
+    c.drawString(3.5*cm, 8.2*cm, "TECHNICAL LEAD: Sergio Luiz dos Santos")
     
     c.showPage()
 
     # --- PÁGINA 2: ANÁLISE DETALHADA ---
+    # AJUSTE FINO: Logo no rodapé para não ser tampado pelo gráfico
     if LOGO_PATH.exists():
         c.drawImage(str(LOGO_PATH), largura - 3.5*cm, 0.8*cm, width=2*cm, preserveAspectRatio=True)
+    
     c.setFont("Helvetica-Oblique", 8)
-    c.drawString(2*cm, 1*cm, f"CCBJJ Risk Intelligence - {id_obra} - Gerado em {data_br}")
+    footer_text = f"CCBJJ Risk Intelligence - {id_obra} - Generated on {data_br}" if lang == "en" else f"CCBJJ Risk Intelligence - {id_obra} - Gerado em {data_br}"
+    c.drawString(2*cm, 1*cm, footer_text)
     
     # Conteúdo (Remove marcações Markdown para o PDF)
     texto_limpo = texto_md.replace("**", "").replace("`", "").replace("•", "-")
@@ -141,10 +146,11 @@ def gerar_pdf_corporativo(id_obra, texto_md, grafico_buf, lang="pt", modo="Diret
         text_obj.textLine(line)
     c.drawText(text_obj)
 
+    # AJUSTE FINO: Gráfico posicionado mais abaixo (2.5cm) para não tampar o logo de fundo ou texto
     img_path = f"temp_plot_{id_obra}.png"
     with open(img_path, "wb") as f:
         f.write(grafico_buf.getbuffer())
-    c.drawImage(img_path, 2*cm, 3.5*cm, width=17*cm, preserveAspectRatio=True)
+    c.drawImage(img_path, 2*cm, 2.5*cm, width=17*cm, preserveAspectRatio=True)
     
     c.showPage()
     c.save()
@@ -159,15 +165,17 @@ def preparar_X(df):
             X[col] = 0
     return X[features_order].fillna(0)
 
-def gerar_grafico(df_obra, preds, id_obra):
-    # Cores do Logo CCBJJ (Azul Corporativo)
+def gerar_grafico(df_obra, preds, id_obra, lang="pt"):
     cor_azul_ccbjj = '#0066CC' 
     
     plt.figure(figsize=(8, 4.5))
     plt.bar(df_obra["etapa"], preds, color=cor_azul_ccbjj, edgecolor='#003366', linewidth=1)
     
-    plt.title(f"Atraso Estimado por Etapa - {id_obra}", fontsize=12, fontweight='bold', color='#2c3e50')
-    plt.ylabel("Dias de Atraso", fontsize=10)
+    title = f"Estimated Delay by Stage - {id_obra}" if lang == "en" else f"Atraso Estimado por Etapa - {id_obra}"
+    ylabel = "Days of Delay" if lang == "en" else "Dias de Atraso"
+    
+    plt.title(title, fontsize=12, fontweight='bold', color='#2c3e50')
+    plt.ylabel(ylabel, fontsize=10)
     plt.grid(axis='y', linestyle='--', alpha=0.3)
     plt.xticks(rotation=20, fontsize=9)
     
@@ -184,7 +192,7 @@ def gerar_grafico(df_obra, preds, id_obra):
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     id_obra = update.message.text.strip().upper()
-    lang = resolve_language(update)
+    lang = resolve_language(update) # Obtém o idioma correto (pt ou en)
     user_id = update.effective_user.id
     
     df_obra = df_base[df_base["id_obra"] == id_obra]
@@ -193,7 +201,8 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         df_obra = df_base[df_base["id_obra"].str.contains(id_obra, na=False, regex=False)]
 
     if df_obra.empty:
-        await update.message.reply_text(TEXTS[lang].get("not_found", "❌ ID da obra não localizado."))
+        not_found_msg = "❌ Project not found in our database." if lang == "en" else "❌ ID da obra não localizado em nossa base."
+        await update.message.reply_text(not_found_msg)
         return
 
     try:
@@ -202,67 +211,82 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         preds = pipeline.predict(X)
         risco_medio = preds.mean()
         
-        # Identificação de Ponto Crítico e Insights
         idx_max = preds.argmax()
         etapa_critica = df_obra.iloc[idx_max]["etapa"]
         
-        # Extração de dados da primeira linha para o cabeçalho
         cidade = df_obra.iloc[0].get("cidade", "N/A")
         solo = df_obra.iloc[0].get("solo", "N/A")
         chuva = df_obra.iloc[0].get("precipitacao", "0")
         
-        status_ia = "🔴 Crítico" if risco_medio > 10 else "🟡 Alerta" if risco_medio > 7 else "🟢 Normal"
-        
-        # Lógica de Insight Simples
-        insight = "Revisar logística e suprimentos."
-        if "estrutura" in etapa_critica.lower(): insight = "Revisar logística de aço e formas."
-        elif "fundação" in etapa_critica.lower(): insight = "Verificar drenagem e condições do solo."
-        elif "acabamento" in etapa_critica.lower(): insight = "Acelerar contratação de mão de obra especializada."
+        # Tradução de Status e Insights
+        if lang == "en":
+            status_ia = "🔴 Critical" if risco_medio > 10 else "🟡 Warning" if risco_medio > 7 else "🟢 Normal"
+            insight = "Review logistics and supplies."
+            if "estrutura" in etapa_critica.lower(): insight = "Review steel and formwork logistics."
+            elif "fundação" in etapa_critica.lower(): insight = "Check drainage and soil conditions."
+            
+            labels = {
+                "header": "CCBJJ Engineering & Risk Intelligence",
+                "project": "Project", "city": "City", "soil": "Soil", "rain": "Rain",
+                "diag": "AI Diagnosis", "risk": "Average Risk", "status": "Status",
+                "critical": "Critical Point", "stage": "Stage", "insight": "Insight",
+                "dev": "Developed by", "days": "days"
+            }
+        else:
+            status_ia = "🔴 Crítico" if risco_medio > 10 else "🟡 Alerta" if risco_medio > 7 else "🟢 Normal"
+            insight = "Revisar logística e suprimentos."
+            if "estrutura" in etapa_critica.lower(): insight = "Revisar logística de aço e formas."
+            elif "fundação" in etapa_critica.lower(): insight = "Verificar drenagem e condições do solo."
+            
+            labels = {
+                "header": "CCBJJ Engenharia & Inteligência de Risco",
+                "project": "Obra", "city": "Cidade", "soil": "Solo", "rain": "Chuva",
+                "diag": "Diagnóstico da IA", "risk": "Risco médio", "status": "Status",
+                "critical": "Ponto Crítico", "stage": "Etapa", "insight": "Insight",
+                "dev": "Desenvolvido por", "days": "dias"
+            }
 
-        # Gerar Texto Completo (Inspirado no modelo antigo)
+        # Gerar Texto com Tradução Aplicada
         texto_resp = (
-            f"🏗️ **CCBJJ Engenharia & Inteligência de Risco**\n"
+            f"🏗️ **{labels['header']}**\n"
             f"----------------------------------\n"
-            f"📍 **Obra:** `{id_obra}`\n"
-            f"🏙️ **Cidade:** `{cidade}`\n"
-            f"⛰️ **Solo:** `{solo}`\n"
-            f"🌧️ **Chuva:** `{chuva} mm`\n"
+            f"📍 **{labels['project']}:** `{id_obra}`\n"
+            f"🏙️ **{labels['city']}:** `{cidade}`\n"
+            f"⛰️ **{labels['soil']}:** `{solo}`\n"
+            f"🌧️ **{labels['rain']}:** `{chuva} mm`\n"
             f"----------------------------------\n"
-            f"📊 **Diagnóstico da IA**\n"
-            f"• Risco médio: `{risco_medio:.1f} dias`\n"
-            f"• Status: {status_ia}\n\n"
-            f"⚠️ **Ponto Crítico**\n"
-            f"Etapa: `{etapa_critica}`\n"
+            f"📊 **{labels['diag']}**\n"
+            f"• {labels['risk']}: `{risco_medio:.1f} {labels['days']}`\n"
+            f"• {labels['status']}: {status_ia}\n\n"
+            f"⚠️ **{labels['critical']}**\n"
+            f"{labels['stage']}: `{etapa_critica}`\n"
             f"----------------------------------\n"
-            f"💡 **Insight:** {insight}\n\n"
-            f"_Desenvolvido por Sergio Luiz dos Santos_"
+            f"💡 **{labels['insight']}** {insight}\n\n"
+            f"_{labels['dev']} Sergio Luiz dos Santos_"
         )
         
-        # Registrar Histórico
         salvar_historico(user_id, id_obra, risco_medio, status_ia, "Automático", lang)
+        graf_buf = gerar_grafico(df_obra, preds, id_obra, lang=lang)
         
-        # Gerar Gráfico
-        graf_buf = gerar_grafico(df_obra, preds, id_obra)
-        
-        # 1) Enviar Texto
         await update.message.reply_text(texto_resp, parse_mode=ParseMode.MARKDOWN)
         
-        # 2) Enviar Gráfico
         graf_buf.seek(0)
-        await update.message.reply_photo(photo=graf_buf, caption="📈 Análise de Tendência de Atrasos")
+        caption_trend = "📈 Trend Analysis" if lang == "en" else "📈 Análise de Tendência de Atrasos"
+        await update.message.reply_photo(photo=graf_buf, caption=caption_trend)
         
-        # 3) Enviar PDF
         if REPORTLAB_AVAILABLE:
             graf_buf.seek(0)
             pdf_file = gerar_pdf_corporativo(id_obra, texto_resp, graf_buf, lang=lang)
+            pdf_caption = "📄 Full Executive Report" if lang == "en" else "📄 Relatório Executivo Completo"
             await update.message.reply_document(
-                document=InputFile(pdf_file, filename=f"Relatorio_{id_obra}.pdf"),
-                caption="📄 Relatório Executivo Completo"
+                document=InputFile(pdf_file, filename=f"Report_{id_obra}.pdf"),
+                caption=pdf_caption
             )
             
     except Exception as e:
-        logging.error(f"Erro no processamento: {e}")
-        await update.message.reply_text("⚠️ Erro técnico ao processar os dados da obra.")
+        logging.error(f"Error in processing: {e}")
+        error_msg = "⚠️ Technical error processing project data." if lang == "en" else "⚠️ Erro técnico ao processar os dados da obra."
+        await update.message.reply_text(error_msg)
 
 # ======================================================
 # APLICAÇÃO FASTAPI + BOT
