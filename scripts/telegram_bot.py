@@ -41,7 +41,7 @@ try:
 except ImportError:
     REPORTLAB_AVAILABLE = False
 
-# Importações customizadas (agora com path resolvido)
+# Importações customizadas
 from i18n import TEXTS
 from database import get_language, set_language
 from handlers import (
@@ -74,10 +74,14 @@ TOKEN = os.getenv("TELEGRAM_TOKEN")
 WEBHOOK_URL = os.getenv("WEBHOOK_URL")
 BR_TIMEZONE = pytz.timezone('America/Sao_Paulo')
 
-# Carregamento de Modelos e Dados
+# Carregamento e Normalização da Base de Dados
 pipeline = joblib.load(PIPELINE_PATH)
 features_order = joblib.load(FEATURES_PATH)
+
+# AJUSTE 1: Normalização na carga dos dados para evitar erros de Case Sensitivity
 df_base = pd.read_csv(DB_PATH, compression="gzip")
+if "id_obra" in df_base.columns:
+    df_base["id_obra"] = df_base["id_obra"].astype(str).str.strip().str.upper()
 
 # ======================================================
 # FUNÇÕES AUXILIARES E RELATÓRIOS
@@ -121,16 +125,14 @@ def gerar_pdf_corporativo(id_obra, texto_md, grafico_buf, lang="pt", modo="Diret
     c.drawString(3.5*cm, 8.9*cm, f"MODO: {modo} | STATUS: OFICIAL")
     c.drawString(3.5*cm, 8.2*cm, "RESPONSÁVEL TÉCNICO: Sergio Luiz dos Santos")
     
-    c.showPage() # Quebra de página
+    c.showPage()
 
     # --- PÁGINA 2: ANÁLISE DETALHADA ---
-    # Rodapé Interno com Logo
     if LOGO_PATH.exists():
         c.drawImage(str(LOGO_PATH), largura - 3.5*cm, 0.8*cm, width=2*cm, preserveAspectRatio=True)
     c.setFont("Helvetica-Oblique", 8)
     c.drawString(2*cm, 1*cm, f"CCBJJ Risk Intelligence - {id_obra} - Gerado em {data_br}")
     
-    # Conteúdo
     texto_limpo = texto_md.replace("**", "").replace("`", "")
     text_obj = c.beginText(2*cm, altura - 3*cm)
     text_obj.setFont("Helvetica", 10)
@@ -139,7 +141,6 @@ def gerar_pdf_corporativo(id_obra, texto_md, grafico_buf, lang="pt", modo="Diret
         text_obj.textLine(line)
     c.drawText(text_obj)
 
-    # Gráfico
     img_path = f"temp_plot_{id_obra}.png"
     with open(img_path, "wb") as f:
         f.write(grafico_buf.getbuffer())
@@ -151,11 +152,13 @@ def gerar_pdf_corporativo(id_obra, texto_md, grafico_buf, lang="pt", modo="Diret
     pdf_buf.seek(0)
     return pdf_buf
 
+# AJUSTE 2: Melhoria na preparação de features com tratamento de nulos
 def preparar_X(df):
     X = df.copy()
     for col in features_order:
-        if col not in X.columns: X[col] = 0
-    return X[features_order]
+        if col not in X.columns: 
+            X[col] = 0
+    return X[features_order].fillna(0)
 
 def gerar_grafico(df_obra, preds, id_obra):
     plt.figure(figsize=(8, 4))
@@ -176,51 +179,61 @@ def gerar_grafico(df_obra, preds, id_obra):
 # ======================================================
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    # AJUSTE 3: Normalização rigorosa da entrada do usuário
     id_obra = update.message.text.strip().upper()
     lang = resolve_language(update)
     user_id = update.effective_user.id
     
+    # Busca na base normalizada
     df_obra = df_base[df_base["id_obra"] == id_obra]
+    
+    # Tentativa de busca parcial caso a exata falhe (ex: se o ID no banco tiver espaços extras não tratados)
     if df_obra.empty:
-        # USA O TEXTO DO i18n
-        await update.message.reply_text(TEXTS[lang].get("not_found", "❌ ID Error"))
+        df_obra = df_base[df_base["id_obra"].str.contains(id_obra, na=False, regex=False)]
+
+    if df_obra.empty:
+        await update.message.reply_text(TEXTS[lang].get("not_found", "❌ ID da obra não localizado em nossa base."))
         return
 
     # Processamento de IA
-    X = preparar_X(df_obra)
-    preds = pipeline.predict(X)
-    risco_medio = preds.mean()
-    status_ia = "🔴 Crítico" if risco_medio > 10 else "🟡 Alerta" if risco_medio > 7 else "🟢 Normal"
-    
-    # Registrar Histórico
-    salvar_historico(user_id, id_obra, risco_medio, status_ia, "Automático", lang)
+    try:
+        X = preparar_X(df_obra)
+        preds = pipeline.predict(X)
+        risco_medio = preds.mean()
+        status_ia = "🔴 Crítico" if risco_medio > 10 else "🟡 Alerta" if risco_medio > 7 else "🟢 Normal"
+        
+        # Registrar Histórico
+        salvar_historico(user_id, id_obra, risco_medio, status_ia, "Automático", lang)
 
-    # Gerar Texto e Gráfico
-    texto_resp = (
-        f"🏗️ **CCBJJ Intelligence Report**\n"
-        f"----------------------------------\n"
-        f"📍 **ID:** `{id_obra}`\n"
-        f"📊 **Risco Médio:** `{risco_medio:.1f} dias`\n"
-        f"🚦 **Status:** {status_ia}\n"
-        f"----------------------------------\n"
-    )
-    
-    graf_buf = gerar_grafico(df_obra, preds, id_obra)
-    
-    # Resposta via Telegram
-    await update.message.reply_text(texto_resp, parse_mode=ParseMode.MARKDOWN)
-    
-    graf_buf.seek(0)
-    await update.message.reply_photo(photo=graf_buf, caption="📈 Análise de Tendência")
-    
-    # Enviar PDF
-    if REPORTLAB_AVAILABLE:
-        graf_buf.seek(0)
-        pdf_file = gerar_pdf_corporativo(id_obra, texto_resp, graf_buf, lang=lang)
-        await update.message.reply_document(
-            document=InputFile(pdf_file, filename=f"Relatorio_{id_obra}.pdf"),
-            caption="📄 Relatório Executivo Completo"
+        # Gerar Texto e Gráfico
+        texto_resp = (
+            f"🏗️ **CCBJJ Intelligence Report**\n"
+            f"----------------------------------\n"
+            f"📍 **ID:** `{id_obra}`\n"
+            f"📊 **Risco Médio:** `{risco_medio:.1f} dias`\n"
+            f"🚦 **Status:** {status_ia}\n"
+            f"----------------------------------\n"
         )
+        
+        graf_buf = gerar_grafico(df_obra, preds, id_obra)
+        
+        # Resposta via Telegram
+        await update.message.reply_text(texto_resp, parse_mode=ParseMode.MARKDOWN)
+        
+        graf_buf.seek(0)
+        await update.message.reply_photo(photo=graf_buf, caption="📈 Análise de Tendência")
+        
+        # Enviar PDF
+        if REPORTLAB_AVAILABLE:
+            graf_buf.seek(0)
+            pdf_file = gerar_pdf_corporativo(id_obra, texto_resp, graf_buf, lang=lang)
+            await update.message.reply_document(
+                document=InputFile(pdf_file, filename=f"Relatorio_{id_obra}.pdf"),
+                caption="📄 Relatório Executivo Completo"
+            )
+    except Exception as e:
+        logging.error(f"Erro no processamento: {e}")
+        await update.message.reply_text("⚠️ Erro técnico ao processar a análise da obra.")
 
 # ======================================================
 # APLICAÇÃO FASTAPI + BOT
