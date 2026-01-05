@@ -1,16 +1,18 @@
+# --- Build Tools ---
+wheel==0.45.1
+setuptools==75.6.0
+
 # --- FastAPI + Telegram ---
 fastapi==0.115.0
 uvicorn==0.30.0
 python-multipart==0.0.9
 python-telegram-bot==21.0
 
-# Banco de dados e ORM
-sqlalchemy==2.0.25
+# --- Banco de dados e ORM ---
+sqlalchemy>=2.0.29   # corrigido para suportar Python 3.13
 pg8000==1.30.2
-psycopg2-binary==2.9.9
-
-# Migrações
 alembic==1.13.1
+psycopg2-binary==2.9.9   # opcional, útil em migrações
 
 # --- Ciência de Dados / ML ---
 pandas==2.2.3
@@ -19,13 +21,8 @@ scikit-learn==1.6.0
 joblib==1.4.2
 
 # --- Visualização ---
-matplotlib==3.9.2
-seaborn==0.13.2
-plotly==5.24.1
+matplotlib>=3.9.0
+seaborn>=0.13.0
+plotly>=5.24.0
 pytz
 reportlab
-
-# --- Extras / compatibilidade ---
-wheel==0.45.1
-setuptools==75.6.0
-
