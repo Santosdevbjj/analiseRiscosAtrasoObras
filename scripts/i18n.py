@@ -27,11 +27,11 @@ TEXTS = {
             "🔌 **Configuração de Infraestrutura**\n"
             "Selecione a fonte de dados para as análises de IA:"
         ),
-        "mode_changed": "✅ Infraestrutura definida para: ",
+        "mode_changed": "✅ Infraestrutura definida para: ", # Espaço mantido no final
         "health_ok": "🚀 Sistema operando com 100% de integridade.",
         "status": "✅ Sistema Online (Render Cloud)\nFuso: Brasília (BRT)",
         "example_msg": "📝 **Exemplo Automático:**\nID: `CCBJJ-107`\nStatus: Analisando parâmetros climáticos e logísticos...",
-        "not_found": "❌ ID da obra não localizado no ",
+        "not_found": "❌ ID da obra não localizado no ", # Espaço mantido no final
         "pdf_title": "Relatório de Análise de Risco"
     },
 
@@ -63,11 +63,11 @@ TEXTS = {
             "🔌 **Infrastructure Setup**\n"
             "Select the data source for AI analysis:"
         ),
-        "mode_changed": "✅ Infrastructure defined to: ",
+        "mode_changed": "✅ Infrastructure defined to: ", # Space kept at the end
         "health_ok": "🚀 System operating with 100% integrity.",
         "status": "✅ System Online (Render Cloud)\nTimezone: Brasilia (BRT)",
         "example_msg": "📝 **Automatic Example:**\nID: `CCBJJ-107`\nStatus: Analyzing climate and logistic parameters...",
-        "not_found": "❌ Project ID not found in ",
+        "not_found": "❌ Project ID not found in ", # Space kept at the end
         "pdf_title": "Risk Analysis Report"
     }
 }
