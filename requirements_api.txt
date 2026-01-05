@@ -4,6 +4,14 @@ uvicorn==0.30.0
 python-multipart==0.0.9
 python-telegram-bot==21.0
 
+# Banco de dados e ORM
+sqlalchemy==2.0.25
+pg8000==1.30.2
+
+# Migrações
+alembic==1.13.1
+
+
 # --- Ciência de Dados / ML ---
 pandas==2.2.3
 numpy==1.26.4
