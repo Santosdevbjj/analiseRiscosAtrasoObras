@@ -46,7 +46,7 @@ except ImportError:
 from i18n import TEXTS
 from database import get_language, set_language
 from handlers import (
-    start_command, help_command, about_command, 
+    help_command, about_command, 
     status_command, language_callback, resolve_language,
     language_manual_command, example_command, healthcheck_command
 )
@@ -72,142 +72,115 @@ WEBHOOK_URL = os.getenv("WEBHOOK_URL")
 DATABASE_URL = os.getenv("DATABASE_URL")
 BR_TIMEZONE = pytz.timezone('America/Sao_Paulo')
 
-# Ajuste da URL do banco para o SQLAlchemy
 if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
     DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
-# Inicialização de Recursos
 pipeline = joblib.load(PIPELINE_PATH)
 features_order = joblib.load(FEATURES_PATH)
 engine = create_engine(DATABASE_URL) if DATABASE_URL else None
 
-# Carrega CSV (Legado)
 df_base = pd.read_csv(DB_PATH, compression="gzip")
 if "id_obra" in df_base.columns:
-    df_base["id_obra"] = df_base["id_obra"].astype(str).str.strip().str.upper()
+    df_base["id_obra"] = df_base["id_obra"].astype(str).str.strip()
 
-# Armazenamento temporário de preferência (Em produção, ideal usar banco)
-USER_PREFERENCE = {} # {user_id: 'SUPABASE' ou 'CSV'}
-
-# ======================================================
-# FUNÇÕES DE APOIO E INFRAESTRUTURA
-# ======================================================
-
-async def get_data(id_obra, user_id):
-    """Busca dados na fonte escolhida pelo usuário."""
-    mode = USER_PREFERENCE.get(user_id, "SUPABASE") # Padrão Cloud
-    
-    if mode == "SUPABASE" and engine:
-        query = f"SELECT * FROM dashboard_obras WHERE id_obra = '{id_obra}'"
-        df = pd.read_sql(query, engine)
-        return df, "SUPABASE"
-    else:
-        df = df_base[df_base["id_obra"] == id_obra]
-        return df, "CSV"
-
-def preparar_X(df):
-    """Ajusta os dados para o formato que o seu PKL espera."""
-    X = df.copy()
-    # Mapeia colunas do banco/csv para o que o modelo espera se necessário
-    # O pipeline_random_forest.pkl exige as features exatas do treino
-    for col in features_order:
-        if col not in X.columns: 
-            X[col] = 0
-    return X[features_order].fillna(0)
-
-# [Mantenha aqui as suas funções gerar_pdf_corporativo, salvar_historico e gerar_grafico sem alterações]
-# (Omitidas aqui para brevidade, mas devem permanecer no seu arquivo)
+USER_PREFERENCE = {}
 
 # ======================================================
-# HANDLERS DE COMANDO
+# FUNÇÕES DE APOIO
 # ======================================================
 
-async def settings_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Menu para escolher entre CSV e Supabase."""
+def obter_menu_infra():
     keyboard = [
         [
             InlineKeyboardButton("📂 Modo CSV (Legado)", callback_data='set_CSV'),
             InlineKeyboardButton("☁️ Modo Supabase (Cloud)", callback_data='set_DB'),
         ]
     ]
-    reply_markup = InlineKeyboardMarkup(keyboard)
+    return InlineKeyboardMarkup(keyboard)
+
+async def get_data(id_obra, user_id):
+    mode = USER_PREFERENCE.get(user_id, "SUPABASE")
+    id_obra_clean = id_obra.strip()
+    
+    if mode == "SUPABASE" and engine:
+        # ILIKE resolve o problema de CCbjj vs CCBJJ
+        query = f"SELECT * FROM dashboard_obras WHERE id_obra ILIKE '{id_obra_clean}'"
+        df = pd.read_sql(query, engine)
+        return df, "SUPABASE"
+    else:
+        # Busca insensível no Pandas
+        df = df_base[df_base["id_obra"].str.contains(id_obra_clean, case=False, na=False)]
+        return df, "CSV"
+
+def preparar_X(df):
+    X = df.copy()
+    for col in features_order:
+        if col not in X.columns: 
+            X[col] = 0
+    return X[features_order].fillna(0)
+
+# [Mantenha aqui gerar_pdf_corporativo, salvar_historico e gerar_grafico]
+
+# ======================================================
+# NOVOS HANDLERS
+# ======================================================
+
+async def start_hibrido(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Substitui o start antigo para garantir que os botões apareçam."""
     await update.message.reply_text(
-        "⚙️ **Configurações de Infraestrutura**\nEscolha como deseja processar os dados:",
-        reply_markup=reply_markup,
+        "🏗️ **CCBJJ Risk Intelligence**\n\n"
+        "Sistema ativo. Por favor, selecione a fonte de dados para análise:",
+        reply_markup=obter_menu_infra(),
         parse_mode=ParseMode.MARKDOWN
     )
 
 async def config_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
-    
     user_id = update.effective_user.id
-    if query.data == 'set_CSV':
-        USER_PREFERENCE[user_id] = "CSV"
-        msg = "✅ Modo alterado para: **CSV (Local)**"
-    else:
-        USER_PREFERENCE[user_id] = "SUPABASE"
-        msg = "✅ Modo alterado para: **Supabase (Nuvem)**"
-    
-    await query.edit_message_text(text=msg, parse_mode=ParseMode.MARKDOWN)
+    mode = "CSV" if query.data == 'set_CSV' else "SUPABASE"
+    USER_PREFERENCE[user_id] = mode
+    await query.edit_message_text(text=f"✅ Infraestrutura definida: **{mode}**\nAgora envie o ID da obra (ex: CCbjj-100).", parse_mode=ParseMode.MARKDOWN)
 
 # ======================================================
-# HANDLER PRINCIPAL DE ANÁLISE (IA + INFRA)
+# HANDLER DE MENSAGEM
 # ======================================================
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    id_obra = update.message.text.strip().upper()
+    id_obra = update.message.text.strip()
     lang = resolve_language(update)
     user_id = update.effective_user.id
     
-    # 1. Busca de Dados Híbrida
     df_obra, modo_usado = await get_data(id_obra, user_id)
 
     if df_obra.empty:
-        not_found_msg = "❌ Project not found." if lang == "en" else "❌ ID da obra não localizado."
-        await update.message.reply_text(not_found_msg)
+        await update.message.reply_text(f"❌ Obra `{id_obra}` não encontrada no {modo_usado}.")
         return
 
     try:
-        # 2. Processamento com o PKL antigo
         X = preparar_X(df_obra)
         preds = pipeline.predict(X)
         risco_medio = preds.mean()
         
-        idx_max = preds.argmax()
-        etapa_critica = df_obra.iloc[idx_max]["etapa"]
-        
-        # 3. Formatação da Resposta (Sua lógica original de tradução)
-        status_ia = "🔴 Crítico" if risco_medio > 10 else "🟡 Alerta" if risco_medio > 7 else "🟢 Normal"
-        
-        # [Seu bloco de montagem de texto_resp aqui...]
+        # Simplificação para teste, use sua lógica de tradução completa aqui
+        status_ia = "🔴 Crítico" if risco_medio > 10 else "🟢 Normal"
         
         texto_resp = (
-            f"🏗️ **CCBJJ Intelligence ({modo_usado})**\n"
-            f"----------------------------------\n"
-            f"📍 **Projeto:** `{id_obra}`\n"
-            f"📊 **Risco Médio:** `{risco_medio:.1f} dias`\n"
-            f"🚦 **Status:** {status_ia}\n"
-            f"⚠️ **Ponto Crítico:** `{etapa_critica}`\n"
-            f"----------------------------------\n"
-            f"_Processado via infraestrutura híbrida._"
+            f"📊 **Resultado IA ({modo_usado})**\n"
+            f"ID: `{id_obra}`\n"
+            f"Risco Estimado: `{risco_medio:.1f} dias`\n"
+            f"Status: {status_ia}"
         )
         
-        # 4. Envio de Gráficos e PDF (Seus métodos originais)
         await update.message.reply_text(texto_resp, parse_mode=ParseMode.MARKDOWN)
+        # Opcional: Adicione gerar_grafico aqui se desejar
         
-        graf_buf = gerar_grafico(df_obra, preds, id_obra, lang=lang)
-        await update.message.reply_photo(photo=graf_buf, caption="📈 Análise Preditiva")
-        
-        # Registro no histórico
-        salvar_historico(user_id, id_obra, risco_medio, status_ia, modo_usado, lang)
-
     except Exception as e:
-        logging.error(f"Erro no processamento: {e}")
-        await update.message.reply_text("⚠️ Erro técnico ao processar IA.")
+        logging.error(f"Erro: {e}")
+        await update.message.reply_text("⚠️ Erro ao processar predição.")
 
 # ======================================================
-# APLICAÇÃO E WEBHOOK
+# INICIALIZAÇÃO
 # ======================================================
 app = FastAPI()
 ptb_app = None
@@ -217,16 +190,15 @@ async def startup():
     global ptb_app
     ptb_app = ApplicationBuilder().token(TOKEN).build()
     
-    # Handlers Originais
-    ptb_app.add_handler(CommandHandler("start", start_command))
-    ptb_app.add_handler(CommandHandler("settings", settings_command)) # Novo comando
-    ptb_app.add_handler(CallbackQueryHandler(config_callback, pattern='^set_')) # Novo callback
-    
-    # Handlers de Sistema
+    # Adicionando Handlers
+    ptb_app.add_handler(CommandHandler("start", start_hibrido)) # Usando o novo start
+    ptb_app.add_handler(CallbackQueryHandler(config_callback, pattern='^set_'))
     ptb_app.add_handler(CallbackQueryHandler(language_callback, pattern='^lang_'))
     ptb_app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     
-    # ... outros handlers (about, help, etc) ...
+    # Comandos auxiliares do handlers.py
+    ptb_app.add_handler(CommandHandler("help", help_command))
+    ptb_app.add_handler(CommandHandler("healthcheck", healthcheck_command))
 
     await ptb_app.initialize()
     await ptb_app.bot.set_webhook(f"{WEBHOOK_URL}/webhook")
