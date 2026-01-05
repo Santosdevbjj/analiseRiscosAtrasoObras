@@ -4,48 +4,51 @@ import logging
 from sqlalchemy import create_engine
 from dotenv import load_dotenv
 
-# Configuração de Logs para monitorar o carregamento
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+# Configuração de logs para acompanhar o progresso no terminal do Render
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
 
-def load_data_to_supabase():
-    # 1. Carregar variáveis de ambiente
+def carregar_dados_supabase():
     load_dotenv()
+    
+    # Pega a URL do banco das variáveis de ambiente
     db_url = os.getenv("DATABASE_URL")
     
     if not db_url:
-        logging.error("❌ DATABASE_URL não encontrada!")
+        logging.error("❌ Erro: DATABASE_URL não encontrada no ambiente!")
         return
 
-    # Ajuste para compatibilidade com SQLAlchemy 2.0+
+    # Correção necessária para o SQLAlchemy reconhecer a URL do Render/Supabase
     if db_url.startswith("postgres://"):
         db_url = db_url.replace("postgres://", "postgresql://", 1)
 
     try:
         engine = create_engine(db_url)
+        path_arquivo = "data/processed/df_mestre_consolidado.csv.gz"
         
-        # 2. Ler o arquivo consolidado (O que analisamos anteriormente)
-        file_path = "data/processed/df_mestre_consolidado.csv.gz"
-        logging.info(f"📂 Lendo arquivo: {file_path}")
-        
-        # Usamos chunksize para não estourar a memória RAM do plano Free do Render
+        logging.info(f"📂 Iniciando leitura de {path_arquivo}...")
+
+        # Lendo em "chunks" (pedaços) para economizar RAM no plano Free
         chunk_size = 10000 
-        df_reader = pd.read_csv(file_path, compression='gzip', chunksize=chunk_size)
+        total_registros = 0
+        
+        # O modo 'replace' cria a tabela do zero no primeiro lote
+        # Os próximos usam 'append' para adicionar os dados
+        primeiro_lote = True
 
-        first_chunk = True
-        for i, chunk in enumerate(df_reader):
-            # 3. Enviar para o banco (Tabela: dashboard_obras)
-            # 'replace' no primeiro chunk para limpar a mesa, 'append' nos próximos
-            mode = 'replace' if first_chunk else 'append'
+        for chunk in pd.read_csv(path_arquivo, compression='gzip', chunksize=chunk_size):
+            metodo = 'replace' if primeiro_lote else 'append'
             
-            chunk.to_sql('dashboard_obras', engine, if_exists=mode, index=False)
+            # Envia o lote atual para a tabela 'base_conhecimento_ia'
+            chunk.to_sql('base_conhecimento_ia', engine, if_exists=metodo, index=False)
             
-            logging.info(f"✅ Lote {i+1} enviado ({len(chunk)} registros).")
-            first_chunk = False
+            total_registros += len(chunk)
+            logging.info(f"✅ Lote processado. Total acumulado: {total_registros} registros.")
+            primeiro_lote = False
 
-        logging.info("🚀 Carga completa! 300k registros disponíveis no Supabase.")
+        logging.info("🚀 Sucesso! Todos os 300k registros estão no Supabase.")
 
     except Exception as e:
-        logging.error(f"❌ Erro durante a carga: {e}")
+        logging.error(f"❌ Falha na migração: {e}")
 
 if __name__ == "__main__":
-    load_data_to_supabase()
+    carregar_dados_supabase()
