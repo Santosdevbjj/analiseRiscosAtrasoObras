@@ -85,7 +85,7 @@ O projeto foi criado para atender a uma necessidade real de negócio:
 
 • Multas contratuais
 
-• Insatisfação dos clientes
+• Insatisfação dos clientes 
 
 • Danos reputacionais
 
