@@ -7,6 +7,7 @@ python-telegram-bot==21.0
 # Banco de dados e ORM
 sqlalchemy==2.0.25
 pg8000==1.30.2
+psycopg2-binary==2.9.9
 
 # Migrações
 alembic==1.13.1
