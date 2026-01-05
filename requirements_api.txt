@@ -11,7 +11,6 @@ pg8000==1.30.2
 # Migrações
 alembic==1.13.1
 
-
 # --- Ciência de Dados / ML ---
 pandas==2.2.3
 numpy==1.26.4
