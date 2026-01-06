@@ -5,6 +5,7 @@ import warnings
 import joblib
 import pandas as pd
 import pytz
+import io
 from io import BytesIO
 from pathlib import Path
 from datetime import datetime
@@ -20,16 +21,21 @@ from fastapi import FastAPI, Request, Response
 import uvicorn
 
 # Telegram
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, InputFile
 from telegram.constants import ParseMode
 from telegram.ext import (
-    ApplicationBuilder,
-    CommandHandler,
-    MessageHandler,
-    CallbackQueryHandler,
-    ContextTypes,
-    filters,
+    ApplicationBuilder, CommandHandler, MessageHandler,
+    CallbackQueryHandler, ContextTypes, filters,
 )
+
+# PDF e Gráficos
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import cm
+from reportlab.lib import colors
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
 
 # Importações customizadas
 import database
@@ -40,21 +46,17 @@ from handlers import (
     language_manual_command, example_command, healthcheck_command
 )
 
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
-
-# Configuração de Logging
 logging.basicConfig(level=logging.INFO)
 warnings.filterwarnings("ignore", category=UserWarning)
 
 # ======================================================
-# CONFIGURAÇÕES DE CAMINHOS E CONEXÕES
+# CONFIGURAÇÕES E RECURSOS
 # ======================================================
 BASE_DIR = Path(__file__).resolve().parent.parent
 PIPELINE_PATH = BASE_DIR / "models/pipeline_random_forest.pkl"
 FEATURES_PATH = BASE_DIR / "models/features_metadata.joblib"
 DB_PATH = BASE_DIR / "data/processed/df_mestre_consolidado.csv.gz"
+LOGO_PATH = BASE_DIR / "assets/logo_ccbjj.png"  # Certifique-se que este arquivo existe
 
 TOKEN = os.getenv("TELEGRAM_TOKEN")
 WEBHOOK_URL = os.getenv("WEBHOOK_URL")
@@ -63,22 +65,92 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
     DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
-# Inicialização de Recursos
 pipeline = joblib.load(PIPELINE_PATH)
 features_order = joblib.load(FEATURES_PATH)
 engine = create_engine(DATABASE_URL) if DATABASE_URL else None
 
-# Carrega CSV e normaliza dados de busca
 df_base = pd.read_csv(DB_PATH, compression="gzip")
 if "id_obra" in df_base.columns:
     df_base["id_obra"] = df_base["id_obra"].astype(str).str.strip()
 
 # ======================================================
-# FUNÇÕES DE APOIO
+# LÓGICA DE RELATÓRIOS (GRÁFICO E PDF)
+# ======================================================
+
+def gerar_grafico_ia(risco_valor):
+    """Gera gráfico de barra horizontal indicando o nível de risco."""
+    plt.style.use('ggplot')
+    fig, ax = plt.subplots(figsize=(8, 4))
+    
+    # Define a cor baseada no risco
+    cor = 'green' if risco_valor <= 7 else 'orange' if risco_valor <= 10 else 'red'
+    
+    ax.barh(['Risco Estimado'], [risco_valor], color=cor, height=0.6)
+    ax.set_xlim(0, max(15, risco_valor + 2))
+    ax.set_xlabel('Dias de Atraso Previstos')
+    ax.set_title('Análise Preditiva de Cronograma - CCBJJ', fontsize=14, pad=15)
+    
+    # Adiciona linha de threshold crítico
+    ax.axvline(10, color='red', linestyle='--', alpha=0.5, label='Limite Crítico')
+    ax.legend()
+
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png', bbox_inches='tight')
+    buf.seek(0)
+    plt.close(fig)
+    return buf
+
+def gerar_pdf_corporativo(id_obra, risco, status, modo, grafico_buf):
+    """Gera um PDF detalhado com capa, logo e gráfico."""
+    pdf_buf = io.BytesIO()
+    c = canvas.Canvas(pdf_buf, pagesize=A4)
+    width, height = A4
+
+    # --- CAPA ---
+    if LOGO_PATH.exists():
+        c.drawImage(str(LOGO_PATH), width/2 - 2*cm, height - 5*cm, width=4*cm, preserveAspectRatio=True)
+    
+    c.setFont("Helvetica-Bold", 22)
+    c.drawCentredString(width/2, height - 8*cm, "RELATÓRIO DE INTELIGÊNCIA DE RISCO")
+    
+    c.setFont("Helvetica", 12)
+    c.drawCentredString(width/2, height - 9*cm, f"Gerado em: {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}")
+
+    # --- CONTEÚDO TÉCNICO ---
+    c.setStrokeColor(colors.black)
+    c.line(2*cm, height - 11*cm, width - 2*cm, height - 11*cm)
+    
+    text = c.beginText(2*cm, height - 12*cm)
+    text.setFont("Helvetica-Bold", 14)
+    text.textLine("Detalhamento da Análise:")
+    text.setFont("Helvetica", 12)
+    text.moveCursor(0, 15)
+    text.textLine(f"Identificador da Obra: {id_obra}")
+    text.textLine(f"Fonte de Dados Utilizada: {modo}")
+    text.textLine(f"Status Resultante: {status}")
+    text.textLine(f"Impacto Estimado no Cronograma: {risco:.2f} dias")
+    c.drawText(text)
+
+    # --- INSERIR GRÁFICO NO PDF ---
+    grafico_buf.seek(0)
+    with open("temp_chart.png", "wb") as f:
+        f.write(grafico_buf.read())
+    c.drawImage("temp_chart.png", 2*cm, height - 22*cm, width=17*cm, preserveAspectRatio=True)
+    
+    # Nota de rodapé
+    c.setFont("Helvetica-Oblique", 9)
+    c.drawCentredString(width/2, 2*cm, "Este relatório foi gerado automaticamente pela IA da CCBJJ Engenharia.")
+    
+    c.showPage()
+    c.save()
+    pdf_buf.seek(0)
+    return pdf_buf
+
+# ======================================================
+# FUNÇÕES DE APOIO AO BOT
 # ======================================================
 
 def obter_menu_infra():
-    """Gera o teclado para escolha da fonte de dados."""
     keyboard = [[
         InlineKeyboardButton("📂 Modo CSV", callback_data='set_CSV'),
         InlineKeyboardButton("☁️ Modo Supabase", callback_data='set_DB'),
@@ -86,99 +158,89 @@ def obter_menu_infra():
     return InlineKeyboardMarkup(keyboard)
 
 async def get_data(id_obra, user_id):
-    """Busca dados usando a preferência salva no banco SQLite local."""
     mode = database.get_storage_mode(user_id)
     id_obra_clean = id_obra.strip()
-    
     if mode == "SUPABASE" and engine:
         try:
             query = f"SELECT * FROM dashboard_obras WHERE id_obra ILIKE '{id_obra_clean}'"
-            df = pd.read_sql(query, engine)
-            return df, "SUPABASE"
-        except Exception as e:
-            logging.error(f"Erro Supabase: {e}")
-            # Fallback automático para CSV se o banco falhar
-            df = df_base[df_base["id_obra"].str.contains(id_obra_clean, case=False, na=False)]
-            return df, "CSV (Fallback)"
-    else:
-        df = df_base[df_base["id_obra"].str.contains(id_obra_clean, case=False, na=False)]
-        return df, "CSV"
+            return pd.read_sql(query, engine), "SUPABASE"
+        except:
+            return df_base[df_base["id_obra"].str.contains(id_obra_clean, case=False, na=False)], "CSV (Fallback)"
+    return df_base[df_base["id_obra"].str.contains(id_obra_clean, case=False, na=False)], "CSV"
 
 def preparar_X(df):
-    """Prepara o DataFrame para o pipeline de predição."""
     X = df.copy()
     for col in features_order:
-        if col not in X.columns: 
-            X[col] = 0
+        if col not in X.columns: X[col] = 0
     return X[features_order].fillna(0)
 
 # ======================================================
-# HANDLERS ADICIONAIS
+# HANDLERS
 # ======================================================
 
 async def settings_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Comando para alterar a fonte de dados (CSV/Supabase)."""
     lang = resolve_language(update)
-    await update.message.reply_text(
-        TEXTS[lang]["infra_select"],
-        reply_markup=obter_menu_infra(),
-        parse_mode=ParseMode.MARKDOWN
-    )
+    await update.message.reply_text(TEXTS[lang]["infra_select"], reply_markup=obter_menu_infra(), parse_mode=ParseMode.MARKDOWN)
 
 async def config_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Processa a escolha do usuário no menu de infraestrutura."""
     query = update.callback_query
     await query.answer()
-    user_id = update.effective_user.id
-    lang = resolve_language(update)
-    
     mode = "CSV" if query.data == 'set_CSV' else "SUPABASE"
-    database.set_storage_mode(user_id, mode)
-    
-    msg = f"{TEXTS[lang]['mode_changed']}**{mode}**"
-    await query.edit_message_text(text=msg, parse_mode=ParseMode.MARKDOWN)
-
-# ======================================================
-# HANDLER DE MENSAGEM PRINCIPAL
-# ======================================================
+    database.set_storage_mode(query.from_user.id, mode)
+    lang = resolve_language(update)
+    await query.edit_message_text(text=f"{TEXTS[lang]['mode_changed']}**{mode}**", parse_mode=ParseMode.MARKDOWN)
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Lógica principal de recebimento do ID e predição de IA."""
     id_obra = update.message.text.strip()
     lang = resolve_language(update)
     user_id = update.effective_user.id
     
     df_obra, modo_usado = await get_data(id_obra, user_id)
-
     if df_obra.empty:
         await update.message.reply_text(f"{TEXTS[lang]['not_found']}{modo_usado}.")
         return
 
+    msg_wait = await update.message.reply_text("🤖 **Processando análise preditiva...**")
+
     try:
         X = preparar_X(df_obra)
         preds = pipeline.predict(X)
-        risco_medio = preds.mean()
-        
-        # Lógica de semáforo de risco
+        risco_medio = float(preds.mean())
         status_ia = "🔴 Crítico" if risco_medio > 10 else "🟡 Alerta" if risco_medio > 7 else "🟢 Normal"
         
-        texto_resp = (
-            f"🏗️ **CCBJJ Risk Analysis ({modo_usado})**\n"
-            f"----------------------------------\n"
-            f"📍 **ID:** `{id_obra}`\n"
-            f"📊 **Risco Estimado:** `{risco_medio:.1f} dias`\n"
-            f"🚦 **Status:** {status_ia}\n"
-            f"----------------------------------"
+        # 1. TEXTO EXPLICATIVO
+        texto = (
+            f"📊 **Análise Preditiva CCBJJ**\n"
+            f"Obra: `{id_obra}` | Base: `{modo_usado}`\n\n"
+            f"O modelo Random Forest identificou um risco estimado de **{risco_medio:.1f} dias** de impacto no cronograma.\n"
+            f"Status: {status_ia}\n\n"
+            f"_Aguarde o gráfico e o relatório técnico abaixo..._"
+        )
+        await update.message.reply_text(texto, parse_mode=ParseMode.MARKDOWN)
+
+        # 2. GRÁFICO
+        grafico_buf = gerar_grafico_ia(risco_medio)
+        await update.message.reply_photo(
+            photo=grafico_buf, 
+            caption=f"📈 Gráfico de Dispersão de Risco: {id_obra}\nLegenda: O gráfico indica o desvio projetado em relação à linha de base zero."
+        )
+
+        # 3. PDF COMPLETO
+        grafico_buf.seek(0) # Reset para reuso
+        pdf_buf = gerar_pdf_corporativo(id_obra, risco_medio, status_ia, modo_usado, grafico_buf)
+        await update.message.reply_document(
+            document=InputFile(pdf_buf, filename=f"Relatorio_Risco_{id_obra}.pdf"),
+            caption="📄 **Relatório Técnico Detalhado (PDF)**"
         )
         
-        await update.message.reply_text(texto_resp, parse_mode=ParseMode.MARKDOWN)
-        
+        await msg_wait.delete()
+
     except Exception as e:
-        logging.error(f"Erro na predição: {e}")
-        await update.message.reply_text("⚠️ Erro técnico no processamento da IA.")
+        logging.error(f"Erro: {e}")
+        await update.message.reply_text("⚠️ Erro ao gerar os relatórios técnicos.")
 
 # ======================================================
-# INICIALIZAÇÃO DO SERVIDOR (FASTAPI + WEBHOOK)
+# INICIALIZAÇÃO
 # ======================================================
 app = FastAPI()
 ptb_app = None
@@ -187,8 +249,6 @@ ptb_app = None
 async def startup():
     global ptb_app
     ptb_app = ApplicationBuilder().token(TOKEN).build()
-    
-    # Registro de Handlers de Comando e Mensagem
     ptb_app.add_handler(CommandHandler("start", start_command))
     ptb_app.add_handler(CommandHandler("settings", settings_command))
     ptb_app.add_handler(CommandHandler("help", help_command))
@@ -196,25 +256,15 @@ async def startup():
     ptb_app.add_handler(CommandHandler("status", status_command))
     ptb_app.add_handler(CommandHandler("language", language_manual_command))
     ptb_app.add_handler(CommandHandler("healthcheck", healthcheck_command))
-    
     ptb_app.add_handler(CallbackQueryHandler(config_callback, pattern='^set_'))
     ptb_app.add_handler(CallbackQueryHandler(language_callback, pattern='^lang_'))
-    
     ptb_app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
-
-    # Inicialização do Bot e Webhook
     await ptb_app.initialize()
-    try:
-        await ptb_app.bot.set_webhook(f"{WEBHOOK_URL}/webhook")
-        logging.info(f"Webhook definido com sucesso: {WEBHOOK_URL}/webhook")
-    except Exception as e:
-        logging.error(f"Falha ao definir Webhook: {e}")
-    
+    await ptb_app.bot.set_webhook(f"{WEBHOOK_URL}/webhook")
     await ptb_app.start()
 
 @app.post("/webhook")
 async def webhook_handler(request: Request):
-    """Endpoint que recebe as atualizações do Telegram."""
     data = await request.json()
     update = Update.de_json(data, ptb_app.bot)
     await ptb_app.process_update(update)
@@ -222,8 +272,7 @@ async def webhook_handler(request: Request):
 
 @app.get("/healthcheck")
 async def health():
-    """Verificação de integridade para o Render."""
-    return {"status": "ok", "timestamp": datetime.now().isoformat()}
+    return {"status": "ok"}
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8000))
