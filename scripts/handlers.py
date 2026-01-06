@@ -1,8 +1,11 @@
 import pytz
+import logging
 from datetime import datetime
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.constants import ParseMode
 from telegram.ext import ContextTypes
+
+# Importações customizadas do seu projeto
 from i18n import TEXTS
 from database import get_language, set_language
 
@@ -81,24 +84,33 @@ async def language_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     Manipula a escolha do idioma e imediatamente oferece a escolha da Infraestrutura.
     """
     query = update.callback_query
+    # Responde ao clique imediatamente para remover o ícone de carregamento no Telegram
     await query.answer()
     
-    lang = query.data.split("_")[1]  # extrai 'pt' ou 'en'
+    data = query.data.split("_")
+    if len(data) < 2:
+        return
+        
+    lang = data[1]  # extrai 'pt' ou 'en'
     user_id = query.from_user.id
     set_language(user_id, lang)
     
-    # Importação local para evitar erro de importação circular
-    from telegram_bot import obter_menu_infra
-    
-    # 1. Edita a mensagem anterior confirmando o idioma e removendo botões de bandeira
+    # 1. Atualiza a mensagem de idioma confirmando a escolha e removendo os botões
     await query.edit_message_text(
         text=TEXTS[lang]["language_changed"],
         parse_mode=ParseMode.MARKDOWN
     )
     
-    # 2. Envia a nova mensagem solicitando a escolha da infraestrutura
-    await query.message.reply_text(
-        text=TEXTS[lang]["infra_select"],
-        reply_markup=obter_menu_infra(),
-        parse_mode=ParseMode.MARKDOWN
-    )
+    # 2. Oferece a escolha de Infraestrutura AUTOMATICAMENTE
+    # Importação tardia (Lazy Import) para evitar o erro de circularidade com telegram_bot.py
+    try:
+        from telegram_bot import obter_menu_infra
+        
+        await query.message.reply_text(
+            text=TEXTS[lang]["infra_select"],
+            reply_markup=obter_menu_infra(),
+            parse_mode=ParseMode.MARKDOWN
+        )
+    except ImportError as e:
+        logging.error(f"Erro ao importar obter_menu_infra: {e}")
+        await query.message.reply_text("⚠️ Erro ao carregar menu de infraestrutura. Use /settings.")
