@@ -1,7 +1,6 @@
 import os 
 import sys
 import logging
-import warnings
 import joblib
 import pandas as pd
 import pytz
@@ -10,7 +9,7 @@ from pathlib import Path
 from datetime import datetime
 from sqlalchemy import create_engine
 
-# Garantir que o Python encontre os módulos locais
+# Ajuste de PATH para módulos locais
 current_dir = Path(__file__).resolve().parent
 if str(current_dir) not in sys.path:
     sys.path.append(str(current_dir))
@@ -35,19 +34,14 @@ import matplotlib.pyplot as plt
 
 import database
 from i18n import TEXTS
-from handlers import (
-    start_command, help_command, about_command, 
-    status_command, language_callback, resolve_language,
-    language_manual_command, healthcheck_command
-)
+from handlers import start_command, help_command, resolve_language
 
-# Configuração Global de Fuso Horário
+# Fuso Horário Brasília
 BR_TIMEZONE = pytz.timezone('America/Sao_Paulo')
 
 logging.basicConfig(level=logging.INFO)
-warnings.filterwarnings("ignore")
 
-# CONFIGURAÇÕES DE CAMINHOS
+# CAMINHOS
 BASE_DIR = Path(__file__).resolve().parent.parent
 LOGO_PATH = BASE_DIR / "assets" / "logo_ccbjj.png"
 PIPELINE_PATH = BASE_DIR / "models" / "pipeline_random_forest.pkl"
@@ -58,96 +52,113 @@ TOKEN = os.getenv("TELEGRAM_TOKEN")
 WEBHOOK_URL = os.getenv("WEBHOOK_URL")
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-# Inicialização de Recursos
+# Carregamento de Recursos
 pipeline = joblib.load(PIPELINE_PATH)
 features_order = joblib.load(FEATURES_PATH)
 engine = create_engine(DATABASE_URL.replace("postgres://", "postgresql://")) if DATABASE_URL else None
 df_base = pd.read_csv(DB_PATH, compression="gzip")
 
 # ======================================================
-# GERAÇÃO DE RELATÓRIOS MELHORADA
+# FUNÇÕES DE INTERFACE (MENUS)
+# ======================================================
+
+def obter_menu_infra():
+    """Retorna o teclado de escolha de infraestrutura."""
+    keyboard = [[
+        InlineKeyboardButton("📂 Modo CSV Local", callback_data='set_CSV'),
+        InlineKeyboardButton("☁️ Modo Supabase Cloud", callback_data='set_DB'),
+    ]]
+    return InlineKeyboardMarkup(keyboard)
+
+# ======================================================
+# CALLBACKS (PROCESSAMENTO DE CLIQUES)
+# ======================================================
+
+async def language_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Escolha do idioma -> Salva -> CHAMA O MENU DE MODO AUTOMATICAMENTE"""
+    query = update.callback_query
+    await query.answer()
+    
+    lang = query.data.split("_")[1] # pt ou en
+    user_id = query.from_user.id
+    database.set_language(user_id, lang)
+    
+    # Edita a mensagem confirmando idioma e já oferecendo a INFRAESTRUTURA
+    await query.edit_message_text(
+        text=f"{TEXTS[lang]['language_changed']}\n\n{TEXTS[lang]['infra_select']}",
+        reply_markup=obter_menu_infra(),
+        parse_mode=ParseMode.MARKDOWN
+    )
+
+async def config_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Escolha da Infra -> Salva -> Finaliza Onboarding"""
+    query = update.callback_query
+    await query.answer()
+    
+    mode = "CSV" if query.data == 'set_CSV' else "SUPABASE"
+    user_id = query.from_user.id
+    database.set_storage_mode(user_id, mode)
+    
+    lang = database.get_language(user_id)
+    confirm_msg = "✅ Configuração Concluída!" if lang == "pt" else "✅ Setup Complete!"
+    
+    await query.edit_message_text(
+        text=f"{confirm_msg}\n🌐 Idioma: `{lang.upper()}`\n🔌 Infra: `{mode}`\n\n{TEXTS[lang]['help']}",
+        parse_mode=ParseMode.MARKDOWN
+    )
+
+# ======================================================
+# GERAÇÃO DE PDF E GRÁFICOS
 # ======================================================
 
 def gerar_grafico_ia(risco_valor, id_obra):
-    """Gera gráfico com legenda explicativa integrada."""
     plt.style.use('ggplot')
     fig, ax = plt.subplots(figsize=(10, 5))
-    
     cor = 'green' if risco_valor <= 7 else 'orange' if risco_valor <= 10 else 'red'
     ax.barh(['Impacto Previsto'], [risco_valor], color=cor, height=0.5)
-    
     ax.set_xlim(0, max(15, risco_valor + 3))
-    ax.set_title(f'Análise de Dispersão de Risco - {id_obra}', fontsize=14, fontweight='bold')
-    ax.set_xlabel('Dias de Atraso (Projeção IA)')
+    ax.set_title(f'Análise de Risco: {id_obra}', fontsize=12, fontweight='bold')
     
-    # Legenda explicativa dentro da imagem
-    legenda_texto = (
-        "Legenda:\n"
-        "🟢 0-7 dias: Baixo Risco\n"
-        "🟡 8-10 dias: Médio Risco (Alerta)\n"
-        "🔴 >10 dias: Risco Crítico"
-    )
-    plt.figtext(0.15, -0.05, legenda_texto, fontsize=10, bbox=dict(facecolor='white', alpha=0.5))
-
     buf = io.BytesIO()
-    plt.savefig(buf, format='png', bbox_inches='tight', dpi=120)
+    plt.savefig(buf, format='png', bbox_inches='tight')
     buf.seek(0)
     plt.close(fig)
     return buf
 
-def gerar_pdf_corporativo(id_obra, risco, status, modo, graf_buf):
-    """Gera PDF com Capa, Logo, Texto Detalhado e Gráfico."""
+def gerar_pdf_final(id_obra, risco, status, modo, graf_buf):
     pdf_buf = io.BytesIO()
     c = canvas.Canvas(pdf_buf, pagesize=A4)
     width, height = A4
-    now_br = datetime.now(BR_TIMEZONE).strftime('%d/%m/%Y %H:%M:%S')
-
-    # --- 1. CAPA ---
+    
+    # Capa com Logo
     if LOGO_PATH.exists():
-        c.drawImage(str(LOGO_PATH), width/2 - 2.5*cm, height - 5*cm, width=5*cm, preserveAspectRatio=True)
+        c.drawImage(str(LOGO_PATH), 2*cm, height - 4*cm, width=3*cm, preserveAspectRatio=True)
     
-    c.setFont("Helvetica-Bold", 24)
-    c.drawCentredString(width/2, height - 8*cm, "CCBJJ ENGENHARIA")
-    c.setFont("Helvetica", 16)
-    c.drawCentredString(width/2, height - 9*cm, "Relatório Preditivo de Inteligência de Risco")
+    c.setFont("Helvetica-Bold", 18)
+    c.drawString(6*cm, height - 3*cm, "CCBJJ ENGENHARIA")
+    c.setFont("Helvetica", 12)
+    c.drawString(6*cm, height - 3.7*cm, "Relatório Preditivo de Impacto em Cronograma")
     
-    c.setFont("Helvetica-Oblique", 10)
-    c.drawCentredString(width/2, height - 10*cm, f"Emitido em: {now_br} (Horário de Brasília)")
-    
-    c.setStrokeColor(colors.black)
-    c.line(2*cm, height - 11*cm, width - 2*cm, height - 11*cm)
+    c.line(2*cm, height - 4.5*cm, width - 2*cm, height - 4.5*cm)
 
-    # --- 2. RELATÓRIO TEXTUAL DETALHADO ---
-    text = c.beginText(2*cm, height - 12.5*cm)
-    text.setFont("Helvetica-Bold", 14)
-    text.textLine("1. RESUMO EXECUTIVO DA ANÁLISE")
-    text.setFont("Helvetica", 12)
-    text.moveCursor(0, 10)
-    text.textLine(f"• Identificador da Unidade: {id_obra}")
-    text.textLine(f"• Origem dos Dados: Sistema {modo}")
-    text.textLine(f"• Classificação de Risco: {status}")
-    text.textLine(f"• Impacto Estimado em Cronograma: {risco:.2f} dias")
-    
-    text.moveCursor(0, 15)
+    # Dados
+    text = c.beginText(2*cm, height - 6*cm)
     text.setFont("Helvetica-Bold", 12)
-    text.textLine("2. METODOLOGIA APLICADA")
+    text.textLine(f"ID DA OBRA: {id_obra}")
+    text.textLine(f"FONTE DE DADOS: {modo}")
+    text.textLine(f"DATA DO RELATÓRIO: {datetime.now(BR_TIMEZONE).strftime('%d/%m/%Y %H:%M')}")
+    text.moveCursor(0, 10)
     text.setFont("Helvetica", 11)
-    text.textLine("Esta análise utiliza o algoritmo Random Forest Regressor treinado com dados")
-    text.textLine("históricos de logística, clima e produtividade da CCBJJ Engenharia.")
+    text.textLine(f"Resultado da Análise: {status}")
+    text.textLine(f"Atraso Estimado: {risco:.2f} dias")
     c.drawText(text)
 
-    # --- 3. GRÁFICO COM LEGENDA ---
+    # Imagem
     graf_buf.seek(0)
-    temp_img = f"pdf_tmp_{id_obra}.png"
-    with open(temp_img, "wb") as f:
-        f.write(graf_buf.read())
+    temp_img = f"tmp_{id_obra}.png"
+    with open(temp_img, "wb") as f: f.write(graf_buf.read())
+    c.drawImage(temp_img, 2*cm, height - 16*cm, width=17*cm, preserveAspectRatio=True)
     
-    c.drawImage(temp_img, 2*cm, 4*cm, width=17*cm, preserveAspectRatio=True)
-    
-    # Rodapé
-    c.setFont("Helvetica-Oblique", 8)
-    c.drawCentredString(width/2, 1.5*cm, "CCBJJ Engenharia & Inteligência de Risco - Uso Confidencial")
-
     c.showPage()
     c.save()
     if os.path.exists(temp_img): os.remove(temp_img)
@@ -155,94 +166,63 @@ def gerar_pdf_corporativo(id_obra, risco, status, modo, graf_buf):
     return pdf_buf
 
 # ======================================================
-# FUNÇÕES DE APOIO
+# PROCESSAMENTO DE MENSAGENS (BUSCA E IA)
 # ======================================================
 
-def obter_menu_infra():
-    keyboard = [[
-        InlineKeyboardButton("📂 Modo CSV Local", callback_data='set_CSV'),
-        InlineKeyboardButton("☁️ Modo Supabase Cloud", callback_data='set_DB'),
-    ]]
-    return InlineKeyboardMarkup(keyboard)
-
-async def settings_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    lang = resolve_language(update)
-    await update.message.reply_text(TEXTS[lang]["infra_select"], reply_markup=obter_menu_infra())
-
-async def config_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    query = update.callback_query
-    await query.answer()
-    mode = "CSV" if query.data == 'set_CSV' else "SUPABASE"
-    database.set_storage_mode(query.from_user.id, mode)
-    lang = resolve_language(update)
-    await query.edit_message_text(text=f"✅ Infraestrutura configurada: **{mode}**", parse_mode=ParseMode.MARKDOWN)
-
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    id_obra = update.message.text.strip().upper()
+    user_input = update.message.text.strip().upper()
     user_id = update.effective_user.id
     lang = database.get_language(user_id)
-    modo_pref = database.get_storage_mode(user_id)
+    mode = database.get_storage_mode(user_id)
 
-    # Busca de dados
-    if modo_pref == "SUPABASE" and engine:
+    # Busca flexível (Case Insensitive e Parcial)
+    if mode == "SUPABASE" and engine:
         try:
-            df = pd.read_sql(f"SELECT * FROM dashboard_obras WHERE id_obra = '{id_obra}'", engine)
-            modo_real = "SUPABASE"
+            df = pd.read_sql(f"SELECT * FROM dashboard_obras WHERE UPPER(id_obra) LIKE '%%{user_input}%%'", engine)
         except:
-            df = df_base[df_base["id_obra"] == id_obra]
-            modo_real = "CSV (Fallback)"
+            df = df_base[df_base["id_obra"].str.upper().str.contains(user_input, na=False)]
     else:
-        df = df_base[df_base["id_obra"] == id_obra]
-        modo_real = "CSV"
+        df = df_base[df_base["id_obra"].str.upper().str.contains(user_input, na=False)]
 
     if df.empty:
-        await update.message.reply_text(f"❌ Obra `{id_obra}` não encontrada no modo {modo_real}.")
+        await update.message.reply_text(f"❌ ID `{user_input}` não localizado ({mode}).")
         return
 
-    wait = await update.message.reply_text("🤖 **Iniciando Processamento de IA CCBJJ...**")
+    wait_msg = await update.message.reply_text("⏳ **Gerando Relatório de Engenharia...**", parse_mode=ParseMode.MARKDOWN)
 
     try:
-        # Predição
+        # IA
         X = df.reindex(columns=features_order, fill_value=0)
         risco = float(pipeline.predict(X).mean())
         status = "🔴 CRÍTICO" if risco > 10 else "🟡 ALERTA" if risco > 7 else "🟢 NORMAL"
+        id_real = df.iloc[0]['id_obra']
+
+        # Texto Detalhado
+        relatorio = (
+            f"🏗️ **RELATÓRIO CCBJJ**\n"
+            f"━━━━━━━━━━━━━━━━━━━━\n"
+            f"📍 **Obra:** `{id_real}`\n"
+            f"🔌 **Dados:** `{mode}`\n"
+            f"🚦 **Status:** {status}\n"
+            f"⏳ **Impacto:** `{risco:.2f} dias`\n"
+            f"━━━━━━━━━━━━━━━━━━━━"
+        )
+        await update.message.reply_text(relatorio, parse_mode=ParseMode.MARKDOWN)
+
+        # Gráfico e PDF
+        graf_buf = gerar_grafico_ia(risco, id_real)
+        await update.message.reply_photo(photo=graf_buf)
         
-        # 1. Relatório Texto Detalhado
-        relatorio_texto = (
-            f"🏗️ **RELATÓRIO DE ANÁLISE PREDITIVA**\n"
-            f"━━━━━━━━━━━━━━━━━━━━\n"
-            f"🆔 **ID da Obra:** `{id_obra}`\n"
-            f"📡 **Fonte de Dados:** `{modo_real}`\n"
-            f"📅 **Data/Hora:** `{datetime.now(BR_TIMEZONE).strftime('%d/%m/%Y %H:%M')}`\n"
-            f"━━━━━━━━━━━━━━━━━━━━\n"
-            f"🧠 **Diagnóstico da IA:**\n"
-            f"O modelo Random Forest detectou uma tendência de desvio no cronograma original. "
-            f"Com base nas variáveis de infraestrutura e histórico, o impacto projetado é de:\n\n"
-            f"⏳ **Atraso Estimado:** `{risco:.2f} dias`\n"
-            f"🚦 **Classificação de Risco:** {status}\n\n"
-            f"━━━━━━━━━━━━━━━━━━━━\n"
-            f"_Aguarde o gráfico e o documento PDF oficial..._"
-        )
-        await update.message.reply_text(relatorio_texto, parse_mode=ParseMode.MARKDOWN)
-
-        # 2. Gráfico
-        graf_buf = gerar_grafico_ia(risco, id_obra)
-        await update.message.reply_photo(photo=graf_buf, caption="📊 **Visualização Técnica de Dispersão de Risco**", parse_mode=ParseMode.MARKDOWN)
-
-        # 3. PDF
-        pdf_buf = gerar_pdf_corporativo(id_obra, risco, status, modo_real, graf_buf)
-        await update.message.reply_document(
-            document=InputFile(pdf_buf, filename=f"CCBJJ_Relatorio_{id_obra}.pdf"),
-            caption="📄 **Relatório Oficial de Engenharia (PDF)**"
-        )
-        await wait.delete()
-
+        pdf = gerar_pdf_final(id_real, risco, status, mode, graf_buf)
+        await update.message.reply_document(document=InputFile(pdf, filename=f"CCBJJ_{id_real}.pdf"))
+        
+        await wait_msg.delete()
     except Exception as e:
-        logging.error(f"Erro: {e}")
-        await update.message.reply_text("⚠️ Ocorreu um erro ao gerar o relatório detalhado.")
+        logging.error(e)
+        await update.message.reply_text("⚠️ Erro no processamento.")
 
 # ======================================================
-# EXECUÇÃO FASTAPI
+# APP STARTUP
 # ======================================================
 app = FastAPI()
 ptb_app = None
@@ -251,10 +231,11 @@ ptb_app = None
 async def startup():
     global ptb_app
     ptb_app = ApplicationBuilder().token(TOKEN).build()
+    
     ptb_app.add_handler(CommandHandler("start", start_command))
-    ptb_app.add_handler(CommandHandler("settings", settings_command))
-    ptb_app.add_handler(CallbackQueryHandler(config_callback, pattern='^set_'))
+    ptb_app.add_handler(CommandHandler("help", help_command))
     ptb_app.add_handler(CallbackQueryHandler(language_callback, pattern='^lang_'))
+    ptb_app.add_handler(CallbackQueryHandler(config_callback, pattern='^set_'))
     ptb_app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     
     await ptb_app.initialize()
