@@ -65,10 +65,12 @@ Este é um projeto de Machine Learning aplicado ao setor de construção civil, 
 
 • Para desenvolver esse projeto usamos: Python, Streamlit, Render Free, Supabase Free, SQL, e o Bot do Telegram.
 
-• Streamlit:
+• **Streamlit**: https://xsczxui9hscbsfpucq38yu.streamlit.app/
 
+• **Bot do Telegram**: https://t.me/CCbjj_risk_bot
 
 ---
+
 
 🎯 **2. Objetivo do Projeto — Por que ele existe?**
 
