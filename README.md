@@ -1,3 +1,47 @@
+<p align="center">
+  <img src="assets/logo_ccbjj.png" alt="Logo CCBJJ Engenharia" width="200"/>
+</p>
+
+# 🏗️ Predição de Risco de Atraso em Obras
+
+Este projeto aplica técnicas de **Ciência de Dados** e **Inteligência Artificial** para prever riscos de atraso em obras de engenharia civil.  
+O sistema utiliza modelos de Machine Learning (Random Forest) e integrações com **Supabase** e **Render** para análise preditiva em tempo real.
+
+## 🚀 Funcionalidades
+- 📊 Predição de impacto em cronograma
+- 📝 Relatórios técnicos em PDF com gráficos
+- 🌐 Integração com Supabase (Postgres) e CSV local
+- 🤖 Bot do Telegram para interação direta
+
+## 📂 Estrutura
+- `scripts/` → Código principal (bot, handlers, i18n, database)
+- `models/` → Pipeline de Machine Learning e metadados
+- `assets/` → Logo e recursos visuais
+- `data/` → Base consolidada de obras
+
+## 🛠️ Tecnologias
+- Python 3.10+
+- FastAPI
+- python-telegram-bot v20+
+- SQLAlchemy
+- Pandas / Joblib
+- ReportLab / Matplotlib
+
+## 📌 Exemplo de Uso
+1. Inicie o bot no Telegram com `/start`
+2. Selecione idioma e modo de dados (CSV ou Supabase)
+3. Digite o ID da obra (ex: `CCBJJ-100`)
+4. Receba relatório detalhado, gráfico e PDF corporativo
+
+---
+
+<p align="center">
+  <i>Desenvolvido por Sergio Luiz dos Santos • CCBJJ Engenharia</i>
+</p>
+
+---
+
+
 ## 🏗️ Simulador de Riscos Logísticos - CCbjj Engenharia & Inteligência de Risco
   *Disciplina, estratégia e dados aplicados à engenharia civil.*
 
