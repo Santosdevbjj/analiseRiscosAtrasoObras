@@ -1,6 +1,6 @@
 
 <p align="center">
-  <img src="assets/logo_ccbjj.png" alt="Logo CCBJJ Engenharia" width="50"/>
+  <img src="assets/logo_ccbjj.png" alt="Logo CCBJJ Engenharia" width="25"/>
 </p>
 
 # 🏗️ Predição de Risco de Atraso em Obras
