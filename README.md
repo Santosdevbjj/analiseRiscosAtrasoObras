@@ -1,24 +1,11 @@
-## 🏗️ **Predição de Risco de Atraso em Obras**
+## 🏗️ Predição de Risco de Atraso em Obras
 
-**CCbjj Engenharia & Inteligência de Risco**
+**Plataforma Analítica de Inteligência Operacional — CCbjj Engenharia & Inteligência de Risco**
 
 
 *Disciplina, estratégia e dados aplicados à engenharia civil.*
 
-> Projeto de Ciência de Dados e Analytics Engineering aplicado à construção civil, com foco em mitigação de riscos operacionais, redução de atrasos e suporte à tomada de decisão estratégica.
-
-
-
-
----
-
-📌 **Visão Geral**
-
-Este projeto tem como objetivo prever o risco de atraso em obras de construção civil, considerando fatores operacionais, climáticos, logísticos e de fornecedores.
-
-A solução simula um ambiente real de uma empresa de engenharia, utilizando uma arquitetura de dados organizada, modelagem analítica, Machine Learning e uma camada de produto acessível por Streamlit e Bot do Telegram.
-
-O foco do projeto vai além do modelo estatístico, priorizando valor de negócio, governança de dados e capacidade de consumo por usuários não técnicos.
+> Projeto de Ciência de Dados e Analytics Engineering aplicado à construção civil, focado em antecipação de riscos, redução de atrasos e suporte à decisão executiva, com entrega em formato de produto de dados.
 
 
 ---
@@ -30,219 +17,260 @@ Todos os dados, nomes de empresas e cenários apresentados neste projeto são fi
 Este projeto não possui vínculo com nenhuma empresa real de engenharia e não utiliza dados confidenciais.
 
 
+
 ---
 
-🎯 **Problema de Negócio**
+1️⃣ **Identidade do Projeto**
 
-Atrasos em obras geram impactos diretos como:
+**Objetivo:**
+Antecipar riscos de atraso em obras, permitindo ações preventivas antes que impactos financeiros e operacionais ocorram.
+
+**Público-alvo:**
+Gestores de obras, PMOs, diretoria operacional e áreas de planejamento.
+
+**Entrega:**
+Modelo preditivo + Bot no Telegram + Simulador Streamlit + Relatório PDF corporativo.
+
+
+---
+
+2️⃣ **Problema de Negócio**
+
+Atrasos em obras geram impactos diretos:
 
 Multas contratuais
 
-Aumento de custos operacionais
+Replanejamento forçado
 
-Quebra de cronograma
+Aumento de custos indiretos
 
-Insatisfação de clientes e investidores
-
-
-O desafio do negócio é antecipar quais obras apresentam maior risco de atraso, permitindo ações preventivas como:
-
-Replanejamento de etapas
-
-Substituição de fornecedores críticos
-
-Ajustes logísticos
-
-Redistribuição de recursos
+Perda de credibilidade com clientes e investidores
 
 
-👉 **Pergunta central do projeto:**
+Apesar de possuir dados históricos, a empresa não conseguia antecipar riscos com antecedência suficiente para agir.
 
-> Quais obras apresentam maior risco de atraso e onde a empresa deve agir primeiro?
+👉 **Pergunta central:**
+
+> Quais obras apresentam maior risco de atraso e onde devemos agir primeiro?
 
 
 
 
 ---
 
-🧭 **Contexto Operacional**
+3️⃣ **Contexto Atual e Baseline**
 
-A CCbjj Engenharia (empresa fictícia) possui dados históricos envolvendo:
+📉 Situação Anterior (Baseline)
 
-Etapas de execução da obra
+Decisões baseadas em média histórica
 
-Condições climáticas
+Erro médio de previsão ≈ 12 dias
 
-Tipo de solo
-
-Fornecedores e materiais
-
-Orçamento estimado
+Atuação reativa, após o atraso ocorrer
 
 
-Apesar da existência desses dados, não havia uma visão analítica integrada, nem mecanismos de simulação de risco em tempo hábil para decisão executiva.
+📈 **Proposta da Solução**
 
-Este projeto preenche essa lacuna ao transformar dados operacionais em insights acionáveis.
+Modelo preditivo orientado a risco
+
+Redução da incerteza para menos de 5 dias
+
+Atuação preventiva, antes do impacto financeiro
 
 
----
-
-🧠 **Premissas da Análise**
-
-Os dados utilizados são sintéticos, porém modelados com comportamento realista do setor
-
-O risco de atraso é tratado como um problema operacional e preditivo
-
-Variáveis externas (ex.: clima) são fatores de risco, não determinantes absolutos
-
-O objetivo do modelo é apoio à decisão, não previsão perfeita
-
+👉 O projeto supera o baseline histórico, reduzindo drasticamente a variabilidade e o risco operacional.
 
 
 ---
 
-🧱 **Arquitetura de Dados (Visão Profissional)**
+4️⃣ **Arquitetura de Dados (Visão de Analytics Engineer)**
 
-O projeto segue uma arquitetura analítica em camadas, semelhante à adotada em ambientes corporativos.
+Arquitetura organizada em camadas analíticas, simulando ambiente corporativo real:
 
 Supabase
 ├── raw
-│   ├── atividadesccbjj        (dimensão de etapas da obra)
-│   ├── fornecedoresccbjj      (dimensão de fornecedores)
-│   ├── climaccbjj             (dimensão climática)
+│   ├── atividadesccbjj        # Etapas da obra
+│   ├── fornecedoresccbjj      # Fornecedores e ratings
+│   ├── climaccbjj             # Dados climáticos
 │
 ├── analytics
-│   └── dashboard_obras        (tabela fato analítica consolidada)
+│   └── dashboard_obras        # Tabela fato analítica consolidada
 │
 └── products
-    └── base_consulta_botccbjj (camada de consumo para app e bot)
+    └── base_consulta_botccbjj # Camada de consumo (Bot / Streamlit)
 
-Essa separação garante:
+Benefícios:
 
-Governança de dados
+Governança
 
 Escalabilidade
 
-Facilidade de manutenção
+Reutilização
 
-Consumo eficiente por BI, Streamlit e APIs
-
-
-
----
-
-📊 **Tabela Analítica Principal**
-
-Tabela: dashboard_obras (Supabase)
-
-Principais variáveis:
-
-risco_etapa → indicador central de decisão
-
-rating_confiabilidade → desempenho do fornecedor
-
-taxa_insucesso_fornecedor → histórico operacional
-
-nivel_chuva → risco climático
-
-tipo_solo → risco geotécnico
-
-orcamento_estimado → exposição financeira
-
-
-Essa tabela funciona como uma tabela fato de risco operacional, preparada para:
-
-Análises SQL
-
-Machine Learning
-
-Simulações
-
-Produtos de dados
+Consumo desacoplado da origem
 
 
 
 ---
 
-🔍 **Estratégia da Solução Analítica**
+5️⃣ **Estratégia da Solução (Pipeline Analítico)**
 
-1️⃣ Entendimento do problema de negócio
-2️⃣ Consolidação e padronização dos dados
-3️⃣ Análise exploratória e validação de hipóteses
-4️⃣ Engenharia de atributos orientada a risco
-5️⃣ Treinamento do modelo preditivo
-6️⃣ Avaliação com foco em impacto operacional
-7️⃣ Criação de camada de consumo para usuários finais
+1. Entendimento da dor do negócio
+
+
+2. Consolidação e padronização dos dados
+
+
+3. Análise exploratória (EDA)
+
+
+4. Engenharia de atributos orientada a risco
+
+
+5. Treinamento do modelo preditivo
+
+
+6. Avaliação técnica + impacto de negócio
+
+
+7. Disponibilização em produto acessível
+
+
 
 
 ---
 
-🤖 **Modelagem Preditiva**
+6️⃣ **Principais Insights Gerenciais** 💡
+
+A análise exploratória revelou padrões relevantes:
+
+🔹 O Rating do Fornecedor tem impacto ~3x maior no atraso do que o Nível de Chuva em etapas de acabamento
+
+🔹 Fornecedores com histórico de baixa confiabilidade amplificam atrasos mesmo em cenários climáticos favoráveis
+
+🔹 Obras com orçamento elevado apresentam maior sensibilidade a atrasos acumulados
+
+🔹 Clima atua como fator agravante, mas raramente é a causa raiz isolada
+
+
+👉 Esses insights direcionam ações práticas, como renegociação, substituição ou reforço de fornecedores críticos.
+
+
+---
+
+7️⃣ **Performance do Modelo (Técnica)**
 
 Algoritmo: RandomForestRegressor
 
-Justificativa da escolha:
+Justificativa:
 
 Captura relações não lineares
 
-Robustez a ruído operacional
+Robustez a ruídos operacionais
 
-Boa performance com variáveis mistas
-
-Adequado para cenários reais de engenharia
+Adequado para dados heterogêneos do mundo real
 
 
 
-O modelo foi salvo e versionado para uso em produção e simulações.
-
-
----
-
-📈 **Métricas do Modelo**
+📊 **Métricas**
 
 Métrica	Valor	Interpretação
 
 MAE	4,97 dias	Erro médio inferior a 5 dias
-R²	0,41	Explicação consistente para um ambiente volátil
-Economia estimada	R$ 248.400 / ano	Multas evitadas por ação preventiva
+R²	0,41	Boa explicação em ambiente volátil
 
 
-👉 O foco está no valor prático da previsão, não apenas na métrica estatística.
-
-
----
-
-🖥️ **Produto Final**
-
-📊 Simulador interativo em Streamlit
-
-🤖 Consulta rápida via Bot do Telegram
-
-🗄️ Base analítica governada no Supabase
-
-
-Esses componentes permitem que gestores não técnicos utilizem inteligência preditiva no dia a dia.
+👉 Resultado consistente para um cenário real de engenharia.
 
 
 ---
 
-📚 **Principais Aprendizados**
+8️⃣ **Performance de Negócio** 💰
 
-Importância da separação entre dados analíticos e dados de consumo
+Indicador	Resultado
 
-Modelagem de dados orientada a decisão
+Redução de incerteza	~60%
+Multas evitadas (estimado)	R$ 248.400 / ano
+Tomada de decisão	Preventiva
 
-Conversão de métricas técnicas em impacto financeiro
 
-Comunicação clara é parte essencial do trabalho com dados
+O foco não é apenas prever, mas agir antes do problema ocorrer.
+
+
+---
+
+9️⃣ **Produto Final (Em Produção)**
+
+🖥️ **Bot no Telegram**
+
+Seleção de idioma (PT/EN)
+
+Escolha da fonte de dados (CSV local ou Supabase)
+
+Consulta por ID da obra
+
+Retorno com:
+
+Status de risco
+
+Gráfico explicativo
+
+Relatório PDF corporativo
+
+
+
+📊 **Simulador Streamlit**
+
+Interface executiva
+
+Análise rápida de risco
+
+Apoio à decisão gerencial
 
 
 
 ---
 
-🚀 **Próximos Passos**
+▶️ **Como Executar o Projeto**
 
-Integração com dados climáticos reais (API)
+Pré-requisitos
+
+Python 3.10+
+
+Conta no Telegram (para o bot)
+
+Opcional: Supabase configurado
+
+
+Instalação
+
+pip install -r requirements.txt
+
+Execução do Bot
+
+python scripts/telegram_bot.py
+
+Exemplo de Uso
+
+1. Inicie o bot no Telegram com /start
+
+
+2. Selecione idioma e modo de dados (CSV ou Supabase)
+
+
+3. Digite o ID da obra (ex: CCBJJ-100)
+
+
+4. Receba relatório detalhado, gráfico e PDF corporativo
+
+
+
+
+---
+
+🔮 **Próximos Passos**
+
+Integração com API climática real
 
 Monitoramento contínuo do modelo
 
@@ -254,33 +282,22 @@ Expansão do impacto financeiro detalhado
 
 ---
 
-🎤 **Como Explicar Este Projeto em Entrevista**
-
-> “Estruturei os dados em camadas analíticas, criei uma tabela fato consolidada, desenvolvi um modelo preditivo e disponibilizei os resultados em um simulador e um bot. O foco foi apoiar decisões operacionais e reduzir risco financeiro, não apenas treinar um modelo.”
-
-
-
-
----
-
 🧾 **Conclusão:**
 
 Este projeto demonstra:
 
-✔ Capacidade técnica em Ciência de Dados
-✔ Visão de Analytics Engineering
-✔ Entendimento profundo do negócio de engenharia
-✔ Maturidade para atuar em ambientes reais
+✔ Visão de Analytics Engineer
+✔ Capacidade de transformar dados em decisão
+✔ Entrega de produto, não apenas modelo
+✔ Comunicação clara entre técnico e negócio
 
-👉 Não é apenas um projeto de Machine Learning. É uma solução de dados aplicada ao negócio.
-
-
+👉 Não é um projeto acadêmico. É uma solução aplicada.
 
 
 ---
 
-👤 **Autor:**
 
+**Autor:**
 Sergio Santos 
 
 ---
@@ -294,6 +311,8 @@ Sergio Santos
 [![LinkedIn Sérgio Santos](https://img.shields.io/badge/LinkedIn-Sérgio_Santos-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/santossergioluiz) 
 
 
+
 ---
+
 
 
