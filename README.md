@@ -1,689 +1,283 @@
+🏗️ **Predição de Risco de Atraso em Obras**
 
-<p align="center">
-  <img src="assets/logo_ccbjj.png" alt="Logo CCBJJ Engenharia" width="25"/>
-</p>
+**CCbjj Engenharia & Inteligência de Risco**
 
-# 🏗️ Predição de Risco de Atraso em Obras
+> Projeto de Ciência de Dados e Analytics Engineering aplicado à construção civil, com foco em mitigação de riscos operacionais, redução de atrasos e suporte à tomada de decisão estratégica.
 
----
----
-
-<p align="center">
-  <img src="assets/logo_ccbjj.png" alt="Logo CCBJJ Engenharia" width="200"/>
-</p>
-
-# 🏗️ Predição de Risco de Atraso em Obras
-
-Este projeto aplica técnicas de **Ciência de Dados** e **Inteligência Artificial** para prever riscos de atraso em obras de engenharia civil.  
-O sistema utiliza modelos de Machine Learning (Random Forest) e integrações com **Supabase** e **Render** para análise preditiva em tempo real.
-
-## 🚀 Funcionalidades
-- 📊 Predição de impacto em cronograma
-- 📝 Relatórios técnicos em PDF com gráficos
-- 🌐 Integração com Supabase (Postgres) e CSV local
-- 🤖 Bot do Telegram para interação direta
-
-## 📂 Estrutura
-- `scripts/` → Código principal (bot, handlers, i18n, database)
-- `models/` → Pipeline de Machine Learning e metadados
-- `assets/` → Logo e recursos visuais
-- `data/` → Base consolidada de obras
-
-## 🛠️ Tecnologias
-- Python 3.10+
-- FastAPI
-- python-telegram-bot v20+
-- SQLAlchemy
-- Pandas / Joblib
-- ReportLab / Matplotlib
-
-## 📌 Exemplo de Uso
-1. Inicie o bot no Telegram com `/start`
-2. Selecione idioma e modo de dados (CSV ou Supabase)
-3. Digite o ID da obra (ex: `CCBJJ-100`)
-4. Receba relatório detalhado, gráfico e PDF corporativo
-
----
-
-<p align="center">
-  <i>Desenvolvido por Sergio Luiz dos Santos • CCBJJ Engenharia</i>
-</p>
-
----
----
-
-
-
-## 🏗️ Simulador de Riscos Logísticos - CCbjj Engenharia & Inteligência de Risco
-  *Disciplina, estratégia e dados aplicados à engenharia civil.*
 
 
 
 ---
 
-Projeto de Ciência de Dados - Estudo sobre Construção Civil de Engenharia
+📌 **Visão Geral**
 
- **Descrição**
-Este projeto foi desenvolvido como parte de um estudo técnico/portfólio pessoal.  
+Este projeto tem como objetivo prever o risco de atraso em obras de construção civil, considerando fatores operacionais, climáticos, logísticos e de fornecedores.
 
-O objetivo é analisar e demonstrar práticas de engenharia, construção civil e gestão de projetos, tomando como referência uma empresa **de Engenharia de Construção Civil**.
+A solução simula um ambiente real de uma empresa de engenharia, utilizando uma arquitetura de dados organizada, modelagem analítica, Machine Learning e uma camada de produto acessível por Streamlit e Bot do Telegram.
 
-⚠️ **Disclaimer:**  
-
-Todos os nomes de produtos, empresas e sistemas mencionados neste projeto
-são fictícios e criados exclusivamente para fins acadêmicos e de portfólio.
-
-Este projeto é apenas um exercício acadêmico e de portfólio de Ciência de Dados.
-
-Não possui qualquer vínculo oficial com qualquer empresa de Engenharia de Construção Civil
-Todos os nomes e referências utilizadas são Fictícios e são utilizados apenas para fins de estudo.
-
-A inspiração para esse projeto veio do Bootcamp que eu concluí recentemente: Santander 2025 - Ciência de Dados com Python, ministrado pela DIO. O objetivo é colocar o conhecimento adquirido na prática, seguindo o conceito de lifelongLearning.
-
-
----
-   
-<p align="center">
-  <img src="reports/figures/Previsao_Real.png" width="800" title="Interface do Simulador CCbjj">
-</p> 
-
-
-Transformando dados operacionais em previsões acionáveis para reduzir multas e aumentar satisfação do cliente
-
----
-
-**Atenção:** Barra de controle do simulador a esquerda. Na seção 6 ative o simulador 
-
-
-
-<p align="center">
-  <img src="reports/figures/Slider_Controle03.png" width="800" title="Interface do Simulador CCbjj">
-</p> 
-
+O foco do projeto vai além do modelo estatístico, priorizando valor de negócio, governança de dados e capacidade de consumo por usuários não técnicos.
 
 
 ---
 
+⚠️ **Disclaimer**
 
+Todos os dados, nomes de empresas e cenários apresentados neste projeto são fictícios, criados exclusivamente para fins acadêmicos e de portfólio.
 
-🌍 **1. Visão Geral — O que é este projeto?**
-
-Este é um projeto de Machine Learning aplicado ao setor de construção civil, cujo objetivo é prever quantos dias uma obra tem risco de atrasar,permitindo atuação antecipada da diretoria, engenharia e suprimentos.
-
-• Capacidade de entender um problema de negócio
-
-• Transformar dados brutos em insights
-
-• Construir e explicar decisões técnicas
-
-• Desenvolver um modelo de previsão aplicável na prática
-
-
-• Para desenvolver esse projeto usamos: Python, Streamlit, Render Free, Supabase Free, SQL, e o Bot do Telegram.
-
-• **Streamlit**: https://xsczxui9hscbsfpucq38yu.streamlit.app/
-
-• **Bot do Telegram**: https://t.me/CCbjj_risk_bot
-
----
-
-
-🎯 **2. Objetivo do Projeto — Por que ele existe?**
-
-O projeto foi criado para atender a uma necessidade real de negócio:
-
-👉 Atrasos na entrega de imóveis geram multas contratuais, perda de confiança e impacto na reputação da construtora.
-
-**Com este projeto, busco**
-
-• Analisar dados com visão operacional
-
-• Construir um pipeline simples de ML com impacto direto no negócio
-
-• Comunicar resultados de forma clara para diretoria, engenharia, obras e suprimentos
-
-
-**Atrasos na entrega de imóveis geram:**
-
-• Multas contratuais
-
-• Insatisfação dos clientes 
-
-• Danos reputacionais
-
-• Perda de receita recorrente
-
-👉 Este projeto busca antecipar o risco antes do atraso ocorrer, sugerindo ações preventivas.
+Este projeto não possui vínculo com nenhuma empresa real de engenharia e não utiliza dados confidenciais.
 
 
 ---
 
-🧩 **3. Contexto — O Problema na Vida Real**
+🎯 **Problema de Negócio**
 
-Dentro da operação, diversos fatores interferem nos prazos:
+Atrasos em obras geram impactos diretos como:
 
-• Variável	Impacto
+Multas contratuais
 
-• Fornecedores	atraso na entrega de materiais
-Chuvas	paralisação de obra
+Aumento de custos operacionais
 
-• Equipe	baixa disponibilidade de mão de obra
+Quebra de cronograma
 
-• Tipo da obra	empreendimentos maiores têm maior risco
-
-• Logística de materiais	distâncias e falhas na rota
-
-• Hoje, esses dados existem — mas não são usados para tomada de decisão predictiva.
-
-• Este projeto resolve exatamente essa lacuna.
+Insatisfação de clientes e investidores
 
 
+O desafio do negócio é antecipar quais obras apresentam maior risco de atraso, permitindo ações preventivas como:
 
----
+Replanejamento de etapas
 
-📏 **4. Premissas da Análise**
+Substituição de fornecedores críticos
 
-• Para garantir consistência, adotamos:
+Ajustes logísticos
 
-• Dataset contém histórico realista de obras e cronogramas
+Redistribuição de recursos
 
-• A métrica de atraso é medida em dias
 
-• Dados faltantes foram tratados com imputação ou remoção
+👉 **Pergunta central do projeto:**
 
-• O objetivo é explicação para negócio + previsibilidade
-
-• O foco é a utilidade preditiva e explicabilidade para o negócio.
+> Quais obras apresentam maior risco de atraso e onde a empresa deve agir primeiro?
 
 
 
 
 ---
 
-🧠 **5. Decisões Técnicas — Como e por quê foi construído**
+🧭 **Contexto Operacional**
+
+A CCbjj Engenharia (empresa fictícia) possui dados históricos envolvendo:
+
+Etapas de execução da obra
+
+Condições climáticas
+
+Tipo de solo
+
+Fornecedores e materiais
+
+Orçamento estimado
 
 
-<p align="center">
-  <img src="reports/figures/Analise_Sensibilidade.png" width="800" title="Interface do Simulador CCbjj">
-</p>
+Apesar da existência desses dados, não havia uma visão analítica integrada, nem mecanismos de simulação de risco em tempo hábil para decisão executiva.
+
+Este projeto preenche essa lacuna ao transformar dados operacionais em insights acionáveis.
 
 
+---
 
-• **Componente,	Escolha,	Motivação:**
+🧠 **Premissas da Análise**
 
-• Linguagem	Python 3.12	Ecossistema rico para Data Science
+Os dados utilizados são sintéticos, porém modelados com comportamento realista do setor
 
-• Frameworks	Pandas, NumPy, Scikit-Learn	Manipulação e modelagem
+O risco de atraso é tratado como um problema operacional e preditivo
 
-• Modelo	RandomForestRegressor	Captura relações não-lineares e heterogeneidade entre obras
+Variáveis externas (ex.: clima) são fatores de risco, não determinantes absolutos
 
-• Alternativas avaliadas	Regressão Linear, XGBoost	Linear não performou bem — Ruído no comportamento do atraso
-
-• Visualização	Matplotlib e Seaborn	Clareza para explicar insights para áreas de negócio
-
-• Deploy futuro	Streamlit (opcional)	Possibilidade de demo executável para diretoria
-
-
-> 🧠 **Nota técnica:** O modelo foi treinado com dados normalizados e codificados (One-Hot Encoding). Para usar .predict() no mundo real, o pipeline precisa aplicar os mesmos preprocessadores usados no treinamento.
-
-> O modelo em produção foi otimizado para lidar com a dimensionalidade do treinamento via alinhamento de matrizes (padding), garantindo que a inferência no Streamlit seja rápida e estável.
-
+O objetivo do modelo é apoio à decisão, não previsão perfeita
 
 
 
 ---
 
-🔧 **6. Como Executar o Projeto**
+🧱 **Arquitetura de Dados (Visão Profissional)**
 
-**• Pré-requisitos:**
+O projeto segue uma arquitetura analítica em camadas, semelhante à adotada em ambientes corporativos.
 
-• python 3.12
+Supabase
+├── raw
+│   ├── atividadesccbjj        (dimensão de etapas da obra)
+│   ├── fornecedoresccbjj      (dimensão de fornecedores)
+│   ├── climaccbjj             (dimensão climática)
+│
+├── analytics
+│   └── dashboard_obras        (tabela fato analítica consolidada)
+│
+└── products
+    └── base_consulta_botccbjj (camada de consumo para app e bot)
 
+Essa separação garante:
 
-[![Streamlit App](https://img.shields.io/badge/Executar_Simulador-Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://xsczxui9hscbsfpucq38yu.streamlit.app/)
+Governança de dados
 
+Escalabilidade
 
+Facilidade de manutenção
 
-• **Rodar o Simulador Interativo:**
-
-streamlit run scripts/app.py
-
-
-
-• **instalar dependências**
-
-pip install -r requirements.txt
-
-• **Rodar o notebook:**
-
- • **Abrir notebook e explorar analise**
- 
-• jupyter notebook
-Notebooks/analise_atrasos.ipynb
-
- • **Rodar simulador**
- 
-python scripts/simulador_de_risco.py
-
-
-• Rodar inferência com modelo salvo:
-
-import joblib
-import pandas as pd
-
-model=joblib.load("models/modelo_random_forest.pkl")
-
-# ⚠ dados precisam estar transformados conforme pipeline original!
-X = preprocessador.transform(df_novos_dados)
-
-previsoes = model.predict(X)
-print(previsoes)
-
-
-## ​ 📱 Acesso Mobile:
-
-Além do simulador web, a diretoria recebe alertas e faz consultas rápidas via Bot do Telegram, integrando a inteligência de dados diretamente no campo de obras. O projeto esta acessivel pelo Telegram.
+Consumo eficiente por BI, Streamlit e APIs
 
 
 
 ---
 
-📊 **7. Estratégia da Solução**
+📊 **Tabela Analítica Principal**
+
+Tabela: dashboard_obras (Supabase)
+
+Principais variáveis:
+
+risco_etapa → indicador central de decisão
+
+rating_confiabilidade → desempenho do fornecedor
+
+taxa_insucesso_fornecedor → histórico operacional
+
+nivel_chuva → risco climático
+
+tipo_solo → risco geotécnico
+
+orcamento_estimado → exposição financeira
+
+
+Essa tabela funciona como uma tabela fato de risco operacional, preparada para:
+
+Análises SQL
+
+Machine Learning
+
+Simulações
+
+Produtos de dados
+
+
+
+---
+
+🔍 **Estratégia da Solução Analítica**
 
 1️⃣ Entendimento do problema de negócio
+2️⃣ Consolidação e padronização dos dados
+3️⃣ Análise exploratória e validação de hipóteses
+4️⃣ Engenharia de atributos orientada a risco
+5️⃣ Treinamento do modelo preditivo
+6️⃣ Avaliação com foco em impacto operacional
+7️⃣ Criação de camada de consumo para usuários finais
 
-2️⃣ Exploração dos dados (tipos, nulos, distribuições)
 
-3️⃣ Análise descritiva (estatísticas, % atraso, padrões)
+---
 
-4️⃣ Segmentação (chuva, fornecedor, porte, região)
+🤖 **Modelagem Preditiva**
 
-5️⃣ Treinamento do Random Forest
+Algoritmo: RandomForestRegressor
 
-6️⃣ Avaliação de erro e explicabilidade
+Justificativa da escolha:
 
-7️⃣ Geração de visualizações para o negócio
+Captura relações não lineares
+
+Robustez a ruído operacional
+
+Boa performance com variáveis mistas
+
+Adequado para cenários reais de engenharia
+
+
+
+O modelo foi salvo e versionado para uso em produção e simulações.
+
+
+---
+
+📈 **Métricas do Modelo**
+
+Métrica	Valor	Interpretação
+
+MAE	4,97 dias	Erro médio inferior a 5 dias
+R²	0,41	Explicação consistente para um ambiente volátil
+Economia estimada	R$ 248.400 / ano	Multas evitadas por ação preventiva
+
+
+👉 O foco está no valor prático da previsão, não apenas na métrica estatística.
+
+
+---
+
+🖥️ **Produto Final**
+
+📊 Simulador interativo em Streamlit
+
+🤖 Consulta rápida via Bot do Telegram
+
+🗄️ Base analítica governada no Supabase
+
+
+Esses componentes permitem que gestores não técnicos utilizem inteligência preditiva no dia a dia.
+
+
+---
+
+📚 **Principais Aprendizados**
+
+Importância da separação entre dados analíticos e dados de consumo
+
+Modelagem de dados orientada a decisão
+
+Conversão de métricas técnicas em impacto financeiro
+
+Comunicação clara é parte essencial do trabalho com dados
 
 
 
 ---
 
-🔍 **8. Insights Encontrados**
+🚀 **Próximos Passos**
 
+Integração com dados climáticos reais (API)
 
-• Obras com fornecedores de rating baixo concentram maior atraso
+Monitoramento contínuo do modelo
 
-• Dias com chuva elevaram o atraso médio em +38%
+Alertas automáticos de risco
 
-• Empreendimentos grandes têm +62% probabilidade de atraso
-
-• Obras com logística acima de 25 km apresentam risco crítico
-
-• Fornecedores atrasados em projetos anteriores continuam atrasando (padrão recorrente) 
-
-
-<p align="center">
-  <img src="reports/figures/Pior_Caso.png" width="800" title="Interface do Simulador CCbjj">
-</p> 
-
-> **Pior Caso**
-
-
-
-
-<p align="center">
-  <img src="reports/figures/Caso_Otimizado.png" width="800" title="Interface do Simulador CCbjj">
-</p> 
-
-> **Caso Otimizado**
-
-
-
-
-**1. Comparação Direta de Performance**
-   
- • **Pior Caso - Fundação:** Apresenta um atraso de 10.1 dias. O sistema indica um grau de confiança "Média", pois nesta fase (fundações) as variáveis externas como geologia e clima são mais imprevisíveis.
- 
- • **Caso Otimizado - Acabamento:** O atraso cai para 7.2 dias. Curiosamente, o grau de confiança sobe para "Alta". Isto demonstra que o modelo tem maior certeza nas previsões de etapas internas, onde o impacto de surpresas geológicas é menor.
-   
-**2. Análise de Sensibilidade Climática (Gráfico de Linhas)**
-
- 
-Ao comparar os dois gráficos de "Relação Clima-Cronograma":
-
-  • **No Pior Caso (Fundação):** A curva de atraso começa em patamares mais altos (perto de 10 dias) e mostra uma inclinação mais acentuada. Pequenas variações de chuva têm um efeito cascata no cronograma.
-   
-  • **No Caso Otimizado (Acabamento):** A curva é muito mais estável. Note que o atraso flutua minimamente entre 6.5 e 8 dias, independentemente da pluviosidade. Isto valida a tese de que a gestão de fornecedores e a logística são os fatores dominantes aqui, não o clima.
-
-  
-**3. Impacto Geológico (Gráfico de Barras)**
- * Em ambos os relatórios, o Solo Arenoso aparece como o de maior risco relativo, mas a magnitude desse risco é drasticamente reduzida no Caso Otimizado.
-   
-   **Insight:** "A escolha da etapa e a eficiência do fornecedor conseguem 'amortecer' os riscos naturais do terreno."
-Sugestão de Estrutura para o seu Slide Executivo
-
-
-
-**Título: Inteligência de Dados na Mitigação de Atrasos**
-
-| Métrica | Cenário A (PDF 3) | Cenário B (PDF 4) | Impacto da Otimização |
-|---|---|---|---|
-| Etapa Crítica | Fundação | Acabamento | Transição de Fase |
-| Atraso Estimado | 10.1 Dias | 7.2 Dias | -2.9 Dias (Redução de 28%) |
-| Confiança da IA | Média | Alta | Maior Previsibilidade |
-| Status | Alerta Crítico | Alerta Gerenciável | Redução de Stress Operacional |
-Conclusão para a Diretoria:
-
-Ao utilizarmos o CCbjj Risk Intelligence, identificamos que a fase de Acabamento, embora ainda em estado de alerta, oferece uma janela de 71% de confiança alta contra apenas uma confiança média na Fundação. 
-
-Isto permite-nos focar esforços de contingência (como tendas ou drenagem) onde a IA aponta maior vulnerabilidade (Fundação) e focar em eficiência logística onde o clima já não é o vilão (Acabamento).
-
-
-
-# Sumario:
-
- • **Plano de Resposta ao Risco" identificado pela Inteligência Artificial** 
-
-<p align="center">
-  <img src="reports/figures/Caso_Otimizado.png" width="800" title="Interface do Simulador CCbjj">
-</p> 
-
-> **Caso Otimizado**
-
-
- Com base na previsão de 7,2 dias de atraso para a etapa de Acabamento (conforme o relatório Caso Otimizado), o cenário é de Alerta Gerenciável. 
- 
- Diferente da fase de fundação, onde o risco é geológico e climático, no acabamento o foco deve ser logística interna, fluxo de materiais e gestão de mão de obra.
- 
-Aqui está o sumário de ações preventivas para mitigar esse atraso e evitar que ele se aproxime dos 10 dias:
-
-📋 **Plano de Ação Preventiva: Cenário Acabamento**
-
-1. Gestão de Suprimentos e Logística (Foco em Materiais Críticos)
-   
-Como o atraso de 7.2 dias nesta fase geralmente está ligado à falta de insumos, a primeira ação é garantir o fluxo.
-
- • **Ação:** Antecipar em 15 dias a conferência de estoque de materiais de "caminho crítico" (pisos, azulejos, louças e tintas).
-   
-  • **Justificativa:** Evitar que a dependência de fornecedores (mesmo os de alto rating) gere paradas por ruptura de estoque.
-
-  
- • **Métrica de Sucesso:** Zerar o tempo de espera por material no canteiro.
-   
-**2. Proteção de Áreas Internas e Estoque**
-   
-Embora o gráfico de sensibilidade mostre que a chuva impacta menos o acabamento, a umidade excessiva pode impedir a aplicação de gesso e pintura.
-
-
- • **Ação:** Reforçar a vedação de vãos e janelas em pavimentos onde a pintura será iniciada.
-   
- • **Justificativa:** Garantir que o cronograma de pintura e gesso não sofra oscilações por conta de infiltrações ou umidade do ar elevada.
-
-   
-**3. Otimização da Mão de Obra Especializada**
-   
-O atraso de 7.2 dias pode ser absorvido com o aumento da produtividade.
-
- • **Ação:** Implementar o sistema de "Linha de Balanço" (trabalho sequencial por pavimentos) para equipes de revestimento.
-
-   
- • **Justificativa:** Reduzir o tempo de movimentação dos operários e ferramentas entre os blocos.
-
-  
-  • **Ferramenta:** Utilizar o quadro de gestão visual (Kanban) para monitorar o avanço diário por unidade.
-   
-**4. Contingência de Fornecedores (Backup Plan)**
-
-No cenário de "Confiança Alta" da IA, o modelo assume que o fornecedor atual é estável. No entanto, o alerta de 7.2 dias indica que não há margem para erros.
-
- * **Ação:** Validar um segundo fornecedor (Backup) para itens de acabamento padrão que tenham longo prazo de entrega.
-
-   
- * **Justificativa:** Se o fornecedor principal falhar, o plano B entra em ação em menos de 48 horas, mantendo o atraso abaixo da barreira dos 10 dias.
-   
-📉 **Impacto Esperado das Ações**
-
-
-Com a implementação imediata dessas ações, a expectativa é que, na próxima avaliação do CCbjj Risk Intelligence, o atraso estimado seja reduzido para a zona verde (abaixo de 5 dias), promovendo a transição do status de Alerta para Normal.
-
-A análise conduzida pelo CCbjj Risk Intelligence indica que a fase de Acabamento, embora ainda demande atenção, apresenta maior previsibilidade e menor exposição a riscos externos quando comparada às etapas iniciais da obra.
-
-
-| Ação | Impacto Estimado no Atraso | Prioridade |
-|---|---|---|
-| Antecipação de Suprimentos | -1.5 dias | Alta |
-| Vedação de Pavimentos | -0.8 dias | Média |
-| Linha de Balanço (Mão de Obra) | -1.2 dias | Alta |
-| Total de Ganho Potencial | -3.5 dias | Status: Verde |
-
-
-
-
-
- # Insights de Performance: Análise de Resíduos
- 
-O gráfico de dispersão "Qualidade da Predição (Real vs. IA)" é a principal ferramenta para validar a confiabilidade do modelo. Abaixo, detalhamos como interpretar o comportamento da IA da Construção Civil:
-
-<p align="center">
-  <img src="reports/figures/Analise_Residuos_Real_Preditivo.png" width="800" title="Interface do Simulador CCbjj">
-</p> 
-
-
-**A Linha Vermelha Tracejada (A Referência)**
-
-A linha diagonal representa a perfeição. Se um ponto estiver exatamente sobre ela, significa que o atraso previsto pela IA foi idêntico ao atraso que ocorreu na obra real.
-
-
-**Distribuição dos Pontos (O Comportamento)**
-
- • Agrupamento Longitudinal: Observamos que os pontos seguem a tendência da linha diagonal. Isso indica que o modelo possui uma alta correlação, conseguindo distinguir obras de baixo risco daquelas com alto potencial de atraso.
-   
- • **Simetria dos Erros:** Os pontos estão distribuídos de forma relativamente equilibrada acima e abaixo da linha. Isso sugere que o modelo não tem um "vício" (bias) de sempre otimizar ou sempre ser pessimista demais.
-   
-**Insights Estratégicos para Gestão**
-
- • **Confiabilidade em Prazos Curtos:** O modelo é extremamente preciso para prever atrasos entre 0 e 5 dias. Nesta zona, a dispersão é mínima, permitindo uma gestão de suprimentos "Just-in-Time".
-   
- • **Identificação de Outliers:** Pontos que se afastam muito da linha (ex: um atraso real de 15 dias que a IA previu como 5) sinalizam eventos atípicos, como greves ou quebras catastróficas de fornecedores, que fogem ao padrão histórico de chuva e solo.
-   
-  • **Margem de Segurança (MAE):** A dispersão visual confirma o nosso MAE (Erro Médio Absoluto). O gestor pode utilizar o valor previsto pela IA com uma margem de confiança baseada nessa largura da "nuvem" de pontos.
-   
-> **Conclusão do Insight:** O modelo demonstra robustez para escalas operacionais de construção civil, sendo capaz de antecipar gargalos críticos antes mesmo do início da etapa, permitindo que a diretoria atue na causa raiz (fornecedor ou logística) para trazer o ponto de volta para a linha da normalidade.
-
-
-
-**Observação:** O modelo tende a apresentar maior incerteza em atrasos extremos, sugerindo que eventos de longa duração na CCbjj Engenharia de Construção Civil envolvem variáveis externas mais complexas do que clima e solo.
-
-
-
-
-
-
- # Insights Estratégicos e Análise de Modelagem
-
-Abaixo apresentamos a interpretação técnica dos três pilares de análise do projeto: impacto operacional, exposição financeira e precisão estatística.
-
-**A. Impacto de Atraso por Variável ** 
-
-
-<p align="center">
-  <img src="reports/figures/Impacto_Atraso_Obras.png" width="800" title="Interface do Simulador CCbjj">
-</p> 
-
-
-Este gráfico identifica os "vilões" do cronograma.
-
- • **O que ele revela:** Mostra a sensibilidade do atraso em relação a variáveis como pluviosidade, tipo de solo e rating do fornecedor.
-   
- • Insight: Etapas de Fundação em Solos Arenosos combinadas com Chuvas acima de 150mm são os cenários de maior vulnerabilidade.
- 
- • A IA indica que a gestão preventiva deve ser intensificada nestes clusters para evitar que o atraso supere a barreira dos 10 dias.
-   
-**B. Exposição Financeira ao Risco**
- 
-
-
-<p align="center">
-  <img src="reports/figures/Exposicao_Financeira_ao_Risco.png" width="800" title="Interface do Simulador CCbjj">
-</p> 
-
-Este gráfico traduz dias de atraso em impacto monetário.
-
- • **O que ele revela:** Cruza o orçamento estimado da obra com a probabilidade de atraso gerada pelo modelo.
-   
- • **Insight:** Obras com orçamentos elevados e "Status de Alerta" representam a maior exposição de capital da companhia.
-
-O gráfico permite priorizar a alocação de fiscais e recursos de contingência em projetos onde cada dia de atraso tem o maior custo de oportunidade.
-   
-**C. Qualidade da Predição: Real vs. Preditivo**  
-
-<p align="center">
-  <img src="reports/figures/Qualidade_da_Predicao.png" width="800" title="Interface do Simulador CCbjj">
-</p> 
-
-
-Este é o certificado de confiança da nossa Inteligência Artificial.
-
- • **O que ele revela:** A proximidade dos pontos em relação à linha diagonal de 45° indica o quão precisa é a previsão da IA comparada ao que realmente aconteceu no canteiro.
-   
- • **Insight:** A forte concentração de pontos sobre a diagonal demonstra que o modelo é robusto e confiável, especialmente para atrasos de médio prazo. 
- 
- A dispersão controlada (baixo erro residual) garante que as decisões tomadas pelo gestor através do simulador são baseadas em padrões históricos reais, e não em ruídos estatísticos.
-
-   
-**Por que estes insights são valiosos?**
-
-Ao unir estas três visões, a Construção Civil deixa de ser reativa. O modelo permite:
-
- • Negociar melhor com fornecedores (sabendo o impacto real do rating deles no prazo).
-   
- • Ajustar o provisionamento financeiro (com base na exposição real).
-   
- • Garantir a entrega das chaves (atuando preventivamente onde a IA aponta risco alto).
+Expansão do impacto financeiro detalhado
 
 
 
 ---
 
-📊 **9. Feature Importance — O que mais impacta o atraso?**
+🎤 **Como Explicar Este Projeto em Entrevista**
 
-
-
- **• Interpretação:** atraso não é aleatório — ele é explicado por logística, fornecedor e clima.
- 
-![Importância das Features](reports/figures/feature_importance.png)
-
-
-
-• Utilizei Feature Importance para garantir que o engenheiro de campo entenda por que o modelo está alertando sobre o risco (ex: é por causa da distância logística ou do fornecedor?).
-
----
-
-🧮 **10. Resultados (Métricas do Modelo)**
-
-• Métrica	Valor	Interpretação para o negócio
-
-• MAE (Erro Médio)	4,97 dias	O modelo erra em média < 5 dias
-
-• R² Score	0,41	Explicamos 41% dos fatores de atraso
-
-• Economia Estimada	R$ 248.400,00 / ano	Multas evitadas ao agir nos empreendimentos de maior risco
-
-
-• **Nota:** O R² de 0,41 reflete a complexidade e volatilidade do setor, mas o MAE de <5 dias garante utilidade prática para o planejamento semanal."
-
-
-
-<p align="center">
-  <img src="reports/figures/Importancia_das_Features.png" width="800" title="Interface do Simulador CCbjj">
-</p>
-
----
-
-🚀 **11. Objetivos Futuros — Próximos Passos**
-
-• Criar um dashboard automático para monitorar risco → Power BI + Streamlit
-
-
-• Adicionar variáveis externas (chuva real via API)
-
-
-• Expandir o dataset com número de equipes e rotatividade
-
-
-• Migrar modelo para RandomForest + SHAP Explainability
-
-
-• Implementar acionadores automáticos para obra crítica ✉
-
-
-
----
-
-# 📚 **12. Aprendizados Individuais (Minha Reflexão Técnica)**
-
-
-**• O que mais aprendi neste projeto:**
-
-• Entender o negócio antes de abrir o Jupyter
-
-• Nem sempre o modelo mais complexo é o melhor → clareza vence
-
-• Explicar bem vale tanto quanto programar bem
-
-• Pipeline de preprocessamento é parte do modelo, não acessório
-
-
----
-
-
-
-# 13. Conclusão e Próximos Passos
-    
-A implementação do Construção Civil Risk Intelligence marca a transição da gestão de obras reativa para uma cultura orientada a dados. 
-
-Através deste modelo de Inteligência Artificial, a companhia agora possui a capacidade de antecipar gargalos operacionais antes mesmo da primeira escavação.
-
-**Principais Entregas:**
-
- • **Redução de Incerteza:** Identificação clara de que a escolha do fornecedor e a etapa da obra superam o impacto climático no cronograma.
-   
- • **Eficiência Financeira:** Visibilidade da exposição de capital por obra, permitindo uma alocação de recursos mais inteligente.
-   
- • **Previsibilidade:** Um modelo robusto (baixo MAE e R² consistente) que permite prometer datas de entrega de chaves com maior segurança para o cliente final.
- 
-   
-# 🚀 **Call to Action: Próximos Passos Recomendados**
-
-Para maximizar o retorno sobre este investimento tecnológico, recomendamos à diretoria:
-
- • **Integração com ERP:** Conectar o simulador diretamente aos dados de suprimentos e cronograma físico-financeiro para atualizações em tempo real.
-   
- • **Feedback Loop:** Alimentar o modelo mensalmente com os atrasos reais ocorridos para que a IA continue aprendendo e refinando sua precisão.
-   
- • **Certificação de Fornecedores:** Utilizar o "Rating de Confiabilidade" gerado pela IA como critério obrigatório na homologação de novos parceiros logísticos.
-   
-> O risco não pode ser totalmente eliminado na construção civil, mas com o Construção Civil Risk Intelligence, ele agora é totalmente visível e gerenciável.
-> 
-
+> “Estruturei os dados em camadas analíticas, criei uma tabela fato consolidada, desenvolvi um modelo preditivo e disponibilizei os resultados em um simulador e um bot. O foco foi apoiar decisões operacionais e reduzir risco financeiro, não apenas treinar um modelo.”
 
 
 
 
 ---
 
-🧲 **Call to Action**
+🧾 **Conclusão:**
 
-Se quiser visualizar um protótipo executável:
+Este projeto demonstra:
 
-👉 O simulador já está disponível através da badge no início deste documento! **Esta na seção 6.**
+✔ Capacidade técnica em Ciência de Dados
+✔ Visão de Analytics Engineering
+✔ Entendimento profundo do negócio de engenharia
+✔ Maturidade para atuar em ambientes reais
+
+👉 Não é apenas um projeto de Machine Learning. É uma solução de dados aplicada ao negócio.
+
+
 
 
 ---
 
+👤 **Autor:**
 
-
-**Autor:**
 Sergio Santos 
 
 ---
@@ -697,12 +291,6 @@ Sergio Santos
 [![LinkedIn Sérgio Santos](https://img.shields.io/badge/LinkedIn-Sérgio_Santos-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/santossergioluiz) 
 
 
-
 ---
-
-
-
-
-
 
 
