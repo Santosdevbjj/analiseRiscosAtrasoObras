@@ -1,7 +1,7 @@
 ## 🏗️ **Predição de Risco de Atraso em Obras**
 
 **CCbjj Engenharia & Inteligência de Risco**
-     *•Disciplina, estratégia e dados aplicados à engenharia civil.*
+     *Disciplina, estratégia e dados aplicados à engenharia civil.*
      
 
 > Projeto de Ciência de Dados e Analytics Engineering aplicado à construção civil, com foco em mitigação de riscos operacionais, redução de atrasos e suporte à tomada de decisão estratégica.
