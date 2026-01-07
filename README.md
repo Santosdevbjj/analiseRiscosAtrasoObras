@@ -287,11 +287,16 @@ Expansão do impacto financeiro detalhado
 Este projeto demonstra:
 
 ✔ Visão de Analytics Engineer
+
 ✔ Capacidade de transformar dados em decisão
+
 ✔ Entrega de produto, não apenas modelo
+
 ✔ Comunicação clara entre técnico e negócio
 
+
 👉 Não é um projeto acadêmico. É uma solução aplicada.
+
 
 
 ---
