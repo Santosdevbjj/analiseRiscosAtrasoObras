@@ -63,6 +63,10 @@ Este é um projeto de Machine Learning aplicado ao setor de construção civil, 
 • Desenvolver um modelo de previsão aplicável na prática
 
 
+• Para desenvolver esse projeto usamos: Python, Streamlit, Render Free, Supabase Free, SQL, e o Bot do Telegram.
+
+• Streamlit:
+
 
 ---
 
