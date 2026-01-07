@@ -279,6 +279,13 @@ Alertas automáticos de risco
 Expansão do impacto financeiro detalhado
 
 
+---
+
+🎤 **Como Explicar Este Projeto em Entrevista**
+
+“Estruturei os dados em camadas analíticas, criei uma tabela fato consolidada, desenvolvi um modelo preditivo e disponibilizei os resultados em um simulador e um bot. O foco foi apoiar decisões operacionais e reduzir risco financeiro, não apenas treinar um modelo.”
+
+
 
 ---
 
