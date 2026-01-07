@@ -1,6 +1,7 @@
 ## 🏗️ **Predição de Risco de Atraso em Obras**
 
 **CCbjj Engenharia & Inteligência de Risco**
+
      *Disciplina, estratégia e dados aplicados à engenharia civil.*
      
 
