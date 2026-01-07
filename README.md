@@ -283,7 +283,7 @@ Expansão do impacto financeiro detalhado
 
 🎤 **Como Explicar Este Projeto em Entrevista**
 
-“Estruturei os dados em camadas analíticas, criei uma tabela fato consolidada, desenvolvi um modelo preditivo e disponibilizei os resultados em um simulador e um bot. O foco foi apoiar decisões operacionais e reduzir risco financeiro, não apenas treinar um modelo.”
+  Estruturei os dados em camadas analíticas, criei uma tabela fato consolidada, desenvolvi um modelo preditivo e disponibilizei os resultados em um simulador e um bot. O foco foi apoiar decisões operacionais e reduzir risco financeiro, não apenas treinar um modelo.
 
 
 
@@ -302,7 +302,8 @@ Este projeto demonstra:
 ✔ Comunicação clara entre técnico e negócio
 
 
-👉 Não é um projeto acadêmico. É uma solução aplicada.
+👉 Não é apenas um projeto de Machine Learning. É uma solução de dados aplicada ao negócio.
+
 
 
 
