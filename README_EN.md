@@ -1,6 +1,9 @@
 ## 🏗️ **Construction Delay Risk Prediction**
 
-Operational Intelligence Analytics Platform — CCbjj Engineering
+Operational Intelligence Analytics Platform — CCbjj Engineering & Risk Intelligence
+
+  *Discipline, strategy, and data applied to civil engineering.*
+
 
 > A Data Science & Analytics Engineering project applied to the construction industry, focused on risk anticipation, delay reduction, and executive decision support, delivered as a data product, not just a model.
 
