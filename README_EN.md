@@ -1,6 +1,6 @@
 ## 🏗️ **Construction Delay Risk Prediction**
 
-Operational Intelligence Analytics Platform — CCbjj Engineering & Risk Intelligence
+**Operational Intelligence Analytics Platform — CCbjj Engineering & Risk Intelligence**
 
   *Discipline, strategy, and data applied to civil engineering.*
 
@@ -269,6 +269,12 @@ Continuous model monitoring
 Automated risk alerts
 
 Expanded financial impact analysis
+
+---
+
+🎤 **How to Explain This Project in an Interview**
+
+I structured the data into analytical layers, created a consolidated fact table, developed a predictive model, and made the results available in a simulator and a bot. The focus was on supporting operational decisions and reducing financial risk, not just training a model.
 
 
 
