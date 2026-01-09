@@ -1,6 +1,6 @@
 ## 🏗️ Predição de Risco de Atraso em Obras
 
-**Plataforma Analítica de Inteligência Operacional — CCbjj Engenharia & Inteligência de Risco**
+**Plataforma Analítica de Inteligência Operacional — CCbjj Engenharia & Inteligência de Risco** 
 
 
 *Disciplina, estratégia e dados aplicados à engenharia civil.*
